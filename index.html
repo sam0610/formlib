@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v36</title></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v38</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -20,7 +20,7 @@ button{font:inherit;cursor:pointer;color:inherit}
 :focus-visible{outline:2px solid var(--pri-ink);outline-offset:2px}
 .hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;min-height:52px;padding-block:8px;background:var(--surface);border-bottom:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
-.logo i{width:30px;height:30px;border-radius:8px;background:var(--pri);color:#fff;display:grid;place-items:center}
+.logo svg.lg{width:30px;height:30px;flex:none;display:block}
 .sp{flex:1}
 .ib{width:36px;height:36px;border:1px solid transparent;background:transparent;border-radius:8px;display:inline-grid;place-items:center;color:var(--ink);position:relative;flex:none}
 .ib:hover{background:var(--hover)}
@@ -110,7 +110,7 @@ textarea.fin{resize:none;padding:2px}
 .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-fg);padding:9px 16px;border-radius:99px;z-index:90;max-width:90vw}
 .toast.err{background:var(--bad);color:#fff}
 .login{max-width:340px;margin:12vh auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
-.login h2{margin:0 0 14px;display:flex;gap:8px;align-items:center}
+.login h2 svg.lg{width:34px;height:34px}.login h2{margin:0 0 14px;display:flex;gap:8px;align-items:center}
 .login input{width:100%;margin:5px 0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:inherit;background:var(--bg);color:var(--ink)}
 .login .btn{width:100%;margin-top:8px}
 .badge{font-size:12px;background:var(--warn-soft);color:var(--warn-ink);border-radius:6px;padding:1px 7px;display:inline-flex;align-items:center;gap:4px}
@@ -145,7 +145,9 @@ textarea.fin{resize:none;padding:2px}
 .epanel{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 80px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;min-width:0}
 .ph{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
 .plist{padding:6px;position:relative}
-.pr{transition:transform .16s ease}.pr.drg{position:relative;z-index:5;background:var(--surface);box-shadow:0 8px 22px rgba(20,30,60,.25);outline:1.5px solid var(--pri-ink);opacity:1;transition:none}
+.pr{transition:transform .16s ease}.pr.col{height:0!important;min-height:0;padding:0;margin:0;overflow:hidden;opacity:0;pointer-events:none;transition:none}.plgap.sp{position:static;margin:0 6px 0 6px}
+.pr .gct{background:var(--pri-ink);color:var(--bg);border-radius:999px;min-width:20px;height:20px;display:grid;place-items:center;font-size:11px;padding:0 5px}
+.pr.drg{position:relative;z-index:5;background:var(--surface);box-shadow:0 8px 22px rgba(20,30,60,.25);outline:1.5px solid var(--pri-ink);opacity:1;transition:none}
 .plgap{position:absolute;left:6px;right:6px;border:1.5px dashed var(--pri-ink);border-radius:8px;background:var(--pri-soft);pointer-events:none;z-index:1}
 @media (prefers-reduced-motion:reduce){.pr{transition:none}}
 .pgh{font-size:12px;color:var(--mute);padding:6px 8px 2px}
@@ -422,7 +424,7 @@ const Cloud = {
 };
 /* GitHub 模式：公開 repo 內 index.json 作資料庫，PDF 與縮圖為檔案；讀取免登入，寫入需 token（主管） */
 const GHub = {
-  api(path, opt = {}) { return fetch(`https://api.github.com/repos/${GH.repo}${path}`, { ...opt, headers: { Accept: 'application/vnd.github+json', ...(GHTOKEN ? { Authorization: 'Bearer ' + GHTOKEN } : {}), ...(opt.headers || {}) } }); },
+  api(path, opt = {}) { return fetch(`https://api.github.com/repos/${GH.repo}${path}`, { cache: 'no-store', ...opt, headers: { Accept: 'application/vnd.github+json', ...(GHTOKEN ? { Authorization: 'Bearer ' + GHTOKEN } : {}), ...(opt.headers || {}) } }); },
   raw: p => `https://raw.githubusercontent.com/${GH.repo}/${GH.branch}/${p}`,
   b64(bytes) { let s = ''; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); },
   ub64(s) { return Uint8Array.from(atob(s.replace(/\s/g, '')), c => c.charCodeAt(0)); },
@@ -435,14 +437,22 @@ const GHub = {
     }
     const r = await fetch(this.raw(this.idx()) + '?t=' + Date.now()); if (r.status === 404) return { items: [], sha: null }; if (!r.ok) throw new Error('讀取範本庫失敗 ' + r.status); return { items: await r.json(), sha: null };
   },
-  async put(path, bytes, msg, sha) { const body = { message: msg, content: this.b64(bytes), branch: GH.branch }; if (sha) body.sha = sha; const r = await this.api(`/contents/${path}`, { method: 'PUT', body: JSON.stringify(body) }); return r; },
+  async put(path, bytes, msg, sha) {
+    const body = { message: msg, content: this.b64(bytes), branch: GH.branch }; if (sha) body.sha = sha; const json = JSON.stringify(body); let r;
+    for (let i = 0; i < 4; i++) { r = await this.api(`/contents/${path}`, { method: 'PUT', body: json }); if (r.ok || sha || ![409, 429, 502, 503, 504].includes(r.status)) return r; await new Promise(z => setTimeout(z, 900 * (i + 1))); } // new file: branch moved under us, just retry
+    return r;
+  },
   async mutate(fn, msg) {
-    for (let i = 0; i < 4; i++) {
+    let last = '';
+    for (let i = 0; i < 6; i++) {
+      if (i) await new Promise(z => setTimeout(z, 1000 * i)); // GitHub may serve a stale sha for a few seconds after a commit: wait, then re-read
       const { items, sha } = await this.readIndex(); const next = fn(items);
       const r = await this.put(this.idx(), new TextEncoder().encode(JSON.stringify(next, null, 1)), msg, sha);
-      if (r.ok) return next; if (r.status === 409 || r.status === 422) continue; throw await this.err(r);
+      if (r.ok) return next;
+      if (r.status === 409 || r.status === 422) { let m = ''; try { m = (await r.clone().json()).message || ''; } catch (e) { } last = `HTTP ${r.status} ${m}`; console.warn('範本清單寫入衝突，重試', i + 1, last); continue; }
+      throw await this.err(r);
     }
-    throw new Error('同時有其他人修改，請稍後再試');
+    throw new Error('範本清單同時被修改，請稍後再試（' + last + '）');
   },
   async upload(path, bytes, msg) { const r = await this.put(path, bytes, msg); if (!r.ok) throw await this.err(r); },
   async delFile(path, msg) { try { const g = await this.api(`/contents/${path}?ref=${encodeURIComponent(GH.branch)}`); if (!g.ok) return; const j = await g.json(); await this.api(`/contents/${path}`, { method: 'DELETE', body: JSON.stringify({ message: msg, sha: j.sha, branch: GH.branch }) }); } catch (e) { console.warn('刪除檔案失敗', path, e); } },
@@ -494,9 +504,10 @@ async function initAuth() {
 async function refresh() { try { S.all = await Store.list(); } catch (e) { console.error(e); toast('讀取範本失敗：' + (e.message || e), true); S.all = []; } }
 
 /* ---------- shell / library ---------- */
+const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo"><i>${ic('file', 18)}</i><span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v36</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v38</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ib('logout', 'logout', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ib('ghout', 'logout', '主管登出') : ib('ghin', 'lock', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -524,7 +535,7 @@ async function renderGate(msg = '', mode = '') {
   app.innerHTML = '<div class="spin"></div>';
   let auth = null; try { auth = await fetchAuth(); } catch (e) { msg = e.message; }
   const setup = mode === 'setup' || !auth;
-  app.innerHTML = `<div class="login"><h2>${ic('lock')} 表格範本庫</h2>` + (setup
+  app.innerHTML = `<div class="login"><h2>${LOGO} 表格範本庫</h2>` + (setup
     ? `<p class="note" style="margin:0">${auth ? '重新設定管理員密碼與 GitHub token。' : '首次設定：貼上 GitHub token，並設定管理員密碼。'}</p>
     <input id="gt" type="password" placeholder="GitHub token（github_pat_…）" autocomplete="off"><input id="p1" type="password" placeholder="新管理員密碼（至少 10 個字元）" autocomplete="new-password"><input id="p2" type="password" placeholder="再輸入一次密碼" autocomplete="new-password">`
     : `<input id="pw" type="password" placeholder="管理員密碼" autocomplete="current-password"><label class="note" style="display:flex;gap:6px;align-items:center;margin:0"><input id="rm" type="checkbox"> 在此裝置記住</label>`)
@@ -1098,13 +1109,37 @@ function renderPanel() {
     const id = r.dataset.pf, touch = ev.pointerType !== 'mouse', f0 = E.fields.find(x => x.id === id); if (!f0) return;
     const sx = ev.clientX, sy = ev.clientY; let armed = !touch, drag = false, tgt = null, after = false, tm = null;
     const cands = () => [...box.querySelectorAll('.pr')].filter(x => x !== r && (E.fields.find(y => y.id === x.dataset.pf) || {}).page === f0.page);
-    const clr = () => { box.querySelectorAll('.pr').forEach(x => { x.classList.remove('dtb', 'dta'); x.style.transform = ''; }); box.querySelectorAll('.plgap').forEach(x => x.remove()); };
+    const clr = () => { box.querySelectorAll('.pr').forEach(x => { x.classList.remove('dtb', 'dta', 'col'); x.style.transform = ''; }); box.querySelectorAll('.plgap').forEach(x => x.remove()); document.querySelectorAll('.pr.gh').forEach(x => x.remove()); };
     if (touch) tm = setTimeout(() => { armed = true; r.classList.add('drg'); try { navigator.vibrate && navigator.vibrate(10); } catch (_) { } }, 350);
+    const selSet = new Set(selIds()); const multi = selSet.size > 1 && selSet.has(id) && !f0.ex; let MS = null;
+    const mrows = () => grp().filter(x => selSet.has(x.dataset.pf) && !(E.fields.find(y => y.id === x.dataset.pf) || {}).ex);
+    const mvMulti = e => {
+      if (!MS) {
+        const rows = mrows(); if (rows.length < 2) { MS = { off: true }; return; }
+        const r0 = r.getBoundingClientRect(), h = r.offsetHeight, ghost = r.cloneNode(true); ghost.classList.add('drg', 'gh'); ghost.style.cssText = `position:fixed;left:${r0.left}px;width:${r0.width}px;top:${r0.top}px;z-index:60;pointer-events:none;margin:0`;
+        ghost.insertAdjacentHTML('beforeend', `<span class="gct">${rows.length}</span>`); document.body.appendChild(ghost);
+        rows.forEach(x => x.classList.add('col'));
+        const others = grp().filter(x => !rows.includes(x)); const cs = others.map(x => { const b = x.getBoundingClientRect(); return b.top + b.height / 2; });
+        const sp = document.createElement('div'); sp.className = 'plgap sp'; sp.style.height = h * rows.length + 'px';
+        MS = { rows, ghost, others, cs, sp, h, oy: e.clientY - r0.top, k: 0 };
+      }
+      if (MS.off) return; const M = MS; M.ghost.style.top = e.clientY - M.oy + 'px';
+      let k = 0; M.cs.forEach(c => { if (c < e.clientY) k++; }); M.k = k;
+      if (M.others.length) { if (k < M.others.length) M.others[k].before(M.sp); else M.others[M.others.length - 1].after(M.sp); }
+    };
+    const applyMulti = () => {
+      const M = MS; if (!M || M.off || !M.others.length) return;
+      const ids = new Set(M.rows.map(x => x.dataset.pf)); const block = E.fields.filter(f => ids.has(f.id)); const rest = E.fields.filter(f => !ids.has(f.id));
+      const nonSel = M.others.map(x => E.fields.find(y => y.id === x.dataset.pf)).filter(Boolean);
+      const ref = M.k < nonSel.length ? nonSel[M.k] : nonSel[nonSel.length - 1]; let at = rest.indexOf(ref); if (at < 0) return; if (M.k >= nonSel.length) at++;
+      const before = JSON.stringify(E.fields.map(f => f.id)); rest.splice(at, 0, ...block); E.fields = rest; if (JSON.stringify(E.fields.map(f => f.id)) !== before) commit();
+    };
     const grp = () => [...box.querySelectorAll('.pr')].filter(x => (E.fields.find(y => y.id === x.dataset.pf) || {}).page === f0.page);
     const mv = e => {
       if (!armed) { if (Math.hypot(e.clientX - sx, e.clientY - sy) > 8) { clearTimeout(tm); fin(); } return; }
       if (!drag && Math.hypot(e.clientX - sx, e.clientY - sy) < 6) return;
-      drag = true; e.preventDefault(); r.classList.add('drg');
+      drag = true; e.preventDefault(); if (multi) { mvMulti(e); if (!MS || !MS.off) return; }
+      r.classList.add('drg');
       const g = grp(), s0 = g.indexOf(r), h = r.offsetHeight; if (s0 < 0) return;
       // target slot = number of other rows whose centre is above the pointer
       let t = 0; g.forEach(x => { if (x === r) return; const b = x.getBoundingClientRect(); if (b.top + b.height / 2 < e.clientY) t++; });
@@ -1116,11 +1151,11 @@ function renderPanel() {
       if (t === s0) { tgt = null; } else { tgt = g[t]; after = t > s0; }
     };
     const tmv = e => { if (armed && touch) e.preventDefault(); };
-    const fin = () => { clearTimeout(tm); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', cn); removeEventListener('touchmove', tmv); clr(); r.classList.remove('drg'); };
+    const fin = () => { if (MS && MS.sp) MS.sp.remove(); clearTimeout(tm); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', cn); removeEventListener('touchmove', tmv); clr(); r.classList.remove('drg'); };
     const cn = () => fin();
     const up = ev2 => {
       fin();
-      if (drag) { if (tgt) { const tf = E.fields.find(y => y.id === tgt.dataset.pf); if (tf && tf !== f0) { E.fields = E.fields.filter(x => x !== f0); const k = E.fields.indexOf(tf); E.fields.splice(k + (after ? 1 : 0), 0, f0); commit(); } } renderPanel(); return; }
+      if (drag) { if (MS) applyMulti(); else if (tgt) { const tf = E.fields.find(y => y.id === tgt.dataset.pf); if (tf && tf !== f0) { E.fields = E.fields.filter(x => x !== f0); const k = E.fields.indexOf(tf); E.fields.splice(k + (after ? 1 : 0), 0, f0); commit(); } } renderPanel(); return; }
       if (touch && !armed) { /* plain tap */ }
       const add = ev2.shiftKey || ev2.ctrlKey || ev2.metaKey, cur = selIds(), now = Date.now();
       if (!add && !f0.ex && E._pr && E._pr.id === id && now - E._pr.t < 450) { E._pr = null; renamePr(r, f0); return; }
@@ -1484,7 +1519,7 @@ async function shrinkScans(doc, E) { // scanned (text-less) pages of big files: 
       const v = pg.getViewport({ scale: 150 / 72 }); const cv = document.createElement('canvas'); cv.width = Math.ceil(v.width); cv.height = Math.ceil(v.height);
       const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
       await pg.render({ canvasContext: cx, viewport: v, annotationMode: 0 }).promise;
-      const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', .72)); const img = await doc.embedJpg(new Uint8Array(await blob.arrayBuffer()));
+      const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', .72)); if (blob.size > E.bytes.byteLength / n * .8) continue; const img = await doc.embedJpg(new Uint8Array(await blob.arrayBuffer()));
       L.node.delete(PDFName.of('Contents')); L.node.set(PDFName.of('Resources'), doc.context.obj({}));
       L.drawImage(img, { x: mb.x, y: mb.y, width: mb.width, height: mb.height }); done++;
     } catch (e) { console.warn('壓縮第 ' + (i + 1) + ' 頁失敗', e); }
@@ -1582,6 +1617,7 @@ async function boot() {
   renderLibrary();
 }
 boot();
+if ('serviceWorker' in navigator && location.protocol === 'https:') addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW', e)));
 </script>
 
 </body></html>

@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v39</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v44</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -360,6 +360,9 @@ const arrToHex = a => { if (!a || !a.length) return null; let r, g, b; if (a.len
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const IC = {
+  sameW:'<path d="M4 3v18M20 3v18"/><rect x="7" y="5" width="10" height="5" rx="1"/><rect x="7" y="14" width="10" height="5" rx="1"/>', sameH:'<path d="M3 4h18M3 20h18"/><rect x="5" y="7" width="5" height="10" rx="1"/><rect x="14" y="7" width="5" height="10" rx="1"/>',
+  fields:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7.5 9.5v5"/>', aa:'<path d="M3 18 8 6l5 12M5 14h6M15 18l3-8 3 8M16 16h4"/>',
+  paste:'<rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 5V4h6v1M9 11h6M9 15h4"/>', size:'<path d="M3 4h18M3 20h18M4 3v18M20 3v18"/><rect x="8" y="8" width="8" height="8" rx="1"/>',
   batch:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7M17.5 14v7"/>',
   grip:'<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" stroke-width="3" stroke-linecap="round"/>',
   save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
@@ -535,7 +538,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v39</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v44</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ib('logout', 'logout', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ib('ghout', 'logout', '主管登出') : ib('ghin', 'lock', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -1085,7 +1088,8 @@ function renderPanel() {
     const gs = {}; ed.forEach(x => { (gs[x.page] = gs[x.page] || []).push(x); }); const mx = Math.max(0, ...Object.values(gs).map(g => g.length));
     const ab = (attr, i, t, dis) => `<button class="ib" ${attr} title="${t}" ${dis ? 'disabled' : ''}>${ic(i)}</button>`;
     const secAlign = ed.length < 2 ? '' : `<div class="row"><label>排列</label><div class="seg" style="flex-wrap:wrap">${[['l', 'aL', '靠左對齊'], ['c', 'aC', '水平置中'], ['r', 'aR', '靠右對齊'], ['t', 'aT', '頂端對齊'], ['m', 'aM', '垂直置中'], ['b', 'aB', '底端對齊']].map(([k, i, t]) => ab(`data-al="${k}"`, i, t, false)).join('')}</div></div>
-      <div class="row"><label>分佈</label><div class="seg">${ab('data-di="h"', 'dH', '水平平均分佈（最少 3 個欄位）', mx < 3)}${ab('data-di="v"', 'dV', '垂直平均分佈（最少 3 個欄位）', mx < 3)}</div></div>`;
+      <div class="row"><label>分佈</label><div class="seg">${ab('data-di="h"', 'dH', '水平平均分佈（最少 3 個欄位）', mx < 3)}${ab('data-di="v"', 'dV', '垂直平均分佈（最少 3 個欄位）', mx < 3)}</div></div>
+      <div class="row"><label>大小</label><div class="seg">${ab('data-sz="w"', 'sameW', '調整為相同寬度（以最先選取嘅欄位為準）')}${ab('data-sz="h"', 'sameH', '調整為相同高度（以最先選取嘅欄位為準）')}</div></div>`;
     const secField = `${txt.length ? `<div class="row"><label>字數</label><input id="pm-ml" type="number" min="1" placeholder="${mlV === null ? '混合' : '不限'}" value="${mlV || ''}"></div>` : ''}
       ${ed.length ? `<div class="row"><label>必填</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pm-req" type="checkbox" ${rqAll ? 'checked' : ''} style="flex:none;height:auto"> 填寫者必須填寫</label></div>` : ''}`;
     const secText = `${fsT.length ? fontRow('pm-font', same(fsT, x => x.font || ''), same(fsT, x => x.font || '') === null) : ''}
@@ -1120,7 +1124,7 @@ function renderPanel() {
     <div class="acts" style="margin:6px 0 0;justify-content:space-between">${brushBtn}<button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>`;
   }
   const tab = E.tab || 'list';
-  box.innerHTML = `<div class="ptabs"><button class="ptab ${tab === 'list' ? 'on' : ''}" data-tab="list" title="欄位清單">${ic('list')}<span>欄位</span><span class="chip">${E.fields.length}</span></button><button class="ptab ${tab === 'fmt' ? 'on' : ''}" data-tab="fmt" title="名稱與格式">${ic('sliders')}<span>格式</span></button></div>` +
+  box.innerHTML = `<div class="ptabs"><button class="ptab ${tab === 'list' ? 'on' : ''}" data-tab="list" title="欄位清單">${ic('fields')}<span>欄位</span><span class="chip">${E.fields.length}</span></button><button class="ptab ${tab === 'fmt' ? 'on' : ''}" data-tab="fmt" title="名稱與格式">${ic('aa')}<span>格式</span></button></div>` +
     (tab === 'list' ? `<div class="plist">${rows || '<p class="note" style="padding:8px">尚未有欄位。選工具後在頁面拖曳，或按魔術棒自動偵測。</p>'}</div>` : `<div class="pprops">${props}</div>`);
   const q = s => box.querySelector(s); const redraw = () => { drawBoxes(); };
   box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { E.tab = b.dataset.tab; renderPanel(); });
@@ -1235,6 +1239,7 @@ function renderPanel() {
     wireFont('pm-font', () => eds.filter(x => x.kind === 'text' || x.kind === 'drop'));
     const grp = () => { const m = new Map(); eds.forEach(f => { if (!m.has(f.page)) m.set(f.page, []); m.get(f.page).push(f); }); return [...m.values()]; };
     box.querySelectorAll('[data-al]').forEach(bt => bt.onclick = () => { const md = bt.dataset.al; grp().forEach(g => { if (g.length < 2) return; const L = Math.min(...g.map(f => f.x)), R = Math.max(...g.map(f => f.x + f.w)), B = Math.min(...g.map(f => f.y)), T = Math.max(...g.map(f => f.y + f.h)); g.forEach(f => { if (md === 'l') f.x = L; else if (md === 'r') f.x = R - f.w; else if (md === 'c') f.x = (L + R) / 2 - f.w / 2; else if (md === 't') f.y = T - f.h; else if (md === 'b') f.y = B; else f.y = (B + T) / 2 - f.h / 2; }); }); drawBoxes(); commit(); });
+    box.querySelectorAll('[data-sz]').forEach(bt => bt.onclick = () => sameSize(bt.dataset.sz));
     box.querySelectorAll('[data-di]').forEach(bt => bt.onclick = () => { const h = bt.dataset.di === 'h'; grp().forEach(g => { if (g.length < 3) return; if (h) { g.sort((a, b) => a.x - b.x); const L = g[0].x, R = Math.max(...g.map(f => f.x + f.w)), gap = (R - L - g.reduce((s, f) => s + f.w, 0)) / (g.length - 1); let x = L; g.forEach(f => { f.x = x; x += f.w + gap; }); } else { g.sort((a, b) => (b.y + b.h) - (a.y + a.h)); const T = g[0].y + g[0].h, B = Math.min(...g.map(f => f.y)), gap = (T - B - g.reduce((s, f) => s + f.h, 0)) / (g.length - 1); let t = T; g.forEach(f => { f.y = t - f.h; t -= f.h + gap; }); } }); drawBoxes(); commit(); });
     wireNum('pm-ls', -2, 20, .5, 0, n => eds.forEach(x => { if (x.kind === 'text') x.ls = n; }));
     wireNum('pm-lh', .8, 4, .1, 1.4, n => eds.forEach(x => { if (x.kind === 'text' && x.multiline) x.lh = n; }));
@@ -1385,20 +1390,60 @@ addEventListener('scroll', () => { if (FTB) posFtb(); }, true);
 addEventListener('resize', () => { if (FTB) posFtb(); });
 /* ---------- right-click menu + batch rename ---------- */
 let CX = null, BNP = null;
-function closeCx() { if (CX) { const c = CX; CX = null; c.el.remove(); document.removeEventListener('pointerdown', c.out, true); document.removeEventListener('keydown', c.key, true); } }
+function closeCx() { if (CX) { const c = CX; CX = null; c.el.remove(); if (c.sub && c.sub()) c.sub().remove(); document.removeEventListener('pointerdown', c.out, true); document.removeEventListener('keydown', c.key, true); } }
 function closeBnp() { if (BNP) { const c = BNP; BNP = null; c.el.remove(); document.removeEventListener('pointerdown', c.out, true); document.removeEventListener('keydown', c.key, true); } }
 function placeFloat(el, x, y) { document.body.appendChild(el); const r = el.getBoundingClientRect(); el.style.left = Math.max(8, Math.min(x, innerWidth - r.width - 8)) + 'px'; el.style.top = Math.max(8, Math.min(y, innerHeight - r.height - 8)) + 'px'; }
-function openCx(x, y) {
-  const E = S.ed; if (!E || S.view !== 'edit') return; closeCx(); closeBnp(); closeFtb(); closeClrPop();
-  const eds = selIds().map(id => E.fields.find(f => f.id === id)).filter(f => f && !f.ex); if (!eds.length) return; const multi = eds.length > 1;
-  const it = (a, i, t, cls, kb) => `<button type="button" class="cxi ${cls}" role="menuitem" data-cx="${a}">${ic(i)}<span>${t}</span>${kb ? `<span class="kb">${kb}</span>` : ''}</button>`;
-  const el = document.createElement('div'); el.className = 'cxm'; el.setAttribute('role', 'menu');
-  el.innerHTML = `<div class="cxh">${eds.length} 個欄位已選</div>` + (multi ? it('batch', 'batch', '批次命名…', 'hot', 'F2') : it('rename', 'edit', '重新命名', '', 'F2')) + `<div class="cxs"></div>` + it('del', 'trash', '刪除', 'dng', 'Del');
-  placeFloat(el, x, y);
-  const out = e => { if (!el.contains(e.target)) closeCx(); }, key = e => { if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); closeCx(); } };
-  CX = { el, out, key }; document.addEventListener('pointerdown', out, true); document.addEventListener('keydown', key, true);
-  el.querySelectorAll('[data-cx]').forEach(b => b.onclick = () => { const a = b.dataset.cx, r = el.getBoundingClientRect(); closeCx(); if (a === 'del') delSel(); else if (a === 'rename') openRename(eds[0]); else openBatch(r.right + 6, r.top); });
+let CLIP = null;
+const edSel = () => { const E = S.ed; return selIds().map(id => E.fields.find(f => f.id === id)).filter(f => f && !f.ex); };
+function copySel(quiet) {
+  const l = edSel().filter(f => f.kind !== 'radio'); if (!l.length) { toast('單選按鈕係以群組命名，唔可以複製', true); return false; }
+  CLIP = { fields: JSON.parse(JSON.stringify(l)), n: 0 }; if (!quiet) toast(`已複製 ${l.length} 個欄位（Ctrl+V 貼上）`); return true;
+}
+function pasteClip(at) { // at = { page, x, top } puts the group's top-left corner there; otherwise a stepped offset from the originals
+  const E = S.ed; if (!CLIP || !CLIP.fields.length) return toast('未有複製嘅欄位', true);
+  const src = CLIP.fields, minX = Math.min(...src.map(f => f.x)), maxT = Math.max(...src.map(f => f.y + f.h)); let dx, dy;
+  if (at) { dx = at.x - minX; dy = (E.pages[at.page].ph - at.top) - maxT; } else { CLIP.n = (CLIP.n || 0) + 1; dx = 12 * CLIP.n; dy = -12 * CLIP.n; }
+  const made = [];
+  src.forEach(s => { const pp = at ? at.page : Math.min(s.page, E.pages.length - 1), pg = E.pages[pp], f = JSON.parse(JSON.stringify(s)); f.id = uid(); f.page = pp; f.x = Math.max(0, Math.min(s.x + dx, pg.pw - f.w)); f.y = Math.max(0, Math.min(s.y + dy, pg.ph - f.h)); f.name = uniqueName(s.name); E.fields.push(f); made.push(f.id); });
+  setSel(made); commit(); drawBoxes(); renderPanel(); toast(`已貼上 ${made.length} 個欄位`);
+}
+function dupSel() { if (copySel(true)) { CLIP.n = 0; pasteClip(null); } }
+const byPage = l => { const m = new Map(); l.forEach(f => { if (!m.has(f.page)) m.set(f.page, []); m.get(f.page).push(f); }); return [...m.values()]; };
+function alignSel(md) { byPage(edSel()).forEach(g => { if (g.length < 2) return; const L = Math.min(...g.map(f => f.x)), R = Math.max(...g.map(f => f.x + f.w)), B = Math.min(...g.map(f => f.y)), T = Math.max(...g.map(f => f.y + f.h)); g.forEach(f => { if (md === 'l') f.x = L; else if (md === 'r') f.x = R - f.w; else if (md === 'c') f.x = (L + R) / 2 - f.w / 2; else if (md === 't') f.y = T - f.h; else if (md === 'b') f.y = B; else f.y = (B + T) / 2 - f.h / 2; }); }); drawBoxes(); commit(); renderPanel(); }
+function distSel(h) { byPage(edSel()).forEach(g => { if (g.length < 3) return; if (h) { g.sort((a, b) => a.x - b.x); const L = g[0].x, R = Math.max(...g.map(f => f.x + f.w)), gap = (R - L - g.reduce((s, f) => s + f.w, 0)) / (g.length - 1); let x = L; g.forEach(f => { f.x = x; x += f.w + gap; }); } else { g.sort((a, b) => (b.y + b.h) - (a.y + a.h)); const T = g[0].y + g[0].h, B = Math.min(...g.map(f => f.y)), gap = (T - B - g.reduce((s, f) => s + f.h, 0)) / (g.length - 1); let t = T; g.forEach(f => { f.y = t - f.h; t -= f.h + gap; }); } }); drawBoxes(); commit(); renderPanel(); }
+function sameSize(md) { const l = edSel(); if (l.length < 2) return; const ref = l[0]; l.slice(1).forEach(f => { if (md !== 'h') f.w = ref.w; if (md !== 'w') { const top = f.y + f.h; f.h = ref.h; f.y = top - f.h; } }); drawBoxes(); commit(); renderPanel(); toast(`已統一大小（以「${ref.name}」為準）`); }
+const cxEl = (rows, head) => { const el = document.createElement('div'); el.className = 'cxm'; el.setAttribute('role', 'menu'); el.innerHTML = (head ? `<div class="cxh">${head}</div>` : '') + rows.map((r, i) => r.sep ? '<div class="cxs"></div>' : `<button type="button" class="cxi ${r.cls || ''}" role="menuitem" data-i="${i}">${ic(r.i)}<span>${r.t}</span>${r.sub ? `<span class="kb">${ic('chev', 14)}</span>` : r.kb ? `<span class="kb">${r.kb}</span>` : ''}</button>`).join(''); return el; };
+function showCx(x, y, rows, head) {
+  closeCx(); closeBnp(); closeFtb(); closeClrPop();
+  const el = cxEl(rows, head); placeFloat(el, x, y); let sub = null; const closeSub = () => { if (sub) { sub.remove(); sub = null; } };
+  const openSub = (r, btn) => { closeSub(); sub = cxEl(r.sub); document.body.appendChild(sub); const b = btn.getBoundingClientRect(), w = sub.offsetWidth; sub.style.left = (b.right + 4 + w > innerWidth - 8 ? Math.max(8, b.left - w - 4) : b.right + 4) + 'px'; sub.style.top = Math.max(8, Math.min(b.top - 5, innerHeight - sub.offsetHeight - 8)) + 'px'; wire(sub, r.sub, false); };
+  const wire = (m, rs, top) => m.querySelectorAll('.cxi').forEach(b => { const r = rs[+b.dataset.i]; b.onclick = () => { if (r.sub) return openSub(r, b); const rc = el.getBoundingClientRect(); closeCx(); r.fn(rc); }; if (top) b.onpointerenter = () => { if (r.sub) openSub(r, b); else closeSub(); }; });
+  wire(el, rows, true);
+  const out = e => { if (!el.contains(e.target) && !(sub && sub.contains(e.target))) closeCx(); }, key = e => { if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); closeCx(); } };
+  CX = { el, out, key, sub: () => sub }; document.addEventListener('pointerdown', out, true); document.addEventListener('keydown', key, true);
   const f0 = el.querySelector('.cxi'); if (f0) f0.focus();
+}
+function openCx(x, y) {
+  const E = S.ed; if (!E || S.view !== 'edit') return; const eds = edSel(); if (!eds.length) return; const multi = eds.length > 1, rows = [];
+  rows.push(multi ? { t: '批次命名…', i: 'batch', kb: 'F2', cls: 'hot', fn: rc => openBatch(rc.right + 6, rc.top) } : { t: '重新命名', i: 'edit', kb: 'F2', fn: () => openRename(eds[0]) });
+  if (multi) {
+    rows.push({ sep: 1 }, { t: '對齊', i: 'aL', sub: [['l', 'aL', '靠左'], ['c', 'aC', '水平置中'], ['r', 'aR', '靠右'], ['t', 'aT', '頂端'], ['m', 'aM', '垂直置中'], ['b', 'aB', '底端']].map(([m, i, t]) => ({ t, i, fn: () => alignSel(m) })) });
+    if (eds.length >= 3) rows.push({ t: '分佈', i: 'dH', sub: [{ t: '水平平均分佈', i: 'dH', fn: () => distSel(true) }, { t: '垂直平均分佈', i: 'dV', fn: () => distSel(false) }] });
+    rows.push({ t: '統一大小', i: 'sameW', sub: [{ t: '同寬度', i: 'sameW', fn: () => sameSize('w') }, { t: '同高度', i: 'sameH', fn: () => sameSize('h') }, { t: '同寬同高', i: 'size', fn: () => sameSize('wh') }] });
+  }
+  rows.push({ sep: 1 }, { t: '複製', i: 'copy', kb: 'Ctrl+C', fn: () => copySel() });
+  if (CLIP) rows.push({ t: '貼上', i: 'paste', kb: 'Ctrl+V', fn: () => pasteClip(null) });
+  rows.push({ t: '原地複製', i: 'copy', kb: 'Ctrl+D', fn: dupSel }, { sep: 1 }, { t: '刪除', i: 'trash', kb: 'Del', cls: 'dng', fn: delSel });
+  showCx(x, y, rows, `${eds.length} 個欄位已選`);
+}
+function openCxBlank(x, y, pi, px, py) { // right-click on empty paper
+  const E = S.ed; if (!E || S.view !== 'edit') return; const rows = [];
+  const add = k => { let l = px, t = py - 9, w = 110, h = 18; if (k === 'check' || k === 'radio') { w = h = 12; l = px - 6; t = py - 6; } else if (k === 'sig') { w = 140; h = 44; l = px - 70; t = py - 22; } addField(pi, l, t, w, h, k); };
+  const SHORT = { text: '文字', multi: '多行文字', comb: '格仔', check: '剔選', radio: '單選', drop: '下拉', sig: '簽名' };
+  rows.push({ t: '喺此處新增', i: 'plus', sub: Object.keys(SHORT).filter(k => KINDS[k]).map(k => ({ t: SHORT[k], i: KINDS[k].icon, fn: () => add(k) })) });
+  if (CLIP) rows.push({ t: '貼上', i: 'paste', kb: 'Ctrl+V', fn: () => pasteClip({ page: pi, x: px, top: py }) });
+  if (E.fields.length) rows.push({ sep: 1 }, { t: '全選', i: 'cursor', kb: 'Ctrl+A', fn: () => { setSel(E.fields.map(f => f.id)); drawBoxes(); renderPanel(); } });
+  showCx(x, y, rows);
 }
 const BN_PRESETS = [['年月日', ['年', '月', '日']], ['男女', ['男', '女']], ['1 2 3', ['1', '2', '3', '4', '5', '6', '7', '8', '9']], ['一二三', ['一', '二', '三', '四', '五', '六', '七', '八', '九']], ['姓 名', ['姓', '名']], ['開始 結束', ['開始', '結束']]];
 async function guessLabels(list) { // the printed word just to the right of each box (年 / 月 / 日, 男 / 女 …)
@@ -1451,10 +1496,10 @@ function bindDraw(pi) {
   let lp = null, lpx = 0, lpy = 0, lpTouch = false; // long-press (touch) opens the text-format bar
   const lpClear = () => { clearTimeout(lp); lp = null; };
   ov.addEventListener('pointerdown', e => { lpTouch = e.pointerType !== 'mouse'; lpClear(); const b = lpTouch && e.target.closest('.fb'); if (!b || e.target.closest('.rz,.tag')) return; lpx = e.clientX; lpy = e.clientY;
-    lp = setTimeout(() => { lp = null; const f = E.fields.find(x => x.id === b.dataset.id); if (!f || f.ex) return; if (!selIds().includes(f.id)) { setSel([f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); } try { navigator.vibrate && navigator.vibrate(12); } catch (_) { } openFtb(selIds()); }, 520); });
+    lp = setTimeout(() => { lp = null; const f = E.fields.find(x => x.id === b.dataset.id); if (!f || f.ex) return; if (!selIds().includes(f.id)) { setSel([f.id]); drawBoxes(); renderPanel(); } try { navigator.vibrate && navigator.vibrate(12); } catch (_) { } openFtb(selIds()); }, 520); });
   ov.addEventListener('pointermove', e => { if (lp && Math.hypot(e.clientX - lpx, e.clientY - lpy) > 10) lpClear(); });
   ov.addEventListener('pointerup', lpClear); ov.addEventListener('pointercancel', lpClear);
-  ov.addEventListener('contextmenu', e => { const b = e.target.closest('.fb'); if (!b) return; const f = E.fields.find(x => x.id === b.dataset.id); if (!f || f.ex) return; e.preventDefault(); if (lpTouch) return; if (!selIds().includes(f.id)) { setSel([f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); } openCx(e.clientX, e.clientY); });
+  ov.addEventListener('contextmenu', e => { const b = e.target.closest('.fb'); if (!b) { if (lpTouch) return; e.preventDefault(); const r = ov.getBoundingClientRect(); openCxBlank(e.clientX, e.clientY, pi, (e.clientX - r.left) / p.sc, (e.clientY - r.top) / p.sc); return; } const f = E.fields.find(x => x.id === b.dataset.id); if (!f || f.ex) return; e.preventDefault(); if (lpTouch) return; if (!selIds().includes(f.id)) { setSel([f.id]); drawBoxes(); renderPanel(); } openCx(e.clientX, e.clientY); });
   ov.addEventListener('mousedown', e => {
     if (document.activeElement && document.activeElement !== document.body && document.activeElement.blur) document.activeElement.blur(); // so Delete / Ctrl+Z reach the editor, not a stale input
     const pt = ev => { const r = ov.getBoundingClientRect(); return [(ev.clientX - r.left) / p.sc, (ev.clientY - r.top) / p.sc]; };
@@ -1462,9 +1507,9 @@ function bindDraw(pi) {
     const boxEl = e.target.closest('.fb'); const [x0, y0] = pt(e); const additive = e.shiftKey || e.ctrlKey || e.metaKey;
     if (boxEl) { // select (shift / ctrl toggles) / move (whole selection) / resize (single field) / paint format
       const f = E.fields.find(x => x.id === boxEl.dataset.id); const cur = selIds();
-      if (additive) { setSel(cur.includes(f.id) ? cur.filter(x => x !== f.id) : [...cur, f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); e.preventDefault(); return; }
-      if (E.paint && !f.ex) { applyFmt(f, E.paint); setSel([f.id]); E.tab = 'fmt'; commit(); drawBoxes(); renderPanel(); e.preventDefault(); return; }
-      if (!cur.includes(f.id) || cur.length < 2) { setSel([f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); }
+      if (additive) { setSel(cur.includes(f.id) ? cur.filter(x => x !== f.id) : [...cur, f.id]); drawBoxes(); renderPanel(); e.preventDefault(); return; }
+      if (E.paint && !f.ex) { applyFmt(f, E.paint); setSel([f.id]); commit(); drawBoxes(); renderPanel(); e.preventDefault(); return; }
+      if (!cur.includes(f.id) || cur.length < 2) { setSel([f.id]); drawBoxes(); renderPanel(); }
       if (f.ex) return;
       if (e.target.closest('.tag')) { const now = Date.now(); if (E._tg && E._tg.id === f.id && now - E._tg.t < 450) { E._tg = null; openRename(f); e.preventDefault(); return; } E._tg = { id: f.id, t: now }; }
       const group = selIds().map(id => E.fields.find(x => x.id === id)).filter(x => x && !x.ex && x.page === pi);
@@ -1492,7 +1537,7 @@ function bindDraw(pi) {
         if (w < 3 && h < 3) return; const r = l + w, bm = t + h;
         const hit = E.fields.filter(f => f.page === pi && f.x < r && f.x + f.w > l && (p.ph - f.y - f.h) < bm && (p.ph - f.y) > t);
         if (E.paint) { hit.forEach(f => applyFmt(f, E.paint)); commit(); }
-        setSel([...prev, ...hit.map(f => f.id)]); if (selIds().length) E.tab = 'fmt'; drawBoxes(); renderPanel(); return;
+        setSel([...prev, ...hit.map(f => f.id)]);  drawBoxes(); renderPanel(); return;
       }
       if (E.tool === 'check' || E.tool === 'radio') { if (w < 6 || h < 6) { w = h = 12; l = x0 - 6; t = y0 - 6; } else { w = h = Math.min(w, h); } }
       else if (E.tool === 'sig') { if (w < 30 || h < 16) { w = 140; h = 44; l = x0 - 70; t = y0 - 22; } }
@@ -1510,7 +1555,7 @@ function addField(pi, l, t, w, h, tool, name) {
   const kind = tool === 'multi' || tool === 'comb' ? 'text' : tool; const f = { id: uid(), page: pi, x: l, y: p.ph - t - h, w, h, kind, multiline: tool === 'multi', comb: tool === 'comb', options: [], align: 'left', required: false, maxLength: tool === 'comb' ? 8 : null, initial: kind === 'check' || kind === 'radio' ? false : '', ...defStyle(kind), name: uniqueName(name || (kind === 'check' ? '選項' : kind === 'radio' ? '單選' : kind === 'drop' ? '下拉' : kind === 'sig' ? '簽名' : tool === 'comb' ? '格仔' : '文字')) };
   f.fontSize = kind === 'check' || kind === 'sig' || kind === 'radio' ? null : defFs(f);
   if (kind === 'radio') { const sel = [E.fields.find(x => x.id === E.sel), E.fields.find(x => x.id === E.lastAdded)].find(x => x && x.kind === 'radio'); if (sel) { const mem = E.fields.filter(m => m.kind === 'radio' && m.name === sel.name); let n = mem.length + 1, v = `選項${n}`; while (mem.some(m => m.onValue === v)) v = `選項${++n}`; Object.assign(f, { name: sel.name, onValue: v, required: sel.required, border: sel.border, bw: sel.bw, bg: sel.bg }); } else f.onValue = '選項1'; }
-  E.fields.push(f); E.lastAdded = f.id; setSel([f.id]); E.tab = 'fmt'; commit(); drawBoxes(); renderPanel();
+  E.fields.push(f); E.lastAdded = f.id; setSel([f.id]); commit(); drawBoxes(); renderPanel();
   if (kind === 'drop' && !E.panel) editProps(f);
   return f;
 }
@@ -1526,11 +1571,14 @@ function editProps(f) {
 document.addEventListener('keydown', e => {
   if (S.view !== 'edit' || !S.ed) return; const t = e.target; if (t.closest && t.closest('.cpop')) return; const typing = /TEXTAREA|SELECT/.test(t.tagName) || (t.tagName === 'INPUT' && !['checkbox', 'color', 'radio', 'button'].includes(t.type));
   if (typing) return; const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
+  if (mod && k === 'c' && selIds().length) { e.preventDefault(); copySel(); return; }
+  if (mod && k === 'v' && CLIP) { e.preventDefault(); pasteClip(null); return; }
+  if (mod && k === 'd' && selIds().length) { e.preventDefault(); dupSel(); return; }
   if (e.key === 'F2' && selIds().length) { e.preventDefault(); const ids = selIds(), f = S.ed.fields.find(x => x.id === ids[0]); if (ids.length > 1) openBatch(innerWidth / 2 - 165, 90); else if (f && !f.ex) openRename(f); return; }
   if (mod && k === 'z') { e.preventDefault(); return e.shiftKey ? redo() : undo(); }
   if (mod && k === 'y') { e.preventDefault(); return redo(); }
   if ((e.key === 'Delete' || e.key === 'Backspace') && selIds().length) { delSel(); e.preventDefault(); return; }
-  if (mod && k === 'a' && S.ed.fields.length) { setSel(S.ed.fields.map(f => f.id)); S.ed.tab = 'fmt'; drawBoxes(); renderPanel(); e.preventDefault(); return; }
+  if (mod && k === 'a' && S.ed.fields.length) { setSel(S.ed.fields.map(f => f.id)); drawBoxes(); renderPanel(); e.preventDefault(); return; }
   if (e.key === 'Escape') { if (S.ed.paint) return setPaint(false); if (selIds().length) { setSel([]); drawBoxes(); renderPanel(); } }
 });
 

@@ -1,0 +1,1587 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v36</title></head><body>
+<style>
+/* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
+:root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
+--pri:#2457d6;--pri-h:#1b44a8;--pri-ink:#2457d6;--pri-soft:#e3ebff;--pri-line:#c8d6fb;
+--ok:#1f9d6b;--ok-soft:#e3f6ee;--bad:#d1434b;--bad-soft:#fdecee;--warn:#e8a317;--warn-soft:#fff3d6;--warn-ink:#8a5a00;
+--thumb:#eef0f4;--scrim:rgba(15,20,35,.45);--toast-bg:#1d2330;--toast-fg:#fff;--shadow:rgba(20,30,60,.18);}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--surface:#181d27;--hover:#232a37;--chip:#232a37;--ink:#e7eaf1;--mute:#8d97ab;--line:#2a3140;
+--pri:#3f6ff0;--pri-h:#5a84f5;--pri-ink:#8fb0ff;--pri-soft:#1d2a4d;--pri-line:#34498a;
+--ok:#3ec38c;--ok-soft:#15332a;--bad:#ef6b73;--bad-soft:#3a1f24;--warn:#e8a317;--warn-soft:#3a2f12;--warn-ink:#f0c15a;
+--thumb:#242a36;--scrim:rgba(0,0,0,.62);--toast-bg:#e7eaf1;--toast-fg:#11141a;--shadow:rgba(0,0,0,.5);color-scheme:dark;}}
+:root[data-theme="dark"]{--bg:#0f1218;--surface:#181d27;--hover:#232a37;--chip:#232a37;--ink:#e7eaf1;--mute:#8d97ab;--line:#2a3140;
+--pri:#3f6ff0;--pri-h:#5a84f5;--pri-ink:#8fb0ff;--pri-soft:#1d2a4d;--pri-line:#34498a;
+--ok:#3ec38c;--ok-soft:#15332a;--bad:#ef6b73;--bad-soft:#3a1f24;--warn:#e8a317;--warn-soft:#3a2f12;--warn-ink:#f0c15a;
+--thumb:#242a36;--scrim:rgba(0,0,0,.62);--toast-bg:#e7eaf1;--toast-fg:#11141a;--shadow:rgba(0,0,0,.5);color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);margin:0;padding-block:0 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font:14px/1.5 -apple-system,"Segoe UI","PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid var(--pri-ink);outline-offset:2px}
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;min-height:52px;padding-block:8px;background:var(--surface);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+.logo i{width:30px;height:30px;border-radius:8px;background:var(--pri);color:#fff;display:grid;place-items:center}
+.sp{flex:1}
+.ib{width:36px;height:36px;border:1px solid transparent;background:transparent;border-radius:8px;display:inline-grid;place-items:center;color:var(--ink);position:relative;flex:none}
+.ib:hover{background:var(--hover)}
+.ib.pri{background:var(--pri);color:#fff}.ib.pri:hover{background:var(--pri-h)}
+.ib.on{background:var(--pri-soft);color:var(--pri-ink);border-color:var(--pri-line)}
+.ib.dng:hover{background:var(--bad-soft);color:var(--bad)}
+.ib[disabled]{opacity:.4;pointer-events:none}
+svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.bar{display:flex;gap:8px;align-items:center;padding-block:12px;flex-wrap:wrap}
+.srch{flex:1;min-width:160px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0 10px;height:38px;color:var(--mute)}
+.srch input{border:0;outline:0;flex:1;min-width:0;font:inherit;background:transparent;color:var(--ink)}
+select{height:38px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:var(--surface);color:var(--ink);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;padding-bottom:30px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:.15s;min-width:0}
+.card:hover{box-shadow:0 6px 20px var(--shadow);transform:translateY(-2px)}
+.thumb{aspect-ratio:3/4;background:var(--thumb) center/cover no-repeat;border-bottom:1px solid var(--line)}
+.cb{padding:10px 12px 8px}
+.cn{font-weight:600;overflow-wrap:anywhere}
+.cm{color:var(--mute);font-size:12px;display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.chip{background:var(--chip);border-radius:99px;padding:0 8px;font-size:12px}
+.chip.v{background:var(--ok-soft);color:var(--ok)}
+.chip.dr{background:var(--warn-soft,#fdf1d8);color:var(--warn,#8a5a00)}
+.card.draft{border-style:dashed}
+.ca{display:flex;justify-content:flex-end;padding:0 6px 6px;gap:2px;margin-top:auto}
+.ca .ib{width:30px;height:30px}.ca .ic{width:17px;height:17px}
+.empty{text-align:center;color:var(--mute);padding:70px 20px}
+.empty .ic{width:46px;height:46px;stroke-width:1.4;opacity:.6}
+/* page views: paper stays white */
+.pages{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding-block:14px;overflow-x:auto}
+.pages>.pg{margin-inline:auto}
+.zoomb{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.2);overflow:hidden}
+.zoomb button{border:0;background:transparent;color:var(--ink);height:32px;min-width:34px;padding:0 8px;font:inherit;font-size:15px;cursor:pointer;font-variant-numeric:tabular-nums}
+.zoomb button:hover{background:var(--hover)}.zoomb button:focus-visible{outline:2px solid var(--pri-ink);outline-offset:-2px}
+.zoomb [data-z=fit]{font-size:12px;min-width:50px;border-inline:1px solid var(--line);color:var(--mute)}
+.pg{position:relative;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.25);flex:none;max-width:100%}
+.pg canvas{display:block}
+.ov{position:absolute;inset:0}
+.fin{position:absolute;border:1px solid #6d93f5;background:rgba(220,232,255,.6);padding:0 2px;font:inherit;color:#0a1a4d;outline:0;border-radius:2px;margin:0}
+.fin:focus{background:rgba(255,248,200,.9);border-color:#e8a317;box-shadow:0 0 0 2px rgba(232,163,23,.35)}
+textarea.fin{resize:none;padding:2px}
+.fck{position:absolute;margin:0;accent-color:#2457d6;cursor:pointer}
+.fb{position:absolute;border:1.5px solid #2457d6;background:rgba(36,87,214,.14);border-radius:2px;cursor:default}
+.fb.cb2{border-color:#c4591f;background:rgba(232,120,40,.18)}
+.fb.dd{border-color:#7a3fc0;background:rgba(130,70,200,.16)}
+.fb.sel{box-shadow:0 0 0 2px #fff,0 0 0 4px #2457d6}
+.fb.ex{border-style:dashed;border-color:#7b8498;background:rgba(120,130,150,.15);cursor:default}
+.fb .tag{position:absolute;left:-1.5px;top:-21px;height:21px;display:flex;align-items:center;gap:4px;background:#2457d6;color:#fff;font-size:11px;padding:0 7px 0 5px;border-radius:6px 6px 0 0;white-space:nowrap;max-width:200px;cursor:grab;z-index:2}
+.fb .tag svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.fb .tag .nm{overflow:hidden;text-overflow:ellipsis}
+.fb .tag.ro{cursor:default;padding:0 5px;pointer-events:none}
+.fb.mvg .tag{cursor:grabbing;filter:brightness(.88)}
+.fb:not(.sel):not(.msel) .tag{display:none}
+.xyb{position:absolute;z-index:6;transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-fg);font-size:11px;font-variant-numeric:tabular-nums;padding:2px 8px;border-radius:99px;white-space:nowrap;pointer-events:none}
+.fb .rz{position:absolute;right:-5px;bottom:-5px;width:11px;height:11px;background:#2457d6;border:2px solid #fff;border-radius:50%;cursor:nwse-resize}
+.fb:not(.sel) .rz{display:none}
+.ov.draw{cursor:crosshair}
+.ftb{position:fixed;z-index:60;display:flex;flex-direction:column;align-items:flex-start;gap:6px;max-width:calc(100vw - 16px)}
+.ftb.up{flex-direction:column-reverse}
+.ftb .tb{display:flex;align-items:center;gap:3px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:4px;box-shadow:0 8px 24px var(--shadow);max-width:100%;overflow-x:auto}
+.ftb .vs{width:1px;height:20px;background:var(--line);margin:0 2px;flex:none}
+.ftb .ib{width:28px;height:28px}
+.ftb .fsel{width:76px;height:28px;border:1px solid var(--line);border-radius:8px;padding:0 4px;background:var(--bg);color:var(--ink);font-size:12px;flex:none}
+.ftb .fst{display:inline-flex;align-items:center;height:28px;border:1px solid var(--line);border-radius:8px;background:var(--bg);flex:none}
+.ftb .fst button{width:22px;height:100%;border:0;background:transparent;padding:0;font-size:15px;line-height:1;color:var(--ink);cursor:pointer}
+.ftb .fst button:hover{background:var(--hover)}
+.ftb .fst b{min-width:30px;text-align:center;font-weight:600;font-size:12px;font-variant-numeric:tabular-nums}
+.ftb .dd{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px;box-shadow:0 8px 24px var(--shadow);display:flex;flex-direction:column;gap:8px}
+.ftb .dr{display:flex;align-items:center;gap:8px}
+.ftb .dr>.ic{color:var(--mute);width:18px;height:18px}
+.ftb .rnin{width:min(220px,58vw);height:28px;border:1px solid var(--line);border-radius:8px;padding:0 8px;background:var(--bg);color:var(--ink);font:inherit;font-size:13px}
+.ftb .rnin:focus{outline:2px solid var(--pri-ink);outline-offset:0}
+.ghost{position:absolute;border:1.5px dashed #2457d6;background:rgba(36,87,214,.08)}
+.mask{position:fixed;inset:0;background:var(--scrim);z-index:50;display:grid;place-items:center;padding:16px}
+.dlg{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px;width:min(420px,100%);box-shadow:0 20px 60px rgba(0,0,0,.35);max-height:90vh;overflow:auto}
+.dlg.wide{width:min(760px,100%)}
+.dlg h3{margin:0 0 12px;font-size:16px}
+.row{display:flex;gap:8px;align-items:center;margin:8px 0}
+.row label{width:48px;color:var(--mute);flex:none}
+.row input,.row select,.row textarea{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;height:36px;background:var(--bg);color:var(--ink)}
+.row textarea{height:70px}
+.acts{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.btn{height:36px;padding:0 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center}
+.btn.pri{background:var(--pri);color:#fff;border-color:var(--pri)}
+.note{color:var(--mute);font-size:12px;margin:0 0 10px}
+.prev{display:flex;flex-direction:column;gap:10px}
+.prev canvas{width:100%;height:auto;background:#fff;box-shadow:0 1px 8px rgba(0,0,0,.3)}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-fg);padding:9px 16px;border-radius:99px;z-index:90;max-width:90vw}
+.toast.err{background:var(--bad);color:#fff}
+.login{max-width:340px;margin:12vh auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.login h2{margin:0 0 14px;display:flex;gap:8px;align-items:center}
+.login input{width:100%;margin:5px 0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:inherit;background:var(--bg);color:var(--ink)}
+.login .btn{width:100%;margin-top:8px}
+.badge{font-size:12px;background:var(--warn-soft);color:var(--warn-ink);border-radius:6px;padding:1px 7px;display:inline-flex;align-items:center;gap:4px}
+.vlist{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.vi{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:6px 8px}
+.vi.act{background:var(--ok-soft)}
+.spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--pri);border-radius:50%;animation:sp .8s linear infinite;margin:40px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}.card{transition:none}}
+.tbtitle{font-weight:600;max-width:40vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+/* sidebar */
+.lib{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.lib.has-side{grid-template-columns:232px minmax(0,1fr)}
+.sbar{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 84px);overflow:auto;min-width:0}
+.sd{display:flex;align-items:center;gap:2px;border-radius:8px;padding:2px 8px 2px 2px;cursor:pointer;min-width:0}
+.sd:hover{background:var(--hover)}
+.sd.on{background:var(--pri-soft);color:var(--pri-ink)}
+.sd .ib{width:26px;height:26px}.sd .ic{width:15px;height:15px}
+.sd .sdn{flex:1;min-width:0;padding:5px 4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.sd.all{padding-left:10px}
+.chev{transition:transform .15s}.chev.open{transform:rotate(90deg)}
+.si{display:flex;align-items:center;gap:6px;margin-left:30px;padding:4px 8px;border-radius:8px;cursor:pointer}
+.si .sin{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.si:hover{background:var(--hover)}
+.sep2{height:1px;background:var(--line);margin:6px 4px}
+.gh{display:flex;gap:8px;align-items:center;font-weight:600;padding-bottom:10px}
+@media (max-width:720px){.lib.has-side{grid-template-columns:minmax(0,1fr)}.sbar{position:static;max-height:46vh}}
+/* editor panel */
+.edl{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.edl.has-panel{grid-template-columns:minmax(0,1fr) 292px}
+.epanel{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 80px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;min-width:0}
+.ph{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.plist{padding:6px;position:relative}
+.pr{transition:transform .16s ease}.pr.drg{position:relative;z-index:5;background:var(--surface);box-shadow:0 8px 22px rgba(20,30,60,.25);outline:1.5px solid var(--pri-ink);opacity:1;transition:none}
+.plgap{position:absolute;left:6px;right:6px;border:1.5px dashed var(--pri-ink);border-radius:8px;background:var(--pri-soft);pointer-events:none;z-index:1}
+@media (prefers-reduced-motion:reduce){.pr{transition:none}}
+.pgh{font-size:12px;color:var(--mute);padding:6px 8px 2px}
+.pr{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:8px;cursor:pointer}
+.pr:hover{background:var(--hover)}.pr.on{background:var(--pri-soft);color:var(--pri-ink)}
+.pr{user-select:none;-webkit-user-select:none}.pr.dtb{box-shadow:0 -2px 0 var(--pri-ink)}.pr.dta{box-shadow:0 2px 0 var(--pri-ink)}
+.pr .rnm{flex:1;min-width:0;height:24px;border:1px solid var(--pri-ink);border-radius:6px;padding:0 6px;background:var(--bg);color:var(--ink);font:inherit}
+.pr .grp{display:flex;cursor:grab;color:var(--mute);opacity:.55;margin-left:-2px}.pr:hover .grp{opacity:1}.pr .grp .ic{width:14px;height:14px}
+.pr .pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr .ic{width:16px;height:16px;flex:none}
+.pprops{border-top:1px solid var(--line);padding:10px 12px}
+.pprops .row label{width:34px}
+.pprops input[type=number]{max-width:84px;flex:none}
+.seg{display:flex;gap:4px}
+.seg .ib{width:32px;height:30px;border:1px solid var(--line)}
+.tname{border:1px solid transparent;border-radius:8px;background:transparent;color:var(--ink);font:inherit;font-weight:600;padding:5px 8px;min-width:0;width:clamp(110px,22vw,260px)}
+.tname:hover,.tname:focus{border-color:var(--line);background:var(--bg)}
+.fb .smp{position:absolute;inset:0;display:flex;align-items:center;overflow:hidden;white-space:nowrap;padding:0 3px;line-height:1.1;color:#0a1a4d;opacity:.5;pointer-events:none}
+.fin.req{border-color:#d1434b}
+@media (max-width:900px){.edl.has-panel{grid-template-columns:minmax(0,1fr)}.epanel{position:static;max-height:none;order:-1}}
+.ptabs{display:flex;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+.ptab{flex:1;display:flex;gap:6px;align-items:center;justify-content:center;padding:10px 8px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--mute);font-weight:600}
+.ptab:hover{color:var(--ink)}.ptab.on{color:var(--pri-ink);border-bottom-color:var(--pri-ink)}
+.ptab .ic{width:17px;height:17px}
+.pprops{border-top:0}
+.fb.msel{box-shadow:0 0 0 2px #fff,0 0 0 4px #2457d6}
+/* design-mode look per object type */
+.fb.k-text{border-color:#2457d6;background:rgba(36,87,214,.10)}
+.fb.k-multi{border-color:#0e8fa3;background:rgba(14,143,163,.10)}
+.fb.k-check{border-color:#c4591f;background:rgba(232,120,40,.16)}
+.fb.k-drop{border-color:#7a3fc0;background:rgba(130,70,200,.12)}
+.fb.k-sig{border-color:#1f8a4c;border-style:dashed;background:rgba(31,138,76,.10)}
+.fb.ex{border-style:dashed;border-color:#7b8498;background:rgba(120,130,150,.15)}
+.fb.k-multi .tag,.fb.k-multi .rz{background:#0e8fa3}.fb.k-check .tag,.fb.k-check .rz{background:#c4591f}.fb.k-drop .tag,.fb.k-drop .rz{background:#7a3fc0}.fb.k-sig .tag,.fb.k-sig .rz{background:#1f8a4c}
+.fb .pv,.fb .ml{position:absolute;inset:0;pointer-events:none;box-sizing:border-box}
+.fb .chv{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:#7a3fc0;fill:none;stroke-width:2.4;pointer-events:none}
+.fb .tick{position:absolute;left:14%;top:14%;width:72%;height:72%;stroke:#c4591f;fill:none;stroke-width:3;opacity:.55;pointer-events:none}
+.fb .sg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:4px;color:#1f8a4c;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;pointer-events:none}
+.fb .sg svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pr.k-text .ic{color:#2457d6}.pr.k-multi .ic{color:#0e8fa3}.pr.k-check .ic{color:#c4591f}.pr.k-drop .ic{color:#7a3fc0}.pr.k-sig .ic{color:#1f8a4c}
+.csw{flex:none;height:36px;display:inline-flex;align-items:center;gap:2px;padding:0 6px 0 5px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--mute)}
+.csw:hover,.csw.on{border-color:var(--pri);background:var(--hover)}
+.csw .ic{width:14px;height:14px}
+.sw{position:relative;display:block;width:24px;height:24px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,0,0,.18);background-color:#fff;background-image:linear-gradient(45deg,#c9ccd3 25%,transparent 25%,transparent 75%,#c9ccd3 75%),linear-gradient(45deg,#c9ccd3 25%,transparent 25%,transparent 75%,#c9ccd3 75%);background-size:10px 10px;background-position:0 0,5px 5px}
+.sw b{position:absolute;inset:0;display:block;box-sizing:border-box}
+.cpop{position:fixed;z-index:95;width:262px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 14px 44px var(--shadow)}
+.cgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.cs{position:relative;aspect-ratio:1;border-radius:9px;border:1px solid rgba(0,0,0,.22);padding:0;overflow:hidden;cursor:pointer;background-color:#fff}
+.cs.chk{background-image:linear-gradient(45deg,#c9ccd3 25%,transparent 25%,transparent 75%,#c9ccd3 75%),linear-gradient(45deg,#c9ccd3 25%,transparent 25%,transparent 75%,#c9ccd3 75%);background-size:10px 10px;background-position:0 0,5px 5px}
+.cs.chk::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:3px;background:#d1434b;transform:rotate(-45deg)}
+.cs.rb{background:conic-gradient(#f33,#ff0,#3f3,#0ff,#33f,#f3f,#f33)}
+.cs.sel{outline:3px solid var(--pri);outline-offset:1px}
+.cs input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}
+.cs.ey{display:grid;place-items:center;color:var(--ink);background:var(--bg)}
+.cs.ey .ic{width:20px;height:20px}
+.copc{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);color:var(--mute)}
+.copc input[type=range]{flex:1;min-width:0;accent-color:var(--pri)}
+.copc .pct{display:flex;align-items:center;gap:4px}
+.copc .pct input{width:52px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);text-align:center;font:inherit}
+.copc.off{opacity:.45;pointer-events:none}
+.stp{flex:none;display:flex;align-items:stretch;border:1px solid var(--line);border-radius:10px;background:var(--bg);height:36px;width:84px;overflow:hidden}
+.row .stp input{flex:none;width:48px;border:0;background:transparent;text-align:center;font-size:15px;height:auto;padding:0;-moz-appearance:textfield;appearance:textfield}
+.stp input::-webkit-inner-spin-button,.stp input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.stp .sb{display:flex;flex-direction:column;flex:1;border-left:1px solid var(--line)}
+.stp .sb button{flex:1;border:0;background:transparent;color:var(--mute);display:grid;place-items:center;padding:0;min-height:0}
+.stp .sb button:hover{background:var(--hover);color:var(--ink)}
+.stp .sb .ic{width:12px;height:12px}
+.ib.tb{width:auto;min-width:44px;height:50px;padding:4px 5px 2px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.ib.tb .tl{font-size:10.5px;line-height:1.15;color:var(--mute);white-space:nowrap}
+.ib.tb.on .tl{color:var(--pri-ink)}.ib.tb.pri .tl{color:#fff}
+.hdr .sep.tall{height:32px}
+.edl .epanel{top:calc(env(safe-area-inset-top,0px) + 80px);max-height:calc(100vh - 94px)}
+@media (max-width:900px){.edl .epanel{top:auto;max-height:none}}
+.fb.k-comb{border-color:#c2317a;background:rgba(194,49,122,.07)}
+.pr.k-comb .ic{color:#c2317a}
+.fb .cells{position:absolute;inset:0;display:flex;pointer-events:none}
+.fb .cells u{flex:1;min-width:0;text-decoration:none;border-right:1px solid rgba(194,49,122,.6);display:grid;place-items:center;color:#5a1236;overflow:hidden;line-height:1}
+.fb .cells u:last-child{border-right:0}
+.cmb{position:absolute;display:flex;border:1px solid #7b8498;background:rgba(220,232,255,.55);border-radius:2px;cursor:text;color:#0a1a4d;box-sizing:border-box}
+.cmb u{flex:1;min-width:0;text-decoration:none;display:grid;place-items:center;border-right:1px solid #7b8498;overflow:hidden;line-height:1}
+.cmb u:last-of-type{border-right:0}
+.cmb u.cur{background:rgba(255,248,200,.95);box-shadow:inset 0 0 0 2px rgba(232,163,23,.55)}
+.cmb input{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;cursor:text}
+.cmb.req{border-color:#d1434b}
+.fb.k-radio{border-color:#7a6a00;background:rgba(122,106,0,.10);border-radius:50%}
+.fb.k-radio .pv{border-radius:50%}
+.fb .rdot{position:absolute;left:50%;top:50%;width:46%;height:46%;transform:translate(-50%,-50%);border-radius:50%;background:#7a6a00;opacity:.6;pointer-events:none}
+.pr.k-radio .ic{color:#7a6a00}
+.pprops .seg{flex-wrap:wrap;gap:4px}
+.psec{border-bottom:1px solid var(--line)}
+.psec:last-of-type{border-bottom:0}
+.psh{width:100%;display:flex;align-items:center;gap:6px;padding:8px 2px;border:0;background:transparent;color:var(--ink);font-weight:600;font-size:13px}
+.psh span{flex:1;text-align:left}
+.psh .ic{width:16px;height:16px;color:var(--mute);flex:none}
+.psh .ic:last-child{width:14px;height:14px;transition:transform .15s}
+.psec.closed .psh .ic:last-child{transform:rotate(-90deg)}
+.psec.closed .psb{display:none}
+.psb{padding:2px 0 8px}
+.row input[type=color]{flex:none;width:46px;padding:2px;height:34px;cursor:pointer}
+.edl.painting .fb,.edl.painting .pr{cursor:copy}
+.sig{position:absolute;display:flex;align-items:center;justify-content:center;gap:4px;border:1.5px dashed #7b8498;background:rgba(220,232,255,.55);color:#2457d6;cursor:pointer;border-radius:3px;padding:0;font:inherit;font-size:12px;overflow:hidden}
+.sig img{max-width:100%;max-height:100%;object-fit:contain}
+.sig.req{border-color:#d1434b}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+<div id="app"></div>
+<script>window.APP_CONFIG = { githubRepo: 'sam0610/formlib', githubBranch: 'main', githubDir: 'data' };</script>
+<script>
+'use strict';
+const CFG = window.APP_CONFIG || {};
+const PREVIEW = !!window.APP_PREVIEW;
+const CLOUD = !!(CFG.supabaseUrl && CFG.supabaseKey && window.supabase);
+const GH = (!CLOUD && CFG.githubRepo) ? { repo: CFG.githubRepo, branch: CFG.githubBranch || 'main', dir: String(CFG.githubDir || 'formlib').replace(/^\/+|\/+$/g, '') } : null;
+let GHTOKEN = ''; try { GHTOKEN = localStorage.getItem('flgh') || ''; } catch (e) { }
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const { PDFDocument, PDFButton, PDFTextField, PDFCheckBox, PDFDropdown, PDFRadioGroup, PDFOptionList } = PDFLib;
+
+/* ---------- helpers ---------- */
+const hexToRgb = h => { const m = /^#?([0-9a-f]{6})([0-9a-f]{2})?$/i.exec(h || ''); if (!m) return undefined; const n = parseInt(m[1], 16), a = m[2] ? parseInt(m[2], 16) / 255 : 1; const c = v => (v / 255) * a + (1 - a); return PDFLib.rgb(c(n >> 16 & 255), c(n >> 8 & 255), c(n & 255)); };
+/* ---------- fonts: built-in standard fonts + fonts loaded from the computer (kept inside the template PDF as attachments) ---------- */
+const BUILTIN = { '': ['黑體（預設）', 'fonts/font.ttf', '"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif'], serif: ['明體', 'fonts/serif.ttf', '"Noto Serif TC","PMingLiU","Songti TC",serif'], mono: ['等寬', 'fonts/mono.ttf', '"IBM Plex Mono","Noto Sans TC",monospace'] };
+const LEGACY = { helv: '', times: 'serif', cour: 'mono' };
+const normFont = k => (k == null || k === '') ? null : (Object.prototype.hasOwnProperty.call(LEGACY, k) ? (LEGACY[k] || null) : k);
+const BF = {}, BFACE = {};
+function builtinBytes(key) { if (key === '' || key == null) return getFont().then(x => new Uint8Array(x)); const b = BUILTIN[key]; if (!b) return Promise.resolve(null); return BF[key] || (BF[key] = (async () => { const r = await fetch(b[1]); if (!r.ok) throw new Error('找不到字體 ' + b[1]); return new Uint8Array(await r.arrayBuffer()); })()); }
+function useBuiltinFace(key) { if (!key || !BUILTIN[key] || BFACE[key]) return; BFACE[key] = true; builtinBytes(key).then(async by => { const ff = new FontFace('FLB_' + key, by.slice().buffer); await ff.load(); document.fonts.add(ff); }).catch(e => console.warn('字體預覽載入失敗', key, e)); }
+let FONTS = {}; // name -> { bytes, fam }
+const fontCss = k0 => { const k = normFont(k0); if (!k) return ''; if (BUILTIN[k]) { useBuiltinFace(k); return `"FLB_${k}",${BUILTIN[k][2]}`; } return (k.startsWith('c:') && FONTS[k.slice(2)]) ? `"${FONTS[k.slice(2)].fam}", sans-serif` : ''; };
+async function addFont(name, bytes) {
+  const fam = 'FL_' + encodeURIComponent(name).replace(/[^A-Za-z0-9]/g, '_') + '_' + bytes.length; FONTS[name] = { bytes, fam };
+  try { const ff = new FontFace(fam, bytes.slice().buffer); await ff.load(); document.fonts.add(ff); } catch (e) { console.warn('字體預覽載入失敗', name, e); }
+}
+function readAttachedFonts(doc) {
+  const out = {};
+  try {
+    const { PDFName, PDFDict, PDFArray, PDFRawStream, decodePDFRawStream } = PDFLib;
+    const names = doc.catalog.lookupMaybe(PDFName.of('Names'), PDFDict), ef = names && names.lookupMaybe(PDFName.of('EmbeddedFiles'), PDFDict), arr = ef && ef.lookupMaybe(PDFName.of('Names'), PDFArray); if (!arr) return out;
+    for (let i = 0; i + 1 < arr.size(); i += 2) {
+      const m = /^flfont-(.+)\.ttf$/.exec(arr.lookup(i).decodeText()); if (!m) continue;
+      const spec = arr.lookup(i + 1, PDFDict), efd = spec.lookup(PDFName.of('EF'), PDFDict), st = efd.lookup(PDFName.of('F'), PDFRawStream);
+      out[decodeURIComponent(m[1])] = decodePDFRawStream(st).decode();
+    }
+  } catch (e) { console.warn('讀取內嵌字體失敗', e); }
+  return out;
+}
+async function loadAttachedFonts(doc) { FONTS = {}; const att = readAttachedFonts(doc); for (const [n, b] of Object.entries(att)) await addFont(n, b); }
+function ttcFace(bytes, idx) {   // pull one font out of a .ttc so pdf-lib can embed it
+  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength); const o = dv.getUint32(12 + idx * 4); const n = dv.getUint16(o + 4);
+  const recs = []; for (let i = 0; i < n; i++) { const r = o + 12 + i * 16; recs.push({ tag: bytes.slice(r, r + 4), sum: dv.getUint32(r + 4), off: dv.getUint32(r + 8), len: dv.getUint32(r + 12) }); }
+  let size = 12 + n * 16; recs.forEach(r => { r.pos = size; size += (r.len + 3) & ~3; }); const out = new Uint8Array(size), ov = new DataView(out.buffer);
+  out.set(bytes.slice(o, o + 12)); recs.forEach((r, i) => { const q = 12 + i * 16; out.set(r.tag, q); ov.setUint32(q + 4, r.sum); ov.setUint32(q + 8, r.pos); ov.setUint32(q + 12, r.len); out.set(bytes.slice(r.off, r.off + r.len), r.pos); }); return out;
+}
+async function loadFontFile(file, want) {
+  let bytes = new Uint8Array(await file.arrayBuffer()); let ft; try { ft = fontkit.create(bytes); } catch (e) { throw new Error('無法讀取此字體檔（支援 .ttf／.otf／.woff／.ttc）'); }
+  if (ft.fonts) { let i = want ? ft.fonts.findIndex(f => f.fullName === want || f.postscriptName === want || f.familyName === want) : 0; if (i < 0) i = 0; bytes = ttcFace(bytes, i); ft = fontkit.create(bytes); }
+  if (bytes.length > 15 * 1024 * 1024) throw new Error('字體檔太大（超過 15MB）。完整嘅中文字體通常好大，建議用內建嘅黑體／明體／等寬');
+  let name = ft.fullName || ft.familyName || file.name.replace(/\.[^.]+$/, ''), n = 2; const base = name; while (FONTS[name] && FONTS[name].bytes.length !== bytes.length) name = `${base}_${n++}`;
+  await addFont(name, bytes); return name;
+}
+async function pickLocalFont(cb) {
+  let list; try { list = await window.queryLocalFonts(); } catch (e) { return toast('讀取電腦字體失敗（瀏覽器未授權或不支援）', true); }
+  const byName = new Map(); list.forEach(fd => { if (!byName.has(fd.fullName)) byName.set(fd.fullName, fd); });
+  const m = modal(`<h3>電腦已安裝字體</h3><div class="row"><input id="lfq" placeholder="搜尋字體名稱"></div><div class="vlist" id="lfl" style="max-height:50vh;overflow:auto"></div><div class="acts"><button class="btn" id="lfx">關閉</button></div>`);
+  const draw = () => {
+    const qy = $('#lfq', m).value.trim().toLowerCase(); const items = [...byName.values()].filter(fd => !qy || fd.fullName.toLowerCase().includes(qy) || fd.family.toLowerCase().includes(qy)).slice(0, 200);
+    $('#lfl', m).innerHTML = items.map((fd, i) => `<div class="vi" data-i="${i}" style="cursor:pointer"><span style="flex:1">${esc(fd.fullName)}</span></div>`).join('') || '<p class="note">冇符合嘅字體</p>';
+    $('#lfl', m).querySelectorAll('[data-i]').forEach(r => r.onclick = async () => { const fd = items[+r.dataset.i]; try { const nm = await loadFontFile(new File([await fd.blob()], fd.fullName + '.ttf'), fd.fullName); m.remove(); cb(nm); } catch (er) { toast(er.message || '字體載入失敗', true); } });
+  };
+  $('#lfq', m).oninput = draw; $('#lfx', m).onclick = () => m.remove(); draw();
+}
+async function pickFieldFont(doc, key0, text, cache) {
+  const key = normFont(key0); if (!key) return null; let pf = cache[key];
+  if (pf === undefined) { try { doc.registerFontkit(fontkit); if (BUILTIN[key]) pf = await doc.embedFont(await builtinBytes(key), { subset: false }); else if (key.startsWith('c:') && FONTS[key.slice(2)]) pf = await doc.embedFont(FONTS[key.slice(2)].bytes, { subset: true }); else pf = null; } catch (e) { console.warn('字體嵌入失敗', key, e); pf = null; } cache[key] = pf; }
+  if (!pf) return null;
+  try { const set = new Set(pf.getCharacterSet()); if (![...text].every(ch => ch === '\n' || ch === '\r' || set.has(ch.codePointAt(0)))) return null; } catch (e) { }
+  return pf;
+}
+// pdf-lib always paints buttons light grey; strip the fill so a signature box stays transparent
+const clearBtnBg = (b, form) => { const w = b.acroField.getWidgets()[0]; w.getAppearanceCharacteristics().dict.delete(PDFLib.PDFName.of('BG')); b.updateWidgetAppearance(w, form.getDefaultFont()); };
+const arrToHex = a => { if (!a || !a.length) return null; let r, g, b; if (a.length === 1) r = g = b = a[0]; else if (a.length === 3) [r, g, b] = a; else if (a.length === 4) { const [c, m, y, k] = a; r = (1 - c) * (1 - k); g = (1 - m) * (1 - k); b = (1 - y) * (1 - k); } else return null; const h = v => Math.round(Math.max(0, Math.min(1, v)) * 255).toString(16).padStart(2, '0'); return '#' + h(r) + h(g) + h(b); };
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const IC = {
+  grip:'<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01" stroke-width="3" stroke-linecap="round"/>',
+  save:'<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>', search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  wand:'<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>', download:'<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',
+  upload:'<path d="M12 16V5M7 9l5-5 5 5M5 20h14"/>', edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  back:'<path d="M15 5l-7 7 7 7"/>', check:'<path d="M5 12l5 5L20 7"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  logout:'<path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/>', history:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  text:'<path d="M4 7V5h16v2M12 5v14M9 19h6"/>', multi:'<path d="M4 6h16M4 12h16M4 18h10"/>',
+  checkbox:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l3 3 5-6"/>', dropdown:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M9 11l3 3 3-3"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>', file:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>',
+  comb:'<rect x="2.5" y="7" width="19" height="10" rx="1.5"/><path d="M8.8 7v10M15.2 7v10"/>',
+  radio:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/>',
+  aL:'<path d="M4 3v18"/><rect x="7" y="6" width="12" height="4" rx="1"/><rect x="7" y="14" width="8" height="4" rx="1"/>', aC:'<path d="M12 3v18"/><rect x="5" y="6" width="14" height="4" rx="1"/><rect x="8" y="14" width="8" height="4" rx="1"/>', aR:'<path d="M20 3v18"/><rect x="5" y="6" width="12" height="4" rx="1"/><rect x="9" y="14" width="8" height="4" rx="1"/>',
+  aT:'<path d="M3 4h18"/><rect x="6" y="7" width="4" height="12" rx="1"/><rect x="14" y="7" width="4" height="8" rx="1"/>', aM:'<path d="M3 12h18"/><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="8" width="4" height="8" rx="1"/>', aB:'<path d="M3 20h18"/><rect x="6" y="5" width="4" height="12" rx="1"/><rect x="14" y="9" width="4" height="8" rx="1"/>',
+  dH:'<path d="M4 3v18M20 3v18"/><rect x="9.5" y="7" width="5" height="10" rx="1"/>', dV:'<path d="M3 4h18M3 20h18"/><rect x="7" y="9.5" width="10" height="5" rx="1"/>',
+  caret:'<path d="M7 10l5 5 5-5z" fill="currentColor" stroke="none"/>', drop:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>', eyedrop:'<path d="M14 6l4 4M16 4l4 4-2.5 2.5-4-4zM13 8l-8 8v3h3l8-8"/>', up:'<path d="M6 15l6-6 6 6"/>', down:'<path d="M6 9l6 6 6-6"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>', eraser:'<path d="M7 21h13M5 15l9-9 5 5-6 6H8z"/>', cloud:'<path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1 0 9z"/>',
+  pen:'<path d="M3 16c2.5-6 4.5-10 6.5-10 2.2 0 .3 8.5 2.5 8.5s2.5-5.5 4.5-5.5c1.5 0 1 3 4.5 3"/><path d="M3 20.5h18"/>', undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>', redo:'<path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/>', brush:'<path d="M18 3l3 3-9 9-3-3z"/><path d="M9 12c-3 0-4 2-4 4 0 2-1 3-2 4 3 1 8 0 8-4"/>',
+  sliders:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>', list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>', alL:'<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>', alC:'<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>', alR:'<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>', copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  menu:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>', chev:'<path d="m9 6 6 6-6 6"/>', folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  device:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>', cursor:'<path d="M5 3l14 8-6 2-2 6z"/>'
+};
+const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="width:${s}px;height:${s}px"` : ''}>${IC[n] || ''}</svg>`;
+const ib = (id, icon, tip, cls = '') => `<button class="ib ${cls}" data-act="${id}" title="${esc(tip)}">${ic(icon)}</button>`;
+function toast(msg, err) { const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), err ? 4500 : 2200); }
+const fmtDate = s => s ? new Date(s).toLocaleDateString('zh-HK') : '';
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id' + Date.now() + Math.random().toString(16).slice(2));
+function download(bytes, name, type = 'application/pdf') { if (PREVIEW) return showPdfPreview(bytes, name); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+function ask(msg) { return new Promise(res => { const m = modal(`<h3>${esc(msg)}</h3><div class="acts"><button class="btn" id="an">取消</button><button class="btn pri" id="ay">確定</button></div>`); m.querySelector('#an').onclick = () => { m.remove(); res(false); }; m.querySelector('#ay').onclick = () => { m.remove(); res(true); }; m.addEventListener('mousedown', e => { if (e.target === m) res(false); }); }); }
+function modal(html) { const m = document.createElement('div'); m.className = 'mask'; m.innerHTML = `<div class="dlg">${html}</div>`; m.addEventListener('mousedown', e => { if (e.target === m) m.remove(); }); document.body.appendChild(m); return m; }
+
+/* ---------- storage adapters ---------- */
+const nextVersion = (all, name) => Math.max(0, ...all.filter(t => t.name === name && !t.draft).map(t => t.version)) + 1;
+const Local = {
+  db: null,
+  open() { return new Promise((res, rej) => { const r = indexedDB.open('formlib', 1); r.onupgradeneeded = () => r.result.createObjectStore('templates', { keyPath: 'id' }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); },
+  async run(mode, fn) { this.db = this.db || await this.open(); return new Promise((res, rej) => { const t = this.db.transaction('templates', mode); const rq = fn(t.objectStore('templates')); t.oncomplete = () => res(rq && rq.result); t.onerror = () => rej(t.error); }); },
+  async list() { const all = await this.run('readonly', s => s.getAll()); return all.map(({ blob, ...m }) => m).sort((a, b) => b.created_at.localeCompare(a.created_at)); },
+  async getBlob(t) { return (await this.run('readonly', s => s.get(t.id))).blob; },
+  async publish(meta, blob) {
+    const m = await this.files(meta, blob); let gone = [];
+    await this.mutate(items => {
+      const version = nextVersion(items, m.name); const same = items.find(x => x.name === m.name && !x.draft && x.tid);
+      const cur = { ...m, id: uid(), tid: same ? same.tid : uid(), version, active: true, draft: false, created_at: new Date().toISOString() };
+      const next = [...items.map(x => x.name === m.name && x.active ? { ...x, active: false } : x), cur];
+      const drop = new Set(next.filter(x => x.name === m.name && !x.draft).sort((a, b) => b.version - a.version).slice(3).map(x => x.id)); // keep this version + 2 older
+      gone = next.filter(x => drop.has(x.id)); return next.filter(x => !drop.has(x.id));
+    }, `發佈 ${m.name}${m.by ? '（' + m.by + '）' : ''}`);
+    for (const g of gone) { await this.delFile(g.file_path, '清理舊版本'); if (g.thumb_path) await this.delFile(g.thumb_path, '清理舊版本'); }
+  },
+  async setActive(t) {
+    const all = await this.list();
+    for (const o of all.filter(x => x.name === t.name && x.active && x.id !== t.id)) { const f = await this.run('readonly', s => s.get(o.id)); f.active = false; await this.run('readwrite', s => s.put(f)); }
+    const f = await this.run('readonly', s => s.get(t.id)); f.active = true; await this.run('readwrite', s => s.put(f));
+  },
+  async saveDraft(meta, blob, id) {
+    const all = await this.list(); const old = all.find(x => x.draft && (x.id === id || x.name === meta.name));
+    const rid = old ? old.id : uid();
+    await this.run('readwrite', s => s.put({ ...meta, id: rid, version: 0, active: false, draft: true, created_at: new Date().toISOString(), blob })); return rid;
+  },
+  async remove(t) { await this.run('readwrite', s => s.delete(t.id)); },
+  async setNote(t, note) { const f = await this.run('readonly', s => s.get(t.id)); f.note = note; await this.run('readwrite', s => s.put(f)); },
+  async clear() { await this.run('readwrite', s => s.clear()); },
+  async deactivate(t) { const f = await this.run('readonly', s => s.get(t.id)); f.active = false; await this.run('readwrite', s => s.put(f)); }
+};
+let sb = null;
+const Cloud = {
+  async list() { const { data, error } = await sb.from('templates').select('id,name,category,version,active,draft,note,field_count,thumb,file_path,created_at').order('created_at', { ascending: false }); if (error) throw error; return data; },
+  async getBlob(t) { const { data, error } = await sb.storage.from('templates').download(t.file_path); if (error) throw error; return data; },
+  async publish(meta, blob) {
+    const all = await this.list(); const version = nextVersion(all, meta.name);
+    const path = `${uid()}.pdf`;
+    let r = await sb.storage.from('templates').upload(path, blob, { contentType: 'application/pdf' }); if (r.error) throw r.error;
+    r = await sb.from('templates').update({ active: false }).eq('name', meta.name).eq('active', true); if (r.error) throw r.error;
+    r = await sb.from('templates').insert({ ...meta, version, active: true, file_path: path, created_by: S.user.id }); if (r.error) throw r.error;
+  },
+  async setActive(t) { let r = await sb.from('templates').update({ active: false }).eq('name', t.name).eq('active', true); if (r.error) throw r.error; r = await sb.from('templates').update({ active: true }).eq('id', t.id); if (r.error) throw r.error; },
+  async deactivate(t) { const r = await sb.from('templates').update({ active: false }).eq('id', t.id); if (r.error) throw r.error; },
+  async saveDraft(meta, blob, id) {
+    const all = await this.list(); const old = all.find(x => x.draft && (x.id === id || x.name === meta.name));
+    const path = `${uid()}.pdf`;
+    let r = await sb.storage.from('templates').upload(path, blob, { contentType: 'application/pdf' }); if (r.error) throw r.error;
+    if (old) { r = await sb.from('templates').update({ ...meta, file_path: path, created_at: new Date().toISOString() }).eq('id', old.id); if (r.error) throw r.error; await sb.storage.from('templates').remove([old.file_path]); return old.id; }
+    r = await sb.from('templates').insert({ ...meta, version: 0, active: false, draft: true, file_path: path, created_by: S.user.id }).select('id').single(); if (r.error) throw r.error; return r.data.id;
+  },
+  async remove(t) { const r = await sb.from('templates').delete().eq('id', t.id); if (r.error) throw r.error; await sb.storage.from('templates').remove([t.file_path]); },
+  async setNote(t, note) { const r = await sb.from('templates').update({ note }).eq('id', t.id); if (r.error) throw r.error; }
+};
+/* GitHub 模式：公開 repo 內 index.json 作資料庫，PDF 與縮圖為檔案；讀取免登入，寫入需 token（主管） */
+const GHub = {
+  api(path, opt = {}) { return fetch(`https://api.github.com/repos/${GH.repo}${path}`, { ...opt, headers: { Accept: 'application/vnd.github+json', ...(GHTOKEN ? { Authorization: 'Bearer ' + GHTOKEN } : {}), ...(opt.headers || {}) } }); },
+  raw: p => `https://raw.githubusercontent.com/${GH.repo}/${GH.branch}/${p}`,
+  b64(bytes) { let s = ''; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); },
+  ub64(s) { return Uint8Array.from(atob(s.replace(/\s/g, '')), c => c.charCodeAt(0)); },
+  async err(r) { let m = ''; try { m = (await r.json()).message || ''; } catch (e) { } return new Error(r.status === 401 || r.status === 403 ? `GitHub 拒絕存取（${r.status}）：token 無效或沒有此 repo 的寫入權限` : r.status === 404 ? 'GitHub 找不到 repo／檔案，請檢查 config.js 的 githubRepo' : `GitHub 錯誤 ${r.status} ${m}`); },
+  idx() { return GH.dir + '/index.json'; },
+  async readIndex() {
+    if (GHTOKEN) {
+      const r = await this.api(`/contents/${this.idx()}?ref=${encodeURIComponent(GH.branch)}`); if (r.status === 404) return { items: [], sha: null }; if (!r.ok) throw await this.err(r);
+      const j = await r.json(); const txt = j.content ? new TextDecoder().decode(this.ub64(j.content)) : await (await fetch(j.download_url)).text(); return { items: JSON.parse(txt || '[]'), sha: j.sha };
+    }
+    const r = await fetch(this.raw(this.idx()) + '?t=' + Date.now()); if (r.status === 404) return { items: [], sha: null }; if (!r.ok) throw new Error('讀取範本庫失敗 ' + r.status); return { items: await r.json(), sha: null };
+  },
+  async put(path, bytes, msg, sha) { const body = { message: msg, content: this.b64(bytes), branch: GH.branch }; if (sha) body.sha = sha; const r = await this.api(`/contents/${path}`, { method: 'PUT', body: JSON.stringify(body) }); return r; },
+  async mutate(fn, msg) {
+    for (let i = 0; i < 4; i++) {
+      const { items, sha } = await this.readIndex(); const next = fn(items);
+      const r = await this.put(this.idx(), new TextEncoder().encode(JSON.stringify(next, null, 1)), msg, sha);
+      if (r.ok) return next; if (r.status === 409 || r.status === 422) continue; throw await this.err(r);
+    }
+    throw new Error('同時有其他人修改，請稍後再試');
+  },
+  async upload(path, bytes, msg) { const r = await this.put(path, bytes, msg); if (!r.ok) throw await this.err(r); },
+  async delFile(path, msg) { try { const g = await this.api(`/contents/${path}?ref=${encodeURIComponent(GH.branch)}`); if (!g.ok) return; const j = await g.json(); await this.api(`/contents/${path}`, { method: 'DELETE', body: JSON.stringify({ message: msg, sha: j.sha, branch: GH.branch }) }); } catch (e) { console.warn('刪除檔案失敗', path, e); } },
+  async list() { const { items } = await this.readIndex(); return items.map(t => ({ ...t, thumb: t.thumb_path ? this.raw(t.thumb_path) : '' })).sort((a, b) => b.created_at.localeCompare(a.created_at)); },
+  async getBlob(t) {
+    if (GHTOKEN) { const r = await this.api(`/contents/${t.file_path}?ref=${encodeURIComponent(GH.branch)}`, { headers: { Accept: 'application/vnd.github.raw+json' } }); if (!r.ok) throw await this.err(r); return await r.blob(); }
+    const r = await fetch(this.raw(t.file_path)); if (!r.ok) throw new Error('下載範本失敗 ' + r.status); return await r.blob();
+  },
+  async files(meta, blob) {
+    const fid = uid(), file_path = `${GH.dir}/files/${fid}.pdf`, thumb_path = meta.thumb ? `${GH.dir}/files/${fid}.jpg` : '';
+    await this.upload(file_path, new Uint8Array(await blob.arrayBuffer()), `上載 ${meta.name}`);
+    if (thumb_path) await this.upload(thumb_path, this.ub64(meta.thumb.split(',')[1]), `縮圖 ${meta.name}`);
+    const { thumb, ...rest } = meta; return { ...rest, file_path, thumb_path };
+  },
+  async publish(meta, blob) {
+    const m = await this.files(meta, blob);
+    await this.mutate(items => { const version = nextVersion(items, m.name); return [...items.map(x => x.name === m.name && x.active ? { ...x, active: false } : x), { ...m, id: uid(), version, active: true, draft: false, created_at: new Date().toISOString() }]; }, `發佈 ${m.name}`);
+  },
+  async setActive(t) { await this.mutate(items => items.map(x => x.name === t.name && !x.draft ? { ...x, active: x.id === t.id } : x), `使用 ${t.name} v${t.version}`); },
+  async deactivate(t) { await this.mutate(items => items.map(x => x.id === t.id ? { ...x, active: false } : x), `停用 ${t.name}`); },
+  async saveDraft(meta, blob, id) {
+    const m = await this.files(meta, blob); let old = null, rid = null;
+    await this.mutate(items => { old = items.find(x => x.draft && (x.id === id || x.name === m.name)) || null; rid = old ? old.id : uid(); const e = { ...m, id: rid, version: 0, active: false, draft: true, created_at: new Date().toISOString() }; return old ? items.map(x => x.id === rid ? e : x) : [...items, e]; }, `草稿 ${m.name}`);
+    if (old) { await this.delFile(old.file_path, '清理舊草稿'); if (old.thumb_path) await this.delFile(old.thumb_path, '清理舊草稿'); }
+    return rid;
+  },
+  async remove(t) {
+    let gone = null; await this.mutate(items => { gone = items.find(x => x.id === t.id) || null; return items.filter(x => x.id !== t.id); }, `刪除 ${t.name} ${t.draft ? '草稿' : 'v' + t.version}`);
+    if (gone) { await this.delFile(gone.file_path, '清理檔案'); if (gone.thumb_path) await this.delFile(gone.thumb_path, '清理檔案'); }
+  },
+  async setNote(t, note) { await this.mutate(items => items.map(x => x.id === t.id ? { ...x, note } : x), `備註 ${t.name} v${t.version}`); },
+  async verify() { const r = await this.api(''); if (!r.ok) return false; const j = await r.json(); return !!(j.permissions && (j.permissions.push || j.permissions.admin)); }
+};
+const Store = CLOUD ? Cloud : GH ? GHub : Local;
+
+/* ---------- state ---------- */
+const S = { zoom: 1, view: 'library', all: [], q: '', cat: '', user: null, admin: !CLOUD && !GH, fill: null, ed: null, sideOpen: undefined, closed: new Set() };
+const NONE = '__none';
+
+async function initAuth() {
+  if (GH) { S.user = null; S.admin = false; if (GHTOKEN) { try { S.admin = await GHub.verify(); } catch (e) { } if (!S.admin) { GHTOKEN = ''; try { localStorage.removeItem('flgh'); } catch (e) { } } } return; }
+  if (!CLOUD) { S.user = { email: '本機模式' }; S.admin = true; return; }
+  sb = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey);
+  const { data } = await sb.auth.getSession();
+  S.user = data.session ? data.session.user : null;
+  S.admin = false;
+  if (S.user) { const { data: p } = await sb.from('profiles').select('role').eq('id', S.user.id).maybeSingle(); S.admin = p && p.role === 'admin'; }
+}
+async function refresh() { try { S.all = await Store.list(); } catch (e) { console.error(e); toast('讀取範本失敗：' + (e.message || e), true); S.all = []; } }
+
+/* ---------- shell / library ---------- */
+const app = $('#app');
+function header(extra = '') {
+  return `<div class="hdr"><div class="logo"><i>${ic('file', 18)}</i><span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v36</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  ${CLOUD ? ib('logout', 'logout', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ib('ghout', 'logout', '主管登出') : ib('ghin', 'lock', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
+}
+function renderLogin(msg = '') {
+  app.innerHTML = `<div class="login"><h2>${ic('lock')} 登入表格範本庫</h2>
+  <input id="em" type="email" placeholder="電郵" autocomplete="username"><input id="pw" type="password" placeholder="密碼" autocomplete="current-password">
+  <div style="color:var(--bad);min-height:20px">${esc(msg)}</div>
+  <button class="btn pri" id="li">登入</button><button class="btn" id="su">註冊新帳戶</button></div>`;
+  const go = async (up) => {
+    const email = $('#em').value.trim(), password = $('#pw').value;
+    const r = up ? await sb.auth.signUp({ email, password }) : await sb.auth.signInWithPassword({ email, password });
+    if (r.error) return renderLogin(r.error.message);
+    if (up && !r.data.session) return renderLogin('註冊成功，請到電郵確認後再登入');
+    await boot();
+  };
+  $('#li').onclick = () => go(false); $('#su').onclick = () => go(true);
+  $('#pw').onkeydown = e => { if (e.key === 'Enter') go(false); };
+}
+/* ---------- admin password gate: the GitHub token is stored AES-GCM encrypted (PBKDF2) in data/auth.json ---------- */
+const B64 = { e: u => { let s = ''; for (let i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); }, d: t => Uint8Array.from(atob(t), c => c.charCodeAt(0)) };
+async function kdfKey(pw, salt, iter) { const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']); return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: iter, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']); }
+async function sealToken(tok, pw) { const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iter = 300000; const key = await kdfKey(pw, salt, iter); const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(tok))); return { v: 1, iter, salt: B64.e(salt), iv: B64.e(iv), ct: B64.e(ct) }; }
+async function openToken(o, pw) { const key = await kdfKey(pw, B64.d(o.salt), o.iter); return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: B64.d(o.iv) }, key, B64.d(o.ct))); }
+async function fetchAuth() { const r = await fetch(GHub.raw(GH.dir + '/auth.json') + '?t=' + Date.now()); if (r.status === 404) return null; if (!r.ok) throw new Error('讀取設定失敗 ' + r.status); return await r.json(); }
+async function renderGate(msg = '', mode = '') {
+  app.innerHTML = '<div class="spin"></div>';
+  let auth = null; try { auth = await fetchAuth(); } catch (e) { msg = e.message; }
+  const setup = mode === 'setup' || !auth;
+  app.innerHTML = `<div class="login"><h2>${ic('lock')} 表格範本庫</h2>` + (setup
+    ? `<p class="note" style="margin:0">${auth ? '重新設定管理員密碼與 GitHub token。' : '首次設定：貼上 GitHub token，並設定管理員密碼。'}</p>
+    <input id="gt" type="password" placeholder="GitHub token（github_pat_…）" autocomplete="off"><input id="p1" type="password" placeholder="新管理員密碼（至少 10 個字元）" autocomplete="new-password"><input id="p2" type="password" placeholder="再輸入一次密碼" autocomplete="new-password">`
+    : `<input id="pw" type="password" placeholder="管理員密碼" autocomplete="current-password"><label class="note" style="display:flex;gap:6px;align-items:center;margin:0"><input id="rm" type="checkbox"> 在此裝置記住</label>`)
+    + `<div id="gm" style="color:var(--bad);min-height:20px">${esc(msg)}</div><button class="btn pri" id="go" title="確定">${ic('check', 16)}</button>`
+    + (auth ? `<button class="btn" id="sw" style="margin-top:8px">${setup ? '返回輸入密碼' : '重新設定密碼／更換 token'}</button>` : '') + '</div>';
+  const fail = m => { $('#gm').textContent = m; };
+  const enter = async (tok, remember) => { GHTOKEN = tok; try { if (remember) localStorage.setItem('flgh', tok); } catch (e) { } S.admin = await GHub.verify(); if (!S.admin) { GHTOKEN = ''; try { localStorage.removeItem('flgh'); } catch (e) { } return fail('此 token 沒有 formlib 的寫入權限'); } await refresh(); renderLibrary(); };
+  if ($('#sw')) $('#sw').onclick = () => renderGate('', setup ? '' : 'setup');
+  const go = async () => {
+    const b = $('#go'); b.disabled = true;
+    try {
+      if (setup) {
+        const tok = $('#gt').value.trim(), p1 = $('#p1').value, p2 = $('#p2').value;
+        if (!tok) return fail('請貼上 GitHub token'); if (p1.length < 10) return fail('密碼至少 10 個字元'); if (p1 !== p2) return fail('兩次密碼不一致');
+        GHTOKEN = tok; if (!(await GHub.verify())) { GHTOKEN = ''; return fail('此 token 沒有 formlib 的寫入權限'); }
+        const body = new TextEncoder().encode(JSON.stringify(await sealToken(tok, p1)));
+        let sha; const g = await GHub.api(`/contents/${GH.dir}/auth.json?ref=${encodeURIComponent(GH.branch)}`); if (g.ok) sha = (await g.json()).sha;
+        const r = await GHub.put(GH.dir + '/auth.json', body, '設定管理員密碼', sha); if (!r.ok) throw await GHub.err(r);
+        await enter(tok, true);
+      } else {
+        const pw = $('#pw').value; if (!pw) return fail('請輸入密碼');
+        let tok; try { tok = await openToken(auth, pw); } catch (e) { return fail('密碼不正確'); }
+        await enter(tok, $('#rm').checked);
+      }
+    } catch (e) { fail(e.message || String(e)); } finally { b.disabled = false; }
+  };
+  $('#go').onclick = go; app.querySelectorAll('input').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
+  const f = $('#pw') || $('#gt'); if (f) f.focus();
+}
+
+function ghLogin() {
+  const m = modal(`<h3>${ic('lock')} 主管登入</h3><p class="note">貼上有「${esc(GH.repo)}」寫入權限的 GitHub token。用家不需要登入。</p>
+  <div class="row"><input id="gt" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+  <p class="note">建立方法：GitHub → Settings → Developer settings → Fine-grained tokens → 只揀此 repo → Contents: Read and write。</p>
+  <div class="acts"><button class="btn" id="gx">取消</button><button class="btn pri" id="go">${ic('check', 16)}</button></div>`);
+  $('#gx', m).onclick = () => m.remove(); $('#gt', m).focus();
+  const go = async () => {
+    const v = $('#gt', m).value.trim(); if (!v) return; GHTOKEN = v;
+    try { if (!(await GHub.verify())) { GHTOKEN = ''; return toast('此 token 沒有寫入權限', true); } } catch (e) { GHTOKEN = ''; return toast('驗證失敗：' + e.message, true); }
+    try { localStorage.setItem('flgh', v); } catch (e) { }
+    S.admin = true; m.remove(); await refresh(); renderLibrary(); toast('已登入為主管');
+  };
+  $('#go', m).onclick = go; $('#gt', m).onkeydown = e => { if (e.key === 'Enter') go(); };
+}
+function renderLibrary() {
+  S.view = 'library'; if (S.sideOpen === undefined) S.sideOpen = window.innerWidth > 720;
+  const q = S.q.toLowerCase();
+  const found = S.all.filter(t => t.active && !t.draft && (!q || (t.name + (t.category || '') + (t.note || '')).toLowerCase().includes(q)));
+  const groups = new Map(); found.forEach(t => { const k = t.category || NONE; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(t); });
+  const keys = [...groups.keys()].sort((a, b) => a === NONE ? 1 : b === NONE ? -1 : a.localeCompare(b, 'zh-HK'));
+  const list = found.filter(t => !S.cat || (S.cat === NONE ? !t.category : t.category === S.cat));
+  const label = k => k === NONE ? '未分類' : k;
+  const side = `<nav class="sbar" aria-label="部門">
+    <div class="sd all ${!S.cat ? 'on' : ''}" data-cat=""><span class="sdn">全部範本</span><span class="chip">${found.length}</span></div><div class="sep2"></div>
+    ${keys.map(k => { const open = !S.closed.has(k); return `<div class="sd ${S.cat === k ? 'on' : ''}" data-cat="${esc(k)}"><button class="ib" data-tg="${esc(k)}" title="${open ? '收起' : '展開'}"><svg class="ic chev ${open ? 'open' : ''}" viewBox="0 0 24 24">${IC.chev}</svg></button><span class="sdn">${esc(label(k))}</span><span class="chip">${groups.get(k).length}</span></div>
+      ${open ? groups.get(k).sort((a, b) => a.name.localeCompare(b.name, 'zh-HK')).map(t => `<div class="si" data-open="${t.id}" title="${esc(t.name)}"><span class="sin">${esc(t.name)}</span><span class="chip v">v${t.version}</span></div>`).join('') : ''}`; }).join('')}
+    ${keys.length ? '' : '<div class="empty" style="padding:20px 8px">沒有符合的範本</div>'}</nav>`;
+  const drafts = S.admin ? S.all.filter(t => t.draft && (!q || t.name.toLowerCase().includes(q))) : [];
+  const dstrip = drafts.length ? `<div class="gh">${ic('save', 18)}<span>草稿（只有管理員見到）</span><span class="chip">${drafts.length}</span></div><div class="grid">${drafts.map(t => `<div class="card draft" data-draft="${t.id}">
+    <div class="thumb" style="${t.thumb ? `background-image:url(${t.thumb})` : ''}"></div>
+    <div class="cb"><div class="cn">${esc(t.name)}</div><div class="cm"><span class="chip dr">草稿</span>${t.category ? `<span class="chip">${esc(t.category)}</span>` : ''}<span>${fmtDate(t.created_at)}</span></div></div>
+    <div class="ca">${ib('edit:' + t.id, 'edit', '繼續編輯草稿')}${ib('deld:' + t.id, 'trash', '刪除草稿', 'dng')}</div></div>`).join('')}</div>` : '';
+  const grid = list.length ? `<div class="gh">${ic('folder', 18)}<span>${esc(S.cat ? label(S.cat) : '全部範本')}</span><span class="chip">${list.length}</span></div><div class="grid">${list.map(t => `<div class="card" data-open="${t.id}">
+    <div class="thumb" style="${t.thumb ? `background-image:url(${t.thumb})` : ''}"></div>
+    <div class="cb"><div class="cn">${esc(t.name)}</div><div class="cm"><span class="chip v">v${t.version}</span>${t.category ? `<span class="chip">${esc(t.category)}</span>` : ''}<span>${fmtDate(t.created_at)}</span></div></div>
+    ${S.admin ? `<div class="ca">${ib('edit:' + t.id, 'edit', '修改欄位／更新版本')}${ib('hist:' + t.id, 'history', '版本記錄')}${ib('del:' + t.id, 'trash', '停用此範本', 'dng')}</div>` : ''}
+  </div>`).join('')}</div>` : `<div class="empty">${ic('file')}<div>${S.all.some(t => t.active && !t.draft) ? '找不到符合的範本' : (S.admin ? '未有範本，按右上角 ＋ 或把 PDF 拖到此頁' : '暫時未有範本')}</div></div>`;
+  app.innerHTML = header() + `<div class="bar">${ib('side', 'menu', S.sideOpen ? '收起部門側欄' : '顯示部門側欄', S.sideOpen ? 'on' : '')}<div class="srch">${ic('search', 18)}<input id="q" placeholder="搜尋範本" value="${esc(S.q)}"></div>
+  ${PREVIEW ? ib('role', 'user', S.admin ? '目前：管理員視角（按此切換到用家）' : '目前：用家視角（按此切換到管理員）', S.admin ? 'on' : '') : ''}${S.admin ? ib('new', 'plus', '上載 PDF 建立範本', 'pri') : ''}</div>
+  <div class="lib ${S.sideOpen ? 'has-side' : ''}">${S.sideOpen ? side : ''}<main style="min-width:0">${dstrip}${grid}</main></div>`;
+  $('#q').oninput = e => { S.q = e.target.value; const p = e.target.selectionStart; renderLibrary(); const i = $('#q'); i.focus(); i.setSelectionRange(p, p); };
+}
+app.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]');
+  if (b) {
+    const [act, id] = b.dataset.act.split(':');
+    e.stopPropagation();
+    if (act === 'logout') { await sb.auth.signOut(); S.user = null; S.admin = false; return renderLogin(); }
+    if (act === 'ghout') { GHTOKEN = ''; try { localStorage.removeItem('flgh'); } catch (e) { } S.admin = false; return renderGate(); }
+    if (act === 'ghin') return renderGate();
+    if (act === 'new') return pickPdf();
+    if (act === 'side') { S.sideOpen = !S.sideOpen; return renderLibrary(); }
+    if (act === 'role') { S.admin = !S.admin; return renderLibrary(); }
+    const t = S.all.find(x => x.id === id);
+    if (act === 'edit' && t) return editExisting(t);
+    if (act === 'deld' && t) { if (await ask(`刪除草稿「${t.name}」？`)) { try { await Store.remove(t); await refresh(); renderLibrary(); toast('已刪除草稿'); } catch (er) { toast(er.message, true); } } return; }
+    if (act === 'del' && t) { if (await ask(`停用「${t.name}」？（可在版本記錄還原）`)) { try { await Store.deactivate(t); await refresh(); renderLibrary(); } catch (er) { toast(er.message, true); } } return; }
+    if (act === 'hist' && t) return showHistory(t.name);
+    return;
+  }
+  const tg = e.target.closest('[data-tg]');
+  if (tg) { const k = tg.dataset.tg; S.closed.has(k) ? S.closed.delete(k) : S.closed.add(k); return renderLibrary(); }
+  const ct = e.target.closest('[data-cat]');
+  if (ct) { S.cat = ct.dataset.cat; return renderLibrary(); }
+  const dc = e.target.closest('[data-draft]');
+  if (dc) return editExisting(S.all.find(x => x.id === dc.dataset.draft));
+  const c = e.target.closest('[data-open]');
+  if (c) openFill(S.all.find(x => x.id === c.dataset.open));
+});
+function showHistory(name) {
+  const m = modal('');
+  const draw = () => {
+    const vs = S.all.filter(t => t.name === name && !t.draft).sort((a, b) => b.version - a.version);
+    $('.dlg', m).innerHTML = `<h3>${esc(name)} · 版本記錄</h3><div class="vlist">${vs.map(v => `<div class="vi ${v.active ? 'act' : ''}"><b>v${v.version}</b><span style="flex:1;color:var(--mute)">${fmtDate(v.created_at)} ${esc(v.note || '')}</span>
+    ${S.admin ? `<button class="ib" data-nt="${v.id}" title="編輯備註">${ic('pen')}</button>` : ''}
+    ${v.active ? `<span class="chip v">使用中</span>` : `<button class="ib" data-use="${v.id}" title="設為使用中（改回用這個版本）">${ic('check')}</button>`}
+    <button class="ib" data-dl="${v.id}" title="下載">${ic('download')}</button>
+    ${S.admin ? `<button class="ib dng" data-rm="${v.id}" ${v.active ? 'disabled' : ''} title="${v.active ? '使用中版本不能刪除，請先切換到其他版本' : '永久刪除此版本'}">${ic('trash')}</button>` : ''}</div>`).join('') || '<p class="note">已無版本</p>'}</div>`;
+    $$('[data-nt]', m).forEach(x => x.onclick = () => { const t = S.all.find(t => t.id === x.dataset.nt); const m2 = modal(`<h3>v${t.version} 備註</h3><div class="row"><input id="nt2" value="${esc(t.note || '')}" placeholder="此版本改動"></div><div class="acts"><button class="btn" id="nx">取消</button><button class="btn pri" id="ns">${ic('check', 16)}</button></div>`); $('#nx', m2).onclick = () => m2.remove(); $('#ns', m2).onclick = async () => { try { await Store.setNote(t, $('#nt2', m2).value.trim()); m2.remove(); await refresh(); draw(); } catch (er) { toast(er.message, true); } }; $('#nt2', m2).focus(); });
+    $$('[data-rm]', m).forEach(x => x.onclick = async () => { const t = S.all.find(t => t.id === x.dataset.rm); if (t.active) return; if (!(await ask(`永久刪除 v${t.version}？刪除後不能還原`))) return; try { await Store.remove(t); await refresh(); draw(); renderLibrary(); toast('已刪除'); } catch (er) { toast(er.message, true); } });
+    $$('[data-use]', m).forEach(x => x.onclick = async () => { await Store.setActive(S.all.find(t => t.id === x.dataset.use)); await refresh(); draw(); renderLibrary(); });
+    $$('[data-dl]', m).forEach(x => x.onclick = async () => { const t = S.all.find(t => t.id === x.dataset.dl); download(await (await Store.getBlob(t)).arrayBuffer(), `${t.name}_v${t.version}.pdf`); });
+  };
+  const $$ = (s, el) => [...el.querySelectorAll(s)];
+  draw();
+}
+
+/* ---------- PDF field reading (shared) ---------- */
+async function readFields(doc) {
+  const form = doc.getForm(), pages = doc.getPages(), out = [];
+  const pageOf = new Map();
+  pages.forEach((p, i) => { const an = p.node.Annots(); if (an) for (let k = 0; k < an.size(); k++) pageOf.set(String(an.get(k)), i); });
+  for (const f of form.getFields()) {
+    let kind = f instanceof PDFButton ? 'sig' : f instanceof PDFTextField ? 'text' : f instanceof PDFCheckBox ? 'check' : f instanceof PDFDropdown ? 'drop' : f instanceof PDFRadioGroup ? 'radio' : f instanceof PDFOptionList ? 'list' : null;
+    if (!kind) continue;
+    const name = f.getName();
+    let widgets = []; try { widgets = f.acroField.getWidgets(); } catch (e) { }
+    let initial = null;
+    try { initial = kind === 'text' ? f.getText() : kind === 'check' ? f.isChecked() : kind === 'radio' ? f.getSelected() : (f.getSelected()[0] || null); } catch (e) { }
+    let options = []; try { if (kind === 'drop' || kind === 'list' || kind === 'radio') options = f.getOptions(); } catch (e) { }
+    const multiline = kind === 'text' && (() => { try { return f.isMultiline(); } catch (e) { return false; } })();
+    let align = 'left', maxLength = null, required = false, fontSize = null;
+    try { if (kind === 'text') { const a = f.getAlignment(); align = a === 1 ? 'center' : a === 2 ? 'right' : 'left'; const ml = f.getMaxLength(); maxLength = ml == null ? null : ml; } } catch (e) { }
+    try { required = f.isRequired(); } catch (e) { }
+    let ffont = null; try { const v = f.acroField.dict.lookup(PDFLib.PDFName.of('FLFont')); if (v && v.decodeText) ffont = v.decodeText() || null; } catch (e) { }
+    let comb = false; try { comb = kind === 'text' && f.isCombed() && !!maxLength; } catch (e) { }
+    let ls = 0, lh = 0; try { const g = k => { const v = f.acroField.dict.lookup(PDFLib.PDFName.of(k)); return v && v.asNumber ? v.asNumber() : 0; }; ls = g('FLSp'); lh = g('FLLh'); } catch (e) { }
+    try { const m = (f.acroField.getDefaultAppearance() || '').match(/([\d.]+)\s+Tf/); fontSize = m && parseFloat(m[1]) > 0 ? parseFloat(m[1]) : null; } catch (e) { }
+    widgets.forEach((w, wi) => {
+      let pi = pageOf.get(String(doc.context.getObjectRef(w.dict)));
+      if (pi == null) { try { const P = w.P(); pi = pages.findIndex(p => p.ref === P); } catch (e) { } }
+      if (pi == null || pi < 0) pi = 0;
+      const r = w.getRectangle();
+      let border = null, bg = null, bw = 0;
+      try { const mk = w.getAppearanceCharacteristics(); if (mk) { border = arrToHex(mk.getBorderColor()); bg = arrToHex(mk.getBackgroundColor()); } } catch (e) { }
+      try { const bs = w.getBorderStyle(); bw = bs ? (bs.getWidth() || 0) : (border ? 1 : 0); } catch (e) { bw = border ? 1 : 0; }
+      if (!border) bw = 0;
+      let onValue = null; if (kind === 'radio') { try { const nm = w.getOnValue().decodeText(); onValue = options.includes(nm) ? nm : (/^\d+$/.test(nm) && options[+nm] != null ? options[+nm] : (options[wi] ?? nm)); } catch (e) { onValue = options[wi]; } }
+      out.push({ name, kind, page: pi, x: r.x, y: r.y, w: r.width, h: r.height, options, initial, multiline, onValue, align, maxLength, required, fontSize, border, bw, bg, ls, lh, comb, font: ffont });
+    });
+  }
+  return out;
+}
+
+/* ---------- fill view ---------- */
+let cjkBytes = null;
+async function getFont() {
+  if (cjkBytes) return cjkBytes;
+  for (const u of [CFG.fontUrl, 'fonts/font.ttf'].filter(Boolean)) { try { const r = await fetch(u); if (r.ok) return (cjkBytes = await r.arrayBuffer()); } catch (e) { } }
+  throw new Error('找不到中文字型 fonts/font.ttf');
+}
+async function loadPdf(blob) {
+  const bytes = await blob.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise;
+  return { bytes, pdf };
+}
+async function openFill(t) {
+  S.zoom = 1;
+  app.innerHTML = header() + '<div class="spin"></div>';
+  try {
+    const blob = await Store.getBlob(t); const { bytes, pdf } = await loadPdf(blob);
+    const doc = await PDFDocument.load(bytes); await loadAttachedFonts(doc); const fields = await readFields(doc);
+    const values = {}; fields.forEach(f => { if (!(f.name in values)) values[f.name] = f.initial ?? (f.kind === 'check' ? false : ''); });
+    S.fill = { t, bytes, pdf, fields, values, flatten: false };
+    renderFill();
+  } catch (e) { console.error(e); toast('開啟失敗：' + (e.message || e), true); renderLibrary(); }
+}
+async function renderFill() {
+  S.view = 'fill'; const F = S.fill;
+  app.innerHTML = header(`<button class="ib" data-f="back" title="返回">${ic('back')}</button><span class="tbtitle">${esc(F.t.name)}</span><span class="chip v">v${F.t.version}</span><div class="sp"></div>
+  <button class="ib ${F.flatten ? 'on' : ''}" data-f="flat" title="鎖定內容（輸出後不可再修改）">${ic('lock')}</button>
+  <button class="ib" data-f="clear" title="清除全部">${ic('eraser')}</button><button class="ib pri" data-f="dl" title="下載已填 PDF">${ic('download')}</button>`).replace('<div class="sp"></div><div class="sp"></div>', '<div class="sp"></div>')
+  + '<div class="pages" id="pages"></div>' + `<div class="zoomb"><button type="button" data-z="out" title="縮小（Ctrl −／Ctrl＋滾輪）" aria-label="縮小">−</button><button type="button" data-z="fit" id="zlab" title="還原 100%（Ctrl 0）">${Math.round(S.zoom * 100)}%</button><button type="button" data-z="in" title="放大（Ctrl +／Ctrl＋滾輪）" aria-label="放大">+</button></div>`;
+  const box = $('#pages'); const avail = Math.min(app.clientWidth, 980); F.pg = [];
+  for (let i = 1; i <= F.pdf.numPages; i++) {
+    const page = await F.pdf.getPage(i); const v1 = page.getViewport({ scale: 1 });
+    const fit = avail / v1.width, sc = fit * S.zoom, vp = page.getViewport({ scale: sc * (window.devicePixelRatio > 1 ? 1.5 : 1) });
+    const wrap = document.createElement('div'); wrap.className = 'pg'; wrap.style.maxWidth = 'none'; wrap.style.width = v1.width * sc + 'px'; wrap.style.height = v1.height * sc + 'px';
+    const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height; cv.style.width = '100%'; cv.style.height = '100%';
+    const ov = document.createElement('div'); ov.className = 'ov'; wrap.append(cv, ov); box.appendChild(wrap);
+    page.render({ canvasContext: cv.getContext('2d'), viewport: vp });
+    F.pg.push({ page, fit, ph: v1.height, pw: v1.width, wrap, cv, ov, idx: i - 1 });
+    F.fields.filter(f => f.page === i - 1).forEach(f => ov.appendChild(fieldEl(f, sc, v1.height)));
+  }
+  const first = $('.fin,.fck'); if (first && !('ontouchstart' in window)) first.focus();
+}
+function fieldEl(f, sc, ph) {
+  const F = S.fill; const left = f.x * sc, top = (ph - f.y - f.h) * sc, w = f.w * sc, h = f.h * sc;
+  let el;
+  if (f.kind === 'check') { el = document.createElement('input'); el.type = 'checkbox'; el.className = 'fck'; el.checked = !!F.values[f.name]; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px`; el.onchange = () => F.values[f.name] = el.checked; }
+  else if (f.kind === 'sig') { el = document.createElement('button'); el.type = 'button'; el.className = 'sig' + (f.required ? ' req' : ''); el.dataset.fname = f.name; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px`; if (f.bg) el.style.background = f.bg; paintSig(el, F.values[f.name]); el.onclick = () => openSigPad(f, el); }
+  else if (f.kind === 'radio') { el = document.createElement('input'); el.type = 'radio'; el.className = 'fck'; el.name = 'r_' + f.name; el.dataset.fname = f.name; el.checked = F.values[f.name] === f.onValue; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px`; el.onchange = () => { if (el.checked) F.values[f.name] = f.onValue; }; }
+  else if (f.kind === 'drop' || f.kind === 'list') { el = document.createElement('select'); el.className = 'fin'; el.innerHTML = '<option value=""></option>' + f.options.map(o => `<option ${F.values[f.name] === o ? 'selected' : ''}>${esc(o)}</option>`).join(''); el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : Math.min(h * .65, 16 * sc)}px`; if (f.required) el.classList.add('req'); el.onchange = () => F.values[f.name] = el.value; styleBox(el, f, sc); }
+  else if (f.kind === 'text' && f.comb && f.maxLength) {
+    const n = Math.min(f.maxLength, 40); el = document.createElement('div'); el.className = 'cmb' + (f.required ? ' req' : '');
+    el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${(f.fontSize || 11) * sc}px`; if (f.bg) el.style.background = f.bg;
+    el.innerHTML = '<u></u>'.repeat(n) + '<input type="text" autocomplete="off">'; const inp = el.querySelector('input'), cells = [...el.querySelectorAll('u')];
+    inp.maxLength = n; inp.value = String(F.values[f.name] || '').slice(0, n); inp.dataset.fname = f.name;
+    const paint = () => { const v = [...inp.value]; cells.forEach((c, i) => { c.textContent = v[i] || ''; }); const pos = document.activeElement === inp ? Math.min([...inp.value.slice(0, inp.selectionStart || 0)].length, n - 1) : -1; cells.forEach((c, i) => c.classList.toggle('cur', i === pos)); };
+    inp.oninput = () => { F.values[f.name] = inp.value; paint(); }; ['focus', 'blur', 'keyup', 'click', 'select'].forEach(ev => inp.addEventListener(ev, paint)); paint();
+  }
+  else { const ml = f.multiline || f.h > 36; el = document.createElement(ml ? 'textarea' : 'input'); el.className = 'fin'; el.value = F.values[f.name] || ''; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : (ml ? Math.min(12 * sc, 15) : Math.max(8, Math.min(h * .62, 16)))}px;text-align:${f.align || 'left'};letter-spacing:${(f.ls || 0) * sc}px${f.lh ? `;line-height:${f.lh}` : ''}`; if (f.maxLength) el.maxLength = f.maxLength; if (f.required) el.classList.add('req'); el.oninput = () => { F.values[f.name] = el.value; $$all('.fin', f.name, el); }; el.dataset.fname = f.name; styleBox(el, f, sc); }
+  if (f.font && (f.kind === 'text' || f.kind === 'drop')) el.style.fontFamily = fontCss(f.font);
+  return el;
+}
+function styleBox(el, f, sc) { if (f.bg) el.style.background = f.bg; if (f.bw > 0 && f.border) { el.style.border = `${Math.max(1, f.bw * sc)}px solid ${f.border}`; } }
+function paintSig(el, v) { el.innerHTML = v ? `<img alt="簽名" src="${v}">` : `${ic('pen', 16)}<span>簽名</span>`; }
+function openSigPad(f, el) {
+  const F = S.fill; const m = modal(`<h3>${esc(f.name)}</h3><p class="note">用滑鼠或手指在下方簽名，或上載簽名圖片。</p>
+  <canvas id="sgc" width="900" height="300" style="width:100%;height:auto;aspect-ratio:3/1;background:#fff;border:1px dashed #7b8498;border-radius:8px;touch-action:none;cursor:crosshair"></canvas>
+  <div class="acts" style="justify-content:space-between"><div style="display:flex;gap:6px"><button class="ib" id="sgx" title="清除">${ic('eraser')}</button><button class="ib" id="sgu" title="上載簽名圖片">${ic('upload')}</button><button class="ib dng" id="sgd" title="移除簽名">${ic('trash')}</button></div><div style="display:flex;gap:8px"><button class="btn" id="sgn">取消</button><button class="btn pri" id="sgk" title="確定">${ic('check', 16)}</button></div></div>`);
+  m.firstElementChild.classList.add('wide'); const cv = m.querySelector('#sgc'), cx = cv.getContext('2d'); cx.lineWidth = 5; cx.lineCap = cx.lineJoin = 'round'; cx.strokeStyle = '#111'; let drawing = false, dirty = false, imgData = null;
+  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; };
+  cv.onpointerdown = e => { drawing = true; dirty = true; imgData = null; cv.setPointerCapture(e.pointerId); const [x, y] = pos(e); cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x + .1, y + .1); cx.stroke(); };
+  cv.onpointermove = e => { if (!drawing) return; const [x, y] = pos(e); cx.lineTo(x, y); cx.stroke(); };
+  cv.onpointerup = cv.onpointercancel = () => { drawing = false; };
+  m.querySelector('#sgx').onclick = () => { cx.clearRect(0, 0, cv.width, cv.height); dirty = false; imgData = null; };
+  m.querySelector('#sgn').onclick = () => m.remove();
+  m.querySelector('#sgd').onclick = () => { F.values[f.name] = ''; paintSig(el, ''); m.remove(); };
+  m.querySelector('#sgu').onclick = () => { const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.style.cssText = 'position:fixed;left:-9999px'; document.body.appendChild(i);
+    i.onchange = () => { const file = i.files[0]; i.remove(); if (!file) return; const fr = new FileReader(); fr.onload = () => { const im = new Image(); im.onload = () => { const k = Math.min(1, 900 / im.width, 300 / im.height); cx.clearRect(0, 0, cv.width, cv.height); const w = im.width * k, h = im.height * k; cx.drawImage(im, (cv.width - w) / 2, (cv.height - h) / 2, w, h); dirty = true; }; im.src = fr.result; }; fr.readAsDataURL(file); }; i.click(); };
+  m.querySelector('#sgk').onclick = () => {
+    if (!dirty) return m.remove();
+    const d = cx.getImageData(0, 0, cv.width, cv.height).data; let x0 = cv.width, y0 = cv.height, x1 = 0, y1 = 0;
+    for (let y = 0; y < cv.height; y++) for (let x = 0; x < cv.width; x++) if (d[(y * cv.width + x) * 4 + 3] > 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    if (x1 <= x0 || y1 <= y0) { toast('未有簽名內容', true); return; }
+    const pad = 6; x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(cv.width - 1, x1 + pad); y1 = Math.min(cv.height - 1, y1 + pad);
+    const out = document.createElement('canvas'); out.width = x1 - x0 + 1; out.height = y1 - y0 + 1; out.getContext('2d').drawImage(cv, x0, y0, out.width, out.height, 0, 0, out.width, out.height);
+    F.values[f.name] = out.toDataURL('image/png'); paintSig(el, F.values[f.name]); m.remove();
+  };
+}
+function $$all(sel, name, except) { document.querySelectorAll(sel).forEach(x => { if (x !== except && x.dataset.fname === name) x.value = except.value; }); }
+/* comb (one character per cell): write our own appearance so the cell dividers show in every reader */
+function combAP(doc, tf, f, val, cf) {
+  const w = f.w, h = f.h, n = Math.max(1, f.maxLength || 8), cw = w / n, fs = f.fontSize || 11;
+  const bw = f.bw > 0 && f.border ? f.bw : 0; const col = c => c ? `${c.red.toFixed(3)} ${c.green.toFixed(3)} ${c.blue.toFixed(3)}` : null;
+  const lineCol = bw ? col(hexToRgb(f.border)) : '0.48 0.52 0.60', lineW = bw || 0.75;
+  let ops = '/Tx BMC q\n'; const bgc = col(f.bg && hexToRgb(f.bg)); if (bgc) ops += `${bgc} rg 0 0 ${w} ${h} re f\n`;
+  ops += `${lineCol} RG ${lineW} w ${lineW / 2} ${lineW / 2} ${w - lineW} ${h - lineW} re S\n`;
+  for (let i = 1; i < n; i++) ops += `${(i * cw).toFixed(2)} 0 m ${(i * cw).toFixed(2)} ${h} l S\n`;
+  const chars = [...String(val || '')].slice(0, n);
+  const res = { Font: {} };
+  if (chars.length && cf) {
+    res.Font.F1 = cf.ref; ops += `BT /F1 ${fs} Tf 0 g\n`;
+    chars.forEach((ch, i) => { const lw = cf.widthOfTextAtSize(ch, fs); ops += `1 0 0 1 ${(i * cw + (cw - lw) / 2).toFixed(2)} ${(h / 2 - fs * .33).toFixed(2)} Tm ${cf.encodeText(ch).toString()} Tj\n`; });
+    ops += 'ET\n';
+  }
+  ops += 'Q EMC';
+  const ctx = doc.context; const ref = ctx.register(ctx.stream(ops, { Type: 'XObject', Subtype: 'Form', BBox: [0, 0, w, h], Resources: res }));
+  tf.acroField.getWidgets()[0].setNormalAppearance(ref);
+}
+/* text with letter / line spacing: pdf-lib cannot do this, so write the widget appearance stream ourselves */
+function spacedAP(doc, tf, f, val, cf) {
+  const w = f.w, h = f.h, ml = tf.isMultiline(), fs = f.fontSize || (ml ? 10 : 11), ls = f.ls || 0, lhp = f.lh ? f.lh * fs : cf.heightAtSize(fs);
+  const bw = f.bw > 0 && f.border ? f.bw : 0, pad = bw + 2, avail = w - 2 * pad;
+  const wid = t => cf.widthOfTextAtSize(t, fs) + ls * Math.max(0, t.length - 1);
+  let lines = [];
+  for (const para of val.split(/\r?\n/)) {
+    if (!ml) { lines.push(para); continue; }
+    let cur = '';
+    for (const ch of [...para]) { if (cur && wid(cur + ch) > avail) { const sp = cur.lastIndexOf(' '); if (sp > 0 && ch !== ' ') { lines.push(cur.slice(0, sp)); cur = cur.slice(sp + 1) + ch; } else { lines.push(cur); cur = ch === ' ' ? '' : ch; } } else cur += ch; }
+    lines.push(cur);
+  }
+  if (!ml) lines = lines.slice(0, 1);
+  const col = c => c ? `${c.red.toFixed(3)} ${c.green.toFixed(3)} ${c.blue.toFixed(3)}` : null;
+  let ops = '/Tx BMC q\n'; const bgc = col(f.bg && hexToRgb(f.bg)); if (bgc) ops += `${bgc} rg 0 0 ${w} ${h} re f\n`;
+  const bdc = bw ? col(hexToRgb(f.border)) : null; if (bdc) ops += `${bdc} RG ${bw} w ${bw / 2} ${bw / 2} ${w - bw} ${h - bw} re S\n`;
+  ops += `${bw} ${bw} ${w - 2 * bw} ${h - 2 * bw} re W n BT /F1 ${fs} Tf 0 g\n`;
+  const first = ml ? h - pad - fs * .95 : h / 2 - fs * .33;
+  lines.forEach((ln, i) => { const lw = wid(ln); const x = f.align === 'center' ? (w - lw) / 2 : f.align === 'right' ? w - pad - lw : pad; ops += `${ls} Tc 1 0 0 1 ${x.toFixed(2)} ${(first - i * lhp).toFixed(2)} Tm ${ln ? cf.encodeText(ln).toString() : '<>'} Tj\n`; });
+  ops += 'ET Q EMC';
+  const ctx = doc.context; const ref = ctx.register(ctx.stream(ops, { Type: 'XObject', Subtype: 'Form', BBox: [0, 0, w, h], Resources: { Font: { F1: cf.ref } } }));
+  tf.acroField.getWidgets()[0].setNormalAppearance(ref);
+}
+async function buildFilled(force) {
+  const F = S.fill; const doc = await PDFDocument.load(F.bytes); const form = doc.getForm(); let needFont = false;
+  for (const [name, val] of Object.entries(F.values)) {
+    let f; try { f = form.getField(name); } catch (e) { continue; }
+    if (typeof val === 'string' && /[^\x20-\x7e]/.test(val)) needFont = true;
+    try {
+      if (f instanceof PDFTextField) { f.setText(val || undefined); }
+      else if (f instanceof PDFCheckBox) { val ? f.check() : f.uncheck(); }
+      else if (f instanceof PDFRadioGroup) { val ? f.select(val) : f.clear(); }
+      else if (f instanceof PDFDropdown) { if (val) f.select(val); else f.clear(); }
+    } catch (e) { console.warn('欄位設定失敗', name, e); }
+  }
+  const sigDraws = []; for (const f of F.fields) { if (f.kind === 'sig' && F.values[f.name]) sigDraws.push(f); }
+  let font; if (needFont) { doc.registerFontkit(fontkit); font = await doc.embedFont(await getFont(), { subset: false }); } // fontkit subsetting drops glyphs for this font
+  form.updateFieldAppearances(font);
+  const fcache = {}; F.fields.forEach(fd => { fd._pf = null; });
+  for (const fd of F.fields) { if (!fd.font || (fd.kind !== 'text' && fd.kind !== 'drop')) continue; const tx = String(F.values[fd.name] || ''); if (!tx) continue; const pf = await pickFieldFont(doc, fd.font, tx, fcache); if (!pf) continue; fd._pf = pf; try { const fl = form.getField(fd.name); if (fl instanceof PDFTextField || fl instanceof PDFDropdown) fl.updateAppearances(pf); } catch (e) { console.warn('字體套用失敗', fd.name, e); } }
+  const spaced = F.fields.filter(f => f.kind === 'text' && !f.comb && (f.ls || f.lh) && String(F.values[f.name] || '') !== '');
+  const combs = F.fields.filter(f => f.kind === 'text' && f.comb && f.maxLength);
+  if (combs.length) { const cf = font || await doc.embedFont(PDFLib.StandardFonts.Helvetica); for (const f of combs) { try { combAP(doc, form.getTextField(f.name), f, String(F.values[f.name] || ''), f._pf || cf); } catch (e) { console.warn('格仔輸入套用失敗', f.name, e); } } }
+  if (spaced.length) { const cf = font || await doc.embedFont(PDFLib.StandardFonts.Helvetica); for (const f of spaced) { try { spacedAP(doc, form.getTextField(f.name), f, String(F.values[f.name]), f._pf || cf); } catch (e) { console.warn('字距/行距套用失敗', f.name, e); } } }
+  if (F.flatten || force) form.flatten({ updateFieldAppearances: false });
+  for (const f of sigDraws) { const img = await doc.embedPng(F.values[f.name]); const k = Math.min(f.w / img.width, f.h / img.height), w = img.width * k, h = img.height * k; doc.getPages()[f.page].drawImage(img, { x: f.x + (f.w - w) / 2, y: f.y + (f.h - h) / 2, width: w, height: h }); }
+  return doc.save({ updateFieldAppearances: false });
+}
+app.addEventListener('click', async e => {
+  const b = e.target.closest('[data-f]'); if (!b) return; const a = b.dataset.f, F = S.fill;
+  if (a === 'back') { S.fill = null; return renderLibrary(); }
+  if (a === 'flat') { F.flatten = !F.flatten; b.classList.toggle('on', F.flatten); return toast(F.flatten ? '已鎖定：輸出後不可再編輯' : '輸出後仍可再編輯'); }
+  if (a === 'clear') { if (!(await ask('清除所有已填內容？'))) return; Object.keys(F.values).forEach(k => F.values[k] = typeof F.values[k] === 'boolean' ? false : ''); return renderFill(); }
+  if (a === 'dl') {
+    const miss = F.fields.find(f => f.required && (f.kind === 'check' ? !F.values[f.name] : !String(F.values[f.name] || '').trim()));
+    if (miss) { const el = document.querySelector(`[data-fname="${CSS.escape(miss.name)}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.focus(); } return toast(`請先填寫必填欄位：${miss.name}`, true); }
+    try { b.disabled = true; toast('正在產生 PDF…'); const out = await buildFilled(PREVIEW); download(out, `${F.t.name}_${new Date().toISOString().slice(0, 10)}.pdf`); }
+    catch (er) { console.error(er); toast('產生失敗：' + (er.message || er), true); } finally { b.disabled = false; }
+  }
+});
+
+/* ---------- editor ---------- */
+const KINDS = { text: { icon: 'text', tip: '文字欄位' }, multi: { icon: 'multi', tip: '多行文字' }, comb: { icon: 'comb', tip: '格仔輸入（固定字數、每格一字，如身份證、電話）' }, check: { icon: 'checkbox', tip: '剔選框' }, radio: { icon: 'radio', tip: '單選按鈕組（多選一；同一群組可加多個選項）' }, drop: { icon: 'dropdown', tip: '下拉選單' }, sig: { icon: 'pen', tip: '簽名' } };
+const TOOLS = { sel: { icon: 'cursor', tip: '選取' }, ...KINDS };
+function pickPdf() {
+  const i = document.createElement('input'); i.type = 'file'; i.accept = 'application/pdf,.pdf'; i.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+  document.body.appendChild(i); // keep it attached so the browser can't drop the change event
+  i.addEventListener('change', () => { const f = i.files[0]; i.remove(); if (f) takePdf(f); });
+  i.addEventListener('cancel', () => i.remove());
+  i.click();
+}
+function takePdf(f) {
+  if (!/pdf$/i.test(f.name) && f.type !== 'application/pdf') return toast('請選擇 PDF 檔案', true);
+  toast('正在讀取 PDF…'); startEditor(f, f.name.replace(/\.pdf$/i, ''));
+}
+['dragover', 'drop'].forEach(ev => document.addEventListener(ev, e => {
+  if (S.view !== 'library' || !S.admin || !e.dataTransfer || ![...e.dataTransfer.types].includes('Files')) return;
+  e.preventDefault(); if (ev === 'drop') { const f = [...e.dataTransfer.files].find(x => /pdf$/i.test(x.name) || x.type === 'application/pdf'); if (f) takePdf(f); else toast('請拖入 PDF 檔案', true); }
+}));
+async function editExisting(t) {
+  try { const blob = await Store.getBlob(t); startEditor(blob, t.name, t); } catch (e) { toast('開啟失敗：' + e.message, true); }
+}
+async function startEditor(blob, name, tpl) {
+  S.zoom = 1;
+  app.innerHTML = header() + '<div class="spin"></div>';
+  try {
+    const { bytes, pdf } = await loadPdf(blob);
+    const doc = await PDFDocument.load(bytes); await loadAttachedFonts(doc); const raw = await readFields(doc); const cnt = {}; raw.forEach(f => cnt[f.name] = (cnt[f.name] || 0) + 1);
+    // single-widget text / checkbox / dropdown fields become fully editable; anything else is kept as-is
+    const existing = raw.map(f => { const ok = f.kind === 'radio' || (cnt[f.name] === 1 && ['text', 'check', 'drop', 'sig'].includes(f.kind)); return { ...f, id: uid(), ex: !ok, ...(f.kind === 'radio' ? { initial: !!f.onValue && f.initial === f.onValue, options: [], onValue: f.onValue || '選項' } : {}), fontSize: f.kind === 'check' || f.kind === 'sig' || f.kind === 'radio' ? null : (f.fontSize || defFs(f)) }; });
+    const meta = tpl ? { name: tpl.name, category: tpl.category || '', note: tpl.draft ? (tpl.note || '') : '' } : { name, category: '', note: '' };
+    S.ed = { hist: [JSON.stringify(existing)], hi: 0, savedJ: (tpl && tpl.draft) ? JSON.stringify(existing) : null, paint: null, bytes, pdf, fields: existing, sel: null, multi: [], tool: 'sel', meta, draftId: tpl && tpl.draft ? tpl.id : null, pages: [], tpl, panel: window.innerWidth > 900 };
+    await renderEditor();
+  } catch (e) { console.error(e); toast('無法讀取此 PDF：' + (e.message || e), true); renderLibrary(); }
+}
+function defStyle(kind) { return kind === 'check' || kind === 'radio' ? { border: '#262626', bw: 1, bg: null } : kind === 'sig' ? { border: '#7b8498', bw: 1, bg: null } : { border: null, bw: 0, bg: null }; }
+/* undo / redo: snapshot of the field list after every finished edit */
+function commit() { const E = S.ed; if (!E || E.batch) return; const j = JSON.stringify(E.fields); if (j === E.hist[E.hi]) return; E.hist = E.hist.slice(0, E.hi + 1); E.hist.push(j); if (E.hist.length > 200) E.hist.shift(); E.hi = E.hist.length - 1; updHist(); }
+function schedCommit() { const E = S.ed; clearTimeout(E._t); E._t = setTimeout(commit, 500); }
+function flushCommit() { const E = S.ed; clearTimeout(E._t); commit(); }
+function updHist() { const E = S.ed; if (!E) return; const u = document.querySelector('[data-e=undo]'), r = document.querySelector('[data-e=redo]'); if (u) u.disabled = E.hi <= 0; if (r) r.disabled = E.hi >= E.hist.length - 1; }
+function restoreHist() { const E = S.ed; E.fields = JSON.parse(E.hist[E.hi]); setSel(selIds().filter(id => E.fields.some(f => f.id === id))); drawBoxes(); renderPanel(); updHist(); }
+function undo() { const E = S.ed; flushCommit(); if (E.hi <= 0) return; E.hi--; restoreHist(); }
+function redo() { const E = S.ed; flushCommit(); if (E.hi >= E.hist.length - 1) return; E.hi++; restoreHist(); }
+/* format brush */
+const pickFmt = f => ({ fontSize: f.fontSize || null, font: f.font || null, ls: f.ls || 0, lh: f.lh || 0, align: f.align || 'left', border: f.border || null, bw: f.bw || 0, bg: f.bg || null });
+function applyFmt(f, fm) { if (!f || f.ex) return; if (f.kind === 'text' || f.kind === 'drop') f.font = fm.font || null; if ((f.kind === 'text' || f.kind === 'drop') && fm.fontSize) f.fontSize = fm.fontSize; if (f.kind === 'text' && !f.comb) { f.align = fm.align; f.ls = fm.ls || 0; if (f.multiline) f.lh = fm.lh || 0; } f.border = fm.border; f.bw = fm.bw; f.bg = fm.bg; }
+function setPaint(on, src) { const E = S.ed; E.paint = on ? pickFmt(src) : null; const el = document.querySelector('.edl'); if (el) el.classList.toggle('painting', !!E.paint); toast(on ? '格式刷已開啟：點選欄位即套用此格式（再按一次或 Esc 關閉）' : '格式刷已關閉'); renderPanel(); }
+function defFs(f) { return f.multiline || f.h > 36 ? 10 : Math.round(Math.max(7, Math.min(12, f.h * .62)) * 2) / 2; }
+function edToolbar() {
+  const E = S.ed; const TB = (attr, icon, label, tip, cls = '', dis = false) => `<button class="ib tb ${cls}" ${attr} title="${tip}" ${dis ? 'disabled' : ''}>${ic(icon)}<span class="tl">${label}</span></button>`;
+  const LBL = { sel: '選取', text: '文字', multi: '多行', comb: '格仔', check: '剔選', radio: '單選', drop: '下拉', sig: '簽名' };
+  return header(`${TB('data-e="back"', 'back', '返回', '取消')}<input class="tname" id="tname" value="${esc(E.meta.name)}" title="範本名稱" aria-label="範本名稱"><div class="sp"></div>
+  ${Object.entries(TOOLS).map(([k, v]) => TB(`data-e="tool:${k}"`, v.icon, LBL[k], `${v.tip}${k === 'sel' ? '（點選或拖曳框選多個欄位；Shift／Ctrl 加選；Ctrl+A 全選；雙擊或長按欄位開啟文字格式）' : '（在頁面上拖曳繪製）'}`, E.tool === k ? 'on' : '')).join('')}
+  <span class="sep tall"></span>${TB('data-e="undo"', 'undo', '復原', '復原（Ctrl+Z）', '', !(E.hi > 0))}${TB('data-e="redo"', 'redo', '重做', '重做（Ctrl+Shift+Z 或 Ctrl+Y）', '', !(E.hi < E.hist.length - 1))}
+  <span class="sep tall"></span>${TB('data-e="auto"', 'wand', '偵測', '自動偵測欄位')}
+  ${TB('data-e="panel"', 'menu', '欄位', '欄位清單與屬性', E.panel ? 'on' : '')}
+  ${TB('data-e="draft"', 'save', '草稿', '儲存為草稿（用家睇唔到，可稍後繼續編輯）')}
+  ${TB('data-e="pub"', 'upload', '發佈', '發佈為範本', 'pri')}`).replace('<div class="sp"></div><div class="sp"></div>', '<div class="sp"></div>');
+}
+async function renderEditor() {
+  S.view = 'edit'; const E = S.ed;
+  app.innerHTML = edToolbar() + `<div class="edl ${E.panel ? 'has-panel' : ''}"><div class="pages" id="pages"></div>${E.panel ? '<aside class="epanel" id="epanel"></aside>' : ''}</div>` + `<div class="zoomb"><button type="button" data-z="out" title="縮小（Ctrl −／Ctrl＋滾輪）" aria-label="縮小">−</button><button type="button" data-z="fit" id="zlab" title="還原 100%（Ctrl 0）">${Math.round(S.zoom * 100)}%</button><button type="button" data-z="in" title="放大（Ctrl +／Ctrl＋滾輪）" aria-label="放大">+</button></div>`;
+  $('#tname').oninput = e => { E.meta.name = e.target.value; };
+  const box = $('#pages'); const avail = Math.min(box.clientWidth || app.clientWidth, 980); E.pages = [];
+  for (let i = 1; i <= E.pdf.numPages; i++) {
+    const page = await E.pdf.getPage(i); const v1 = page.getViewport({ scale: 1 }); const fit = avail / v1.width, sc = fit * S.zoom;
+    const vp = page.getViewport({ scale: sc * (window.devicePixelRatio > 1 ? 1.5 : 1) });
+    const wrap = document.createElement('div'); wrap.className = 'pg'; wrap.style.maxWidth = 'none'; wrap.style.width = v1.width * sc + 'px'; wrap.style.height = v1.height * sc + 'px';
+    const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height; cv.style.width = '100%'; cv.style.height = '100%';
+    const ov = document.createElement('div'); ov.className = 'ov' + (E.tool === 'sel' ? '' : ' draw'); wrap.append(cv, ov); box.appendChild(wrap);
+    E.pages.push({ page, sc, fit, ph: v1.height, pw: v1.width, ov, cv });
+    await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+    bindDraw(i - 1);
+  }
+  drawBoxes(); renderPanel(); updHist(); const edl = document.querySelector('.edl'); if (edl) edl.classList.toggle('painting', !!E.paint);
+}
+/* ---------- zoom (buttons, Ctrl/Cmd + / - / 0, Ctrl/Cmd + wheel or trackpad pinch) ---------- */
+const ZSTEPS = [.5, .67, .8, 1, 1.25, 1.5, 2, 3, 4];
+let zTimer = null;
+function zoomItems() { return S.view === 'edit' && S.ed ? S.ed.pages.map(p => ({ page: p.page, fit: p.fit, cv: p.cv, wrap: p.ov.parentElement, p })) : S.view === 'fill' && S.fill && S.fill.pg ? S.fill.pg.map(p => ({ page: p.page, fit: p.fit, cv: p.cv, wrap: p.wrap, p })) : []; }
+async function zoomRerender(gen) {
+  for (const it of zoomItems()) {
+    if (gen !== S.zgen) return; const sc = it.fit * S.zoom, k = window.devicePixelRatio > 1 ? 1.5 : 1;
+    let vp = it.page.getViewport({ scale: sc * k }); const px = vp.width * vp.height; if (px > 3.2e7) vp = it.page.getViewport({ scale: sc * k * Math.sqrt(3.2e7 / px) });
+    const tmp = document.createElement('canvas'); tmp.width = Math.floor(vp.width); tmp.height = Math.floor(vp.height);
+    try { await it.page.render({ canvasContext: tmp.getContext('2d'), viewport: vp }).promise; } catch (_) { continue; }
+    if (gen !== S.zgen) return; it.cv.width = tmp.width; it.cv.height = tmp.height; it.cv.getContext('2d').drawImage(tmp, 0, 0);
+  }
+}
+function applyZoom(nz, cx, cy) {
+  nz = Math.max(.5, Math.min(4, Math.round(nz * 100) / 100)); if (nz === S.zoom) return;
+  const items = zoomItems(); const box = document.querySelector('#pages'); if (!items.length || !box) return;
+  if (cx == null) { const br = box.getBoundingClientRect(); cx = Math.max(br.left, 0) + Math.min(br.width, innerWidth) / 2; cy = innerHeight / 2; }
+  let a = null, ad = 1e9; items.forEach(it => { const r = it.wrap.getBoundingClientRect(), d = cy < r.top ? r.top - cy : cy > r.bottom ? cy - r.bottom : 0; if (d < ad) { ad = d; a = { it, r }; } });
+  const fx = (cx - a.r.left) / a.r.width, fy = (cy - a.r.top) / a.r.height;
+  S.zoom = nz;
+  items.forEach(it => { const sc = it.fit * nz; it.wrap.style.width = it.p.pw * sc + 'px'; it.wrap.style.height = it.p.ph * sc + 'px'; });
+  if (S.view === 'edit') { S.ed.pages.forEach(p => { p.sc = p.fit * nz; }); drawBoxes(); if (FTB) posFtb(); }
+  else { S.fill.pg.forEach(p => { const sc = p.fit * nz; p.ov.innerHTML = ''; S.fill.fields.filter(f => f.page === p.idx).forEach(f => p.ov.appendChild(fieldEl(f, sc, p.ph))); }); }
+  const r2 = a.it.wrap.getBoundingClientRect(); box.scrollLeft += (r2.left + fx * r2.width) - cx; window.scrollBy(0, (r2.top + fy * r2.height) - cy);
+  const lab = document.getElementById('zlab'); if (lab) lab.textContent = Math.round(nz * 100) + '%';
+  clearTimeout(zTimer); const g = S.zgen = (S.zgen || 0) + 1; zTimer = setTimeout(() => zoomRerender(g), 220);
+}
+const zoomStep = dir => { const z = S.zoom; if (dir > 0) return ZSTEPS.find(v => v > z + .005) || 4; const lo = ZSTEPS.filter(v => v < z - .005); return lo.length ? lo[lo.length - 1] : .5; };
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-z]'); if (!b) return; const a = b.dataset.z; applyZoom(a === 'fit' ? 1 : zoomStep(a === 'in' ? 1 : -1)); });
+document.addEventListener('wheel', e => { if (!(e.ctrlKey || e.metaKey) || !document.querySelector('#pages') || (S.view !== 'edit' && S.view !== 'fill')) return; e.preventDefault(); const dy = Math.max(-120, Math.min(120, e.deltaY)); applyZoom(S.zoom * Math.exp(-dy * .0022), e.clientX, e.clientY); }, { passive: false });
+document.addEventListener('keydown', e => {
+  if (!(e.ctrlKey || e.metaKey) || e.altKey || !document.querySelector('#pages') || (S.view !== 'edit' && S.view !== 'fill')) return;
+  const k = e.key; if (k === '+' || k === '=' || k === 'Add') applyZoom(zoomStep(1)); else if (k === '-' || k === '_' || k === 'Subtract') applyZoom(zoomStep(-1)); else if (k === '0' || k === ')') applyZoom(1); else return;
+  e.preventDefault(); e.stopPropagation();
+}, true);
+function drawBoxes() {
+  const E = S.ed; const sids = selIds();
+  E.pages.forEach((p, pi) => {
+    p.ov.querySelectorAll('.fb').forEach(x => x.remove());
+    E.fields.filter(f => f.page === pi).forEach(f => {
+      const kk = kindKey(f); const d = document.createElement('div'); d.className = `fb k-${kk}` + (f.ex ? ' ex' : '') + (sids.includes(f.id) ? (sids.length > 1 ? ' msel' : ' sel') : ''); d.dataset.id = f.id;
+      d.style.cssText = `left:${f.x * p.sc}px;top:${(p.ph - f.y - f.h) * p.sc}px;width:${f.w * p.sc}px;height:${f.h * p.sc}px`;
+      if (f.font) d.style.fontFamily = fontCss(f.font);
+      const fs = (f.fontSize || 11) * p.sc; const jc = f.align === 'center' ? 'center' : f.align === 'right' ? 'flex-end' : 'flex-start';
+      const pv = `<i class="pv" style="background:${f.bg || 'transparent'};border:${f.bw > 0 && f.border ? `${Math.max(1, f.bw * p.sc)}px solid ${f.border}` : '0'}"></i>`;
+      let inner = '';
+      const lsp = `letter-spacing:${(f.ls || 0) * p.sc}px;`;
+      if (kk === 'text') inner = `<span class="smp" style="font-size:${fs}px;justify-content:${jc};${lsp}">${esc(f.initial || 'AaBb 範例')}</span>`;
+      else if (kk === 'multi') { const lh = fs * (f.lh || 1.5); inner = `<i class="ml" style="background-image:repeating-linear-gradient(to bottom,transparent 0,transparent ${lh - 1}px,rgba(14,143,163,.5) ${lh - 1}px,rgba(14,143,163,.5) ${lh}px)"></i><span class="smp" style="font-size:${fs}px;justify-content:${jc};align-items:flex-start;white-space:normal;line-height:${f.lh || 1.5};${lsp}">${esc(f.initial || 'AaBb 範例')}</span>`; }
+      else if (kk === 'comb') { const n = Math.max(1, Math.min(f.maxLength || 8, 40)); const ch = [...String(f.initial || '')]; inner = `<span class="cells" style="font-size:${fs}px">${Array.from({ length: n }, (_, i) => `<u>${esc(ch[i] || '')}</u>`).join('')}</span>`; }
+      else if (kk === 'radio') inner = f.initial === true ? '<i class="rdot"></i>' : '';
+      else if (kk === 'drop') inner = `<span class="smp" style="font-size:${fs}px;justify-content:${jc};padding-right:${16}px">${esc(f.initial || (f.options && f.options[0]) || 'AaBb 範例')}</span><svg class="chv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>`;
+      else if (kk === 'check') inner = `<svg class="tick" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>`;
+      else if (kk === 'sig') inner = `<span class="sg"><svg viewBox="0 0 24 24">${IC.pen}</svg>簽名</span>`;
+      d.innerHTML = `${pv}${inner}<span class="tag${f.ex ? ' ro' : ''}" title="拖動移動；雙擊改名">${f.ex ? '' : '<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg>'}<span class="nm">${esc(f.name)}${kk === 'radio' ? ' · ' + esc(f.onValue || '') : ''}</span></span>${f.ex ? '' : '<i class="rz"></i>'}`;
+      p.ov.appendChild(d);
+    });
+  });  syncFtb();
+}
+function syncFtb() {
+  const E = S.ed; if (!E || S.view !== 'edit' || E.dragging) return;
+  const ids = selIds().filter(id => { const f = E.fields.find(x => x.id === id); return f && !f.ex; });
+  if (!ids.length) { if (FTB) closeFtb(); return; }
+  if (FTB && FTB.ids.length === ids.length && ids.every(i => FTB.ids.includes(i))) { posFtb(); return; }
+  if (FTB && FTB.onClose) FTB.cancel = true;
+  openFtb(ids);
+}
+const selIds = () => { const E = S.ed; return E.multi && E.multi.length > 1 ? E.multi : (E.sel ? [E.sel] : []); };
+function setSel(ids) { const E = S.ed; ids = [...new Set(ids)]; E.multi = ids.length > 1 ? ids : []; E.sel = ids.length === 1 ? ids[0] : null; }
+const kindKey = f => f.kind === 'check' ? 'check' : f.kind === 'radio' ? 'radio' : f.kind === 'drop' ? 'drop' : f.kind === 'sig' ? 'sig' : f.kind === 'text' ? (f.comb ? 'comb' : f.multiline ? 'multi' : 'text') : 'other';
+/* colour popover (swatches + eyedropper + opacity) */
+const PAL = ['', '#111111', '#6b7280', '#e5e7eb', '#ffffff', '#c0392b', '#ef93b0', '#fbd5d5', '#d98030', '#fad54a', '#fff5aa', '#3a7d44', '#d8eed9', '#4aa3a3', '#2850cc', '#d3e2ff', '#703cb4'];
+const clrSplit = v => { const m = /^#([0-9a-f]{6})([0-9a-f]{2})?$/i.exec(v || ''); return m ? { hex: '#' + m[1].toLowerCase(), a: m[2] ? Math.round(parseInt(m[2], 16) / 2.55) : 100 } : { hex: '', a: 100 }; };
+const clrJoin = (hex, a) => !hex ? null : (a >= 100 ? hex : hex + Math.round(a * 2.55).toString(16).padStart(2, '0'));
+const swHtml = (kind, v) => `<i class="sw"><b style="${kind === 'bd' ? (v ? `border:4px solid ${v}` : 'border:3px dashed #9aa3b5') : (v ? `background:${v}` : '')}"></b></i>`;
+let CP = null;
+function closeClrPop() { if (!CP) return; const c = CP; CP = null; c.el.remove(); c.anchor.classList.remove('on'); document.removeEventListener('pointerdown', c.out, true); document.removeEventListener('keydown', c.key, true); if (S.ed) commit(); }
+function openClrPop(anchor, cur, onChange) {
+  if (anchor._cl && Date.now() - anchor._cl < 250) return; closeClrPop();
+  const st = clrSplit(cur); const el = document.createElement('div'); el.className = 'cpop';
+  const hasEye = !!window.EyeDropper;
+  el.innerHTML = `<div class="cgrid">${PAL.map(c => `<button type="button" class="cs ${c ? '' : 'chk'}" data-c="${c}" style="${c ? `background:${c}` : ''}" title="${c || '無（透明）'}"></button>`).join('')}<label class="cs rb" data-c="rb" title="自訂顏色"><input type="color" value="${st.hex || '#2457d6'}"></label>${hasEye ? `<button type="button" class="cs ey" data-eye title="吸管：從畫面取色">${ic('eyedrop')}</button>` : ''}</div>
+  <div class="copc"><span class="ic-w">${ic('drop')}</span><input type="range" min="0" max="100" step="1"><span class="pct"><input type="number" min="0" max="100" step="1"><span>%</span></span></div>`;
+  document.body.appendChild(el);
+  const rg = el.querySelector('input[type=range]'), pc = el.querySelector('.pct input'), op = el.querySelector('.copc'), cc = el.querySelector('.rb input');
+  const sync = () => { el.querySelectorAll('.cs[data-c]').forEach(b => { const c = b.dataset.c; b.classList.toggle('sel', c === 'rb' ? !!st.hex && !PAL.includes(st.hex) : c === st.hex); }); rg.value = pc.value = st.hex ? st.a : 100; op.classList.toggle('off', !st.hex); };
+  const emit = () => { sync(); onChange(clrJoin(st.hex, st.a)); };
+  el.querySelectorAll('button.cs[data-c]').forEach(b => b.onclick = () => { st.hex = b.dataset.c; if (st.hex && st.a === 0) st.a = 100; emit(); });
+  cc.oninput = () => { st.hex = cc.value.toLowerCase(); if (st.a === 0) st.a = 100; emit(); };
+  const ey = el.querySelector('[data-eye]'); if (ey) ey.onclick = async () => { try { const r = await new window.EyeDropper().open(); st.hex = r.sRGBHex.toLowerCase(); if (st.a === 0) st.a = 100; emit(); } catch (e) { } };
+  rg.oninput = () => { st.a = +rg.value; emit(); };
+  pc.oninput = () => { const n = Math.max(0, Math.min(100, parseInt(pc.value, 10) || 0)); st.a = n; sync(); pc.value = n; onChange(clrJoin(st.hex, st.a)); };
+  const place = () => { const r = anchor.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight; let l = Math.min(r.left, innerWidth - w - 8); l = Math.max(8, l); let t = r.bottom + 6; if (t + h > innerHeight - 8) t = Math.max(8, r.top - h - 6); el.style.left = l + 'px'; el.style.top = t + 'px'; };
+  const out = e => { if (!el.contains(e.target) && !(e.target.closest && e.target.closest('input[type=color]'))) { if (anchor.contains(e.target)) anchor._cl = Date.now(); closeClrPop(); } };
+  const key = e => { if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); closeClrPop(); } };
+  CP = { el, anchor, out, key }; anchor.classList.add('on'); sync(); place();
+  document.addEventListener('pointerdown', out, true); document.addEventListener('keydown', key, true);
+}
+
+const SECX = (() => { try { return new Set(JSON.parse(localStorage.getItem('fl_secx') || '[]')); } catch (e) { return new Set(); } })();
+const sec = (key, icon, title, body) => body.trim() ? `<div class="psec ${SECX.has(key) ? 'closed' : ''}"><button type="button" class="psh" data-sh="${key}" title="展開／收起">${ic(icon)}<span>${title}</span>${ic('caret')}</button><div class="psb">${body}</div></div>` : '';
+function renderPanel() {
+  closeClrPop();
+  const E = S.ed; const sids = selIds(); const box = document.getElementById('epanel'); if (!box) return;
+  const icon = { text: 'text', multi: 'multi', comb: 'comb', radio: 'radio', check: 'checkbox', drop: 'dropdown', sig: 'pen', other: 'cursor' };
+  const rows = E.pages.map((_, pi) => { const fs = E.fields.filter(f => f.page === pi);
+    return fs.length ? `<div class="pgh">第 ${pi + 1} 頁</div>` + fs.map(f => `<div class="pr k-${kindKey(f)} ${sids.includes(f.id) ? 'on' : ''}" data-pf="${f.id}" title="${esc(f.name)}（拖動排序；雙擊改名）"><span class="grp" aria-hidden="true">${ic('grip')}</span>${ic(icon[kindKey(f)])}<span class="pn">${esc(f.name)}${f.kind === 'radio' ? ' · ' + esc(f.onValue || '') : ''}</span>${f.ex ? ic('lock') : ''}</div>`).join('') : ''; }).join('');
+  const f = E.fields.find(x => x.id === E.sel); let props = '<p class="note" style="margin:0">在清單或頁面上選取欄位，即可修改名稱與格式。</p>';
+  const colorRows = (p, cur) => `<div class="row"><label>顏色</label><button type="button" class="csw" data-cb="${p}-bg" title="背景顏色">${swHtml('bg', cur.bg)}${ic('caret')}</button><button type="button" class="csw" data-cb="${p}-bd" title="框線顏色">${swHtml('bd', cur.bw > 0 ? cur.border : '')}${ic('caret')}</button><div class="stp" title="框線粗幼（pt）"><input id="${p}-bw" type="number" min="0" max="6" step="0.5" value="${cur.bw ?? 0}"><div class="sb"><button type="button" data-bwu="${p}">${ic('up')}</button><button type="button" data-bwd="${p}">${ic('down')}</button></div></div></div>`;
+  const stepRow = (id, label, val, min, max, step, ph, unit, tip) => `<div class="row"><label>${label}</label><div class="stp" title="${tip}"><input id="${id}" type="number" min="${min}" max="${max}" step="${step}" value="${val ?? ''}" placeholder="${ph}"><div class="sb"><button type="button" data-st="${id}" data-d="1">${ic('up')}</button><button type="button" data-st="${id}" data-d="-1">${ic('down')}</button></div></div><span class="note" style="margin:0">${unit}</span></div>`;
+  const fontRow = (id, cur0, mixed) => { const cur = normFont(cur0) || ''; return `<div class="row"><label>字體</label><select id="${id}">${mixed ? '<option value="__m" selected disabled>混合</option>' : ''}${Object.entries(BUILTIN).map(([kk, v]) => `<option value="${kk}" ${!mixed && cur === kk ? 'selected' : ''}>${v[0]}</option>`).join('')}${Object.keys(FONTS).length ? `<optgroup label="已載入嘅字體">${Object.keys(FONTS).map(n => `<option value="c:${esc(n)}" ${cur === 'c:' + n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</optgroup>` : ''}<option value="__local">更多字體（本機）…</option></select><button class="ib" data-fl="file" title="載入電腦字體檔（.ttf／.otf／.woff／.ttc）">${ic('upload')}</button></div>`; };
+  const brushBtn = `<button class="ib ${E.paint ? 'on' : ''}" data-pp="paint" title="格式刷：開啟後，之後點選嘅欄位會自動套用此格式（字級、對齊、框線、背景）">${ic('brush')}</button>`;
+  const alignBtns = (attr, cur) => [['left', 'alL', '靠左'], ['center', 'alC', '置中'], ['right', 'alR', '靠右']].map(([a, i, t]) => `<button class="ib ${cur === a ? 'on' : ''}" ${attr}="${a}" title="${t}">${ic(i)}</button>`).join('');
+  const same = (arr, g) => arr.length && arr.every(x => g(x) === g(arr[0])) ? g(arr[0]) : null;
+  let multi = null;
+  if (sids.length > 1) {
+    const sel = E.fields.filter(x => sids.includes(x.id)), ed = sel.filter(x => !x.ex), txt = ed.filter(x => x.kind === 'text' && !x.comb), fsT = ed.filter(x => x.kind === 'text' || x.kind === 'drop');
+    multi = { ed, txt, fsT };
+    const fsV = same(fsT, x => x.fontSize), alV = same(txt, x => x.align || 'left'), mlV = same(txt, x => x.maxLength || ''), rqAll = ed.length && ed.every(x => x.required);
+    const cur = { border: same(ed, x => x.border || ''), bw: same(ed, x => x.bw || 0), bg: same(ed, x => x.bg || '') };
+    const gs = {}; ed.forEach(x => { (gs[x.page] = gs[x.page] || []).push(x); }); const mx = Math.max(0, ...Object.values(gs).map(g => g.length));
+    const ab = (attr, i, t, dis) => `<button class="ib" ${attr} title="${t}" ${dis ? 'disabled' : ''}>${ic(i)}</button>`;
+    const secAlign = ed.length < 2 ? '' : `<div class="row"><label>排列</label><div class="seg" style="flex-wrap:wrap">${[['l', 'aL', '靠左對齊'], ['c', 'aC', '水平置中'], ['r', 'aR', '靠右對齊'], ['t', 'aT', '頂端對齊'], ['m', 'aM', '垂直置中'], ['b', 'aB', '底端對齊']].map(([k, i, t]) => ab(`data-al="${k}"`, i, t, false)).join('')}</div></div>
+      <div class="row"><label>分佈</label><div class="seg">${ab('data-di="h"', 'dH', '水平平均分佈（最少 3 個欄位）', mx < 3)}${ab('data-di="v"', 'dV', '垂直平均分佈（最少 3 個欄位）', mx < 3)}</div></div>`;
+    const secField = `${txt.length ? `<div class="row"><label>字數</label><input id="pm-ml" type="number" min="1" placeholder="${mlV === null ? '混合' : '不限'}" value="${mlV || ''}"></div>` : ''}
+      ${ed.length ? `<div class="row"><label>必填</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pm-req" type="checkbox" ${rqAll ? 'checked' : ''} style="flex:none;height:auto"> 填寫者必須填寫</label></div>` : ''}`;
+    const secText = `${fsT.length ? fontRow('pm-font', same(fsT, x => x.font || ''), same(fsT, x => x.font || '') === null) : ''}
+      ${fsT.length ? `<div class="row"><label>字級</label><input id="pm-fs" type="number" min="6" max="36" step="0.5" value="${fsV ?? ''}" placeholder="混合"><span class="note" style="margin:0">pt</span></div>` : ''}
+      ${txt.length ? `<div class="row"><label>對齊</label><div class="seg">${alignBtns('data-pma', alV)}</div></div>` : ''}
+      ${txt.length ? stepRow('pm-ls', '字距', same(txt, x => x.ls || 0), -2, 20, 0.5, '混合', 'pt', '字與字之間距離（pt）') : ''}
+      ${txt.some(x => x.multiline) ? stepRow('pm-lh', '行距', same(txt.filter(x => x.multiline), x => x.lh || 0) || '', 0.8, 4, 0.1, '預設', '倍', '行與行之間距離（字級倍數，留空＝預設）') : ''}`;
+    props = `<p class="note" style="margin:0 0 4px">已選 <b>${sel.length}</b> 個欄位${sel.length > ed.length ? `（${sel.length - ed.length} 個不可編輯，只會被刪除）` : ''}。設定會套用到全部可編輯欄位。</p>
+    ${sec('align', 'aL', '對齊', secAlign)}${sec('field', 'sliders', '欄位設定', secField)}${sec('text', 'text', '文字格式', secText)}${sec('look', 'drop', '外觀', ed.length ? colorRows('pm', cur) : '')}
+    <div class="acts" style="margin:6px 0 0;justify-content:space-between"><div style="display:flex;gap:4px"><button class="ib" data-pm="clear" title="取消選取">${ic('x')}</button>${ed.length ? brushBtn : ''}</div><button class="ib dng" data-pm="del" title="刪除已選欄位">${ic('trash')}</button></div>`;
+  } else if (f) {
+    const k = kindKey(f); const txt = k === 'text' || k === 'multi'; const cmb = k === 'comb'; const rad = k === 'radio'; const rn = rad ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name).length : 0; const hasFont = txt || cmb || k === 'drop';
+    const cw = f.w / (f.maxLength || 8), cnote = (f.fontSize || 11) > cw ? `<span style="color:var(--bad)">每格約闊 ${cw.toFixed(1)}pt，字級偏大，字會超出格</span>` : `每格約闊 ${cw.toFixed(1)}pt`;
+    const secField = `<div class="row"><label>${rad ? '群組' : '名稱'}</label><input id="pp-name" value="${esc(f.name)}"></div>
+    <div class="row"><label>類型</label><div class="seg">${Object.entries(KINDS).map(([kk, v]) => `<button class="ib ${k === kk ? 'on' : ''}" data-pk="${kk}" title="${v.tip}">${ic(v.icon)}</button>`).join('')}</div></div>
+    ${rad ? `<div class="row"><label>選項</label><input id="pp-ov" value="${esc(f.onValue || '')}" placeholder="此圓圈代表嘅選項"></div>
+    <div class="row"><label>預設</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-rsel" type="checkbox" ${f.initial === true ? 'checked' : ''} style="flex:none;height:auto"> 預設選取此項</label></div>
+    <div class="row"><label>同組</label><span class="note" style="margin:0;flex:1">此群組共 ${rn} 個選項，同一時間只可選一個</span><button class="ib" data-pp="addopt" title="加入同群組嘅新選項">${ic('plus')}</button></div>` : ''}
+    ${cmb ? stepRow('pp-cn', '格數', f.maxLength || 8, 1, 40, 1, '8', '格', '字格數目（必須設定；總闊度平均分配）') + `<p class="note" id="pp-cnote" style="margin:-2px 0 6px">${cnote}。每格一個字；要加減格數，可拉闊欄位或改格數。</p>` : ''}
+    ${cmb ? `<div class="row"><label>預設</label><input id="pp-def" value="${esc(f.initial || '')}" placeholder="預設內容（可留空）"></div>` : ''}
+    ${txt ? `<div class="row"><label>字數</label><input id="pp-ml" type="number" min="1" placeholder="不限" value="${f.maxLength || ''}"></div>
+    <div class="row"><label>預設</label><input id="pp-def" value="${esc(f.initial || '')}" placeholder="預設內容（可留空）"></div>` : ''}
+    ${k === 'check' ? `<div class="row"><label>預設</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-chk" type="checkbox" ${f.initial === true ? 'checked' : ''} style="flex:none;height:auto"> 預設剔選</label></div>` : ''}
+    ${k === 'drop' ? `<div class="row"><label>選項</label><textarea id="pp-opt" placeholder="每行一個選項">${esc((f.options || []).join('\n'))}</textarea></div>` : ''}
+    <div class="row"><label>必填</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-req" type="checkbox" ${f.required ? 'checked' : ''} style="flex:none;height:auto"> ${k === 'sig' ? '必須簽名' : '填寫者必須填寫'}</label></div>`;
+    const secText = `${hasFont ? fontRow('pp-font', f.font || '', false) : ''}
+    ${hasFont ? `<div class="row"><label>字級</label><input id="pp-fs" type="number" min="6" max="36" step="0.5" value="${f.fontSize || 11}"><span class="note" style="margin:0">pt</span></div>` : ''}
+    ${txt ? `<div class="row"><label>對齊</label><div class="seg">${alignBtns('data-pa', f.align || 'left')}</div></div>` : ''}
+    ${txt ? stepRow('pp-ls', '字距', f.ls || 0, -2, 20, 0.5, '0', 'pt', '字與字之間距離（pt）') : ''}
+    ${k === 'multi' ? stepRow('pp-lh', '行距', f.lh || '', 0.8, 4, 0.1, '預設', '倍', '行與行之間距離（字級倍數，留空＝預設）') : ''}`;
+    props = f.ex ? `<div class="row"><label>名稱</label><input value="${esc(f.name)}" disabled></div><p class="note">此欄位類型（${esc(f.kind)}）或含多個位置，保留原樣，只可刪除。</p><div class="acts" style="margin:0"><button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>` : `${sec('field', 'sliders', '欄位設定', secField)}${sec('text', 'text', '文字格式', secText)}${sec('look', 'drop', '外觀', colorRows('pp', f))}
+    <div class="acts" style="margin:6px 0 0;justify-content:space-between">${brushBtn}<button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>`;
+  }
+  const tab = E.tab || 'list';
+  box.innerHTML = `<div class="ptabs"><button class="ptab ${tab === 'list' ? 'on' : ''}" data-tab="list" title="欄位清單">${ic('list')}<span>欄位</span><span class="chip">${E.fields.length}</span></button><button class="ptab ${tab === 'fmt' ? 'on' : ''}" data-tab="fmt" title="名稱與格式">${ic('sliders')}<span>格式</span></button></div>` +
+    (tab === 'list' ? `<div class="plist">${rows || '<p class="note" style="padding:8px">尚未有欄位。選工具後在頁面拖曳，或按魔術棒自動偵測。</p>'}</div>` : `<div class="pprops">${props}</div>`);
+  const q = s => box.querySelector(s); const redraw = () => { drawBoxes(); };
+  box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { E.tab = b.dataset.tab; renderPanel(); });
+  const renamePr = (r, f) => {
+    const sp = r.querySelector('.pn'); if (!sp) return; const inp = document.createElement('input'); inp.className = 'rnm'; inp.value = f.name; inp.maxLength = 60; sp.replaceWith(inp); inp.focus(); inp.select();
+    let fin = false; const end = ok => { if (fin) return; fin = true; const v = inp.value.trim();
+      if (ok && v && v !== f.name) { const mem = f.kind === 'radio' ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name) : [f]; mem.forEach(x => { x.name = ''; }); const nn = uniqueName(v); mem.forEach(x => { x.name = nn; }); commit(); drawBoxes(); }
+      renderPanel(); };
+    inp.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); end(true); } else if (e.key === 'Escape') { e.preventDefault(); end(false); } };
+    inp.onblur = () => end(true); inp.onpointerdown = e => e.stopPropagation();
+  };
+  box.querySelectorAll('[data-pf]').forEach(r => r.addEventListener('pointerdown', ev => {
+    if ((ev.button || 0) > 0 || ev.target.closest('input')) return;
+    const id = r.dataset.pf, touch = ev.pointerType !== 'mouse', f0 = E.fields.find(x => x.id === id); if (!f0) return;
+    const sx = ev.clientX, sy = ev.clientY; let armed = !touch, drag = false, tgt = null, after = false, tm = null;
+    const cands = () => [...box.querySelectorAll('.pr')].filter(x => x !== r && (E.fields.find(y => y.id === x.dataset.pf) || {}).page === f0.page);
+    const clr = () => { box.querySelectorAll('.pr').forEach(x => { x.classList.remove('dtb', 'dta'); x.style.transform = ''; }); box.querySelectorAll('.plgap').forEach(x => x.remove()); };
+    if (touch) tm = setTimeout(() => { armed = true; r.classList.add('drg'); try { navigator.vibrate && navigator.vibrate(10); } catch (_) { } }, 350);
+    const grp = () => [...box.querySelectorAll('.pr')].filter(x => (E.fields.find(y => y.id === x.dataset.pf) || {}).page === f0.page);
+    const mv = e => {
+      if (!armed) { if (Math.hypot(e.clientX - sx, e.clientY - sy) > 8) { clearTimeout(tm); fin(); } return; }
+      if (!drag && Math.hypot(e.clientX - sx, e.clientY - sy) < 6) return;
+      drag = true; e.preventDefault(); r.classList.add('drg');
+      const g = grp(), s0 = g.indexOf(r), h = r.offsetHeight; if (s0 < 0) return;
+      // target slot = number of other rows whose centre is above the pointer
+      let t = 0; g.forEach(x => { if (x === r) return; const b = x.getBoundingClientRect(); if (b.top + b.height / 2 < e.clientY) t++; });
+      r.style.transform = `translateY(${e.clientY - sy}px)`;
+      g.forEach((x, i) => { if (x === r) return; let d = 0; if (s0 < t && i > s0 && i <= t) d = -h; else if (s0 > t && i >= t && i < s0) d = h; x.style.transform = d ? `translateY(${d}px)` : ''; });
+      const slot = g[0].offsetTop + t * h; let ph = box.querySelector('.plgap'); const par = r.parentElement;
+      if (!ph) { ph = document.createElement('div'); ph.className = 'plgap'; par.appendChild(ph); }
+      ph.style.top = slot + 'px'; ph.style.height = h + 'px';
+      if (t === s0) { tgt = null; } else { tgt = g[t]; after = t > s0; }
+    };
+    const tmv = e => { if (armed && touch) e.preventDefault(); };
+    const fin = () => { clearTimeout(tm); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', cn); removeEventListener('touchmove', tmv); clr(); r.classList.remove('drg'); };
+    const cn = () => fin();
+    const up = ev2 => {
+      fin();
+      if (drag) { if (tgt) { const tf = E.fields.find(y => y.id === tgt.dataset.pf); if (tf && tf !== f0) { E.fields = E.fields.filter(x => x !== f0); const k = E.fields.indexOf(tf); E.fields.splice(k + (after ? 1 : 0), 0, f0); commit(); } } renderPanel(); return; }
+      if (touch && !armed) { /* plain tap */ }
+      const add = ev2.shiftKey || ev2.ctrlKey || ev2.metaKey, cur = selIds(), now = Date.now();
+      if (!add && !f0.ex && E._pr && E._pr.id === id && now - E._pr.t < 450) { E._pr = null; renamePr(r, f0); return; }
+      E._pr = { id, t: now };
+      if (add) setSel(cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id]);
+      else { setSel([id]); if (E.paint) { applyFmt(f0, E.paint); commit(); } }
+      drawBoxes(); renderPanel(); const b = document.querySelector(`.fb[data-id="${CSS.escape(id)}"]`); if (b && !add) b.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+    addEventListener('pointermove', mv, { passive: false }); addEventListener('pointerup', up); addEventListener('pointercancel', cn); addEventListener('touchmove', tmv, { passive: false });
+  }));
+  if (tab !== 'fmt') return;
+  box.querySelectorAll('[data-sh]').forEach(h => h.onclick = () => { const k = h.dataset.sh, c = h.parentElement.classList.toggle('closed'); c ? SECX.add(k) : SECX.delete(k); try { localStorage.setItem('fl_secx', JSON.stringify([...SECX])); } catch (e) { } });
+  const wireColors = (p, targets) => {
+    const bb = q(`[data-cb="${p}-bg"]`), bd = q(`[data-cb="${p}-bd"]`), bw = q(`#${p}-bw`); if (!bb) return;
+    const sm = g => { const t = targets(); return t.length && t.every(x => g(x) === g(t[0])) ? g(t[0]) : ''; };
+    const bgNow = () => sm(x => x.bg || ''), bdNow = () => sm(x => (x.bw > 0 && x.border) ? x.border : '');
+    const paint = () => { bb.innerHTML = swHtml('bg', bgNow()) + ic('caret'); bd.innerHTML = swHtml('bd', bdNow()) + ic('caret'); };
+    bb.onclick = () => openClrPop(bb, bgNow(), v => { targets().forEach(x => { x.bg = v; }); paint(); redraw(); schedCommit(); });
+    bd.onclick = () => openClrPop(bd, bdNow(), v => { targets().forEach(x => { x.border = v; x.bw = v ? (x.bw || 1) : 0; }); bw.value = sm(x => x.bw || 0) || 0; paint(); redraw(); schedCommit(); });
+    const setW = n => { n = Math.max(0, Math.min(6, Math.round(n * 2) / 2)); targets().forEach(x => { x.bw = n; if (n > 0 && !x.border) x.border = '#262626'; }); bw.value = n; paint(); redraw(); schedCommit(); };
+    bw.oninput = e => { const n = parseFloat(e.target.value); if (n >= 0 && n <= 6) { targets().forEach(x => { x.bw = n; if (n > 0 && !x.border) x.border = '#262626'; }); paint(); redraw(); schedCommit(); } };
+    q(`[data-bwu="${p}"]`).onclick = () => setW((parseFloat(bw.value) || 0) + .5);
+    q(`[data-bwd="${p}"]`).onclick = () => setW((parseFloat(bw.value) || 0) - .5);
+  };
+  const wireNum = (id, min, max, step, base, set) => {
+    const inp = q('#' + id); if (!inp) return;
+    const apply = n => { set(n); redraw(); schedCommit(); };
+    inp.oninput = e => { if (e.target.value === '') return apply(0); const n = parseFloat(e.target.value); if (n >= min && n <= max) apply(n); };
+    box.querySelectorAll(`[data-st="${id}"]`).forEach(b => b.onclick = () => { const cur = parseFloat(inp.value); let n = (isNaN(cur) ? base : cur) + (+b.dataset.d) * step; n = Math.round(Math.max(min, Math.min(max, n)) * 100) / 100; inp.value = n; apply(n); });
+  };
+  const wireFont = (id, targets) => {
+    const sl = q('#' + id); if (!sl) return; const prev = sl.value;
+    const apply = nm => { targets().forEach(x => { x.font = 'c:' + nm; }); commit(); redraw(); renderPanel(); toast(`已載入字體：${nm}`); };
+    const chooseFile = () => { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.ttf,.otf,.woff,.ttc'; inp.onchange = async () => { const file = inp.files[0]; if (!file) return; try { apply(await loadFontFile(file)); } catch (er) { toast(er.message || '字體載入失敗', true); } }; inp.click(); };
+    sl.onchange = e => { const v = e.target.value; if (v === '__local') { e.target.value = prev; if (window.queryLocalFonts) pickLocalFont(apply); else { toast('呢個瀏覽器唔支援直接讀取本機字體（請用 Chrome / Edge），改為揀字體檔'); chooseFile(); } return; } targets().forEach(x => { x.font = v || null; }); redraw(); commit(); };
+    const fb = q('[data-fl=file]'); if (fb) fb.onclick = chooseFile;
+  };
+  const brush = q('[data-pp=paint]');
+  if (multi) {
+    const eds = multi.ed;
+    const a = q('#pm-fs'); if (a) a.oninput = e => { const n = parseFloat(e.target.value); if (n >= 4 && n <= 72) { eds.forEach(x => { if (x.kind === 'text' || x.kind === 'drop') x.fontSize = n; }); redraw(); schedCommit(); } };
+    box.querySelectorAll('[data-pma]').forEach(b => b.onclick = () => { eds.forEach(x => { if (x.kind === 'text') x.align = b.dataset.pma; }); redraw(); commit(); renderPanel(); });
+    const ml = q('#pm-ml'); if (ml) ml.oninput = e => { const n = parseInt(e.target.value, 10); eds.forEach(x => { if (x.kind === 'text') x.maxLength = n > 0 ? n : null; }); schedCommit(); };
+    const rq = q('#pm-req'); if (rq) rq.onchange = e => { eds.forEach(x => { x.required = e.target.checked; E.fields.forEach(m => { if (x.kind === 'radio' && m.kind === 'radio' && m.name === x.name) m.required = x.required; }); }); commit(); };
+    wireColors('pm', () => eds);
+    wireFont('pm-font', () => eds.filter(x => x.kind === 'text' || x.kind === 'drop'));
+    const grp = () => { const m = new Map(); eds.forEach(f => { if (!m.has(f.page)) m.set(f.page, []); m.get(f.page).push(f); }); return [...m.values()]; };
+    box.querySelectorAll('[data-al]').forEach(bt => bt.onclick = () => { const md = bt.dataset.al; grp().forEach(g => { if (g.length < 2) return; const L = Math.min(...g.map(f => f.x)), R = Math.max(...g.map(f => f.x + f.w)), B = Math.min(...g.map(f => f.y)), T = Math.max(...g.map(f => f.y + f.h)); g.forEach(f => { if (md === 'l') f.x = L; else if (md === 'r') f.x = R - f.w; else if (md === 'c') f.x = (L + R) / 2 - f.w / 2; else if (md === 't') f.y = T - f.h; else if (md === 'b') f.y = B; else f.y = (B + T) / 2 - f.h / 2; }); }); drawBoxes(); commit(); });
+    box.querySelectorAll('[data-di]').forEach(bt => bt.onclick = () => { const h = bt.dataset.di === 'h'; grp().forEach(g => { if (g.length < 3) return; if (h) { g.sort((a, b) => a.x - b.x); const L = g[0].x, R = Math.max(...g.map(f => f.x + f.w)), gap = (R - L - g.reduce((s, f) => s + f.w, 0)) / (g.length - 1); let x = L; g.forEach(f => { f.x = x; x += f.w + gap; }); } else { g.sort((a, b) => (b.y + b.h) - (a.y + a.h)); const T = g[0].y + g[0].h, B = Math.min(...g.map(f => f.y)), gap = (T - B - g.reduce((s, f) => s + f.h, 0)) / (g.length - 1); let t = T; g.forEach(f => { f.y = t - f.h; t -= f.h + gap; }); } }); drawBoxes(); commit(); });
+    wireNum('pm-ls', -2, 20, .5, 0, n => eds.forEach(x => { if (x.kind === 'text') x.ls = n; }));
+    wireNum('pm-lh', .8, 4, .1, 1.4, n => eds.forEach(x => { if (x.kind === 'text' && x.multiline) x.lh = n; }));
+    if (brush) brush.onclick = () => setPaint(!E.paint, eds[0]);
+    q('[data-pm=del]').onclick = delSel; q('[data-pm=clear]').onclick = () => { setSel([]); drawBoxes(); renderPanel(); };
+    return;
+  }
+  if (!f) return;
+  if (f.ex) { const d = q('[data-pp=del]'); if (d) d.onclick = delSel; return; }
+  q('#pp-name').onchange = e => { const v = e.target.value.trim(); const mem = f.kind === 'radio' ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name) : [f]; if (v) { mem.forEach(x => { x.name = ''; }); const nn = uniqueName(v); mem.forEach(x => { x.name = nn; }); } else mem.forEach(x => { x.name = x.name; }); e.target.value = f.name; redraw(); commit(); };
+  const radioReq = x => { if (x.kind === 'radio') E.fields.forEach(m => { if (m.kind === 'radio' && m.name === x.name) m.required = x.required; }); };
+  const ov = q('#pp-ov'); if (ov) ov.onchange = e => { let v = e.target.value.trim() || '選項'; const taken = n => E.fields.some(m => m !== f && m.kind === 'radio' && m.name === f.name && m.onValue === n); let n = 2, b = v; while (taken(v)) v = `${b}_${n++}`; f.onValue = v; e.target.value = v; redraw(); commit(); };
+  const rs = q('#pp-rsel'); if (rs) rs.onchange = e => { E.fields.forEach(m => { if (m.kind === 'radio' && m.name === f.name) m.initial = false; }); f.initial = e.target.checked; redraw(); commit(); };
+  const ao = q('[data-pp=addopt]'); if (ao) ao.onclick = () => {
+    const pw = E.pages[f.page].pw; const mem = E.fields.filter(m => m.kind === 'radio' && m.name === f.name); let n = mem.length + 1, v = `選項${n}`; while (mem.some(m => m.onValue === v)) v = `選項${++n}`;
+    const g = { ...f, id: uid(), onValue: v, initial: false }; if (f.x + 2 * f.w + 50 < pw - 10) g.x = f.x + f.w + 50; else { g.y = f.y - f.h - 8; }
+    E.fields.push(g); setSel([g.id]); commit(); drawBoxes(); renderPanel(); toast('已加入同群組選項，拖到想要嘅位置');
+  };
+  box.querySelectorAll('[data-pk]').forEach(b => b.onclick = () => setKind(f, b.dataset.pk));
+  const fs = q('#pp-fs'); if (fs) fs.oninput = e => { const n = parseFloat(e.target.value); if (n >= 4 && n <= 72) { f.fontSize = n; redraw(); schedCommit(); } };
+  box.querySelectorAll('[data-pa]').forEach(b => b.onclick = () => { f.align = b.dataset.pa; redraw(); commit(); renderPanel(); });
+  const ml = q('#pp-ml'); if (ml) ml.oninput = e => { const n = parseInt(e.target.value, 10); f.maxLength = n > 0 ? n : null; schedCommit(); };
+  const df = q('#pp-def'); if (df) df.oninput = e => { f.initial = e.target.value; redraw(); schedCommit(); };
+  const ck = q('#pp-chk'); if (ck) ck.onchange = e => { f.initial = e.target.checked; commit(); };
+  const op = q('#pp-opt'); if (op) op.oninput = e => { f.options = e.target.value.split('\n').map(x => x.trim()).filter(Boolean); schedCommit(); };
+  q('#pp-req').onchange = e => { f.required = e.target.checked; radioReq(f); commit(); };
+  wireColors('pp', () => [f]);
+  wireFont('pp-font', () => [f]);
+  wireNum('pp-cn', 1, 40, 1, 8, n => { f.maxLength = Math.max(1, Math.round(n) || 8); const cw = f.w / f.maxLength, el = q('#pp-cnote'); if (el) el.innerHTML = (f.fontSize || 11) > cw ? `<span style="color:var(--bad)">每格約闊 ${cw.toFixed(1)}pt，字級偏大，字會超出格</span>。每格一個字；要加減格數，可拉闊欄位或改格數。` : `每格約闊 ${cw.toFixed(1)}pt。每格一個字；要加減格數，可拉闊欄位或改格數。`; });
+  wireNum('pp-ls', -2, 20, .5, 0, n => { f.ls = n; });
+  wireNum('pp-lh', .8, 4, .1, 1.4, n => { f.lh = n; });
+  if (brush) brush.onclick = () => setPaint(!E.paint, f);
+  q('[data-pp=del]').onclick = delSel;
+}
+function delSel() { const E = S.ed; const ids = selIds(); if (!ids.length) return; E.fields = E.fields.filter(f => !ids.includes(f.id)); setSel([]); commit(); drawBoxes(); renderPanel(); }
+function setKind(f, k) {
+  const old = f.kind, wasMulti = f.multiline, wasChk = old === 'check' || old === 'radio';
+  if (old === 'radio' && k !== 'radio') { const nm = f.name; f.name = ''; f.name = uniqueName(nm); f.onValue = null; }
+  const isDef = JSON.stringify({ border: f.border || null, bw: f.bw || 0, bg: f.bg || null }) === JSON.stringify(defStyle(old));
+  f.comb = false;
+  if (k === 'check') { f.kind = 'check'; f.multiline = false; const z = Math.max(10, Math.min(f.w, f.h, 16)); f.y += f.h - z; f.w = f.h = z; f.fontSize = null; f.initial = false; }
+  else if (k === 'radio') { f.kind = 'radio'; f.multiline = false; const z = Math.max(10, Math.min(f.w, f.h, 16)); f.y += f.h - z; f.w = f.h = z; f.fontSize = null; f.initial = false; f.onValue = '選項1'; }
+  else if (k === 'sig') { f.kind = 'sig'; f.multiline = false; f.fontSize = null; f.initial = ''; f.w = Math.max(f.w, 120); if (f.h < 30) { f.y -= 36 - f.h; f.h = 36; } }
+  else if (k === 'comb') { f.kind = 'text'; f.multiline = false; f.comb = true; f.maxLength = f.maxLength || 8; f.ls = 0; f.lh = 0; if (!f.fontSize) f.fontSize = 11; f.initial = typeof f.initial === 'string' ? f.initial.slice(0, f.maxLength) : ''; if (wasChk || old === 'sig') { f.w = Math.max(f.w, 150); f.h = 22; } }
+  else { f.kind = k === 'drop' ? 'drop' : 'text'; f.multiline = k === 'multi'; if (wasChk || old === 'sig') { if (wasChk) f.w = 110; f.h = k === 'multi' ? 60 : 20; f.initial = ''; f.align = f.align || 'left'; } if (!f.fontSize) f.fontSize = k === 'multi' ? 10 : 11; if (k === 'multi' && f.h < 36) { f.y -= 40 - f.h; f.h = 40; } if (k === 'drop' && !f.options) f.options = []; }
+  if (isDef) Object.assign(f, defStyle(f.kind));
+  commit(); drawBoxes(); renderPanel();
+}
+/* floating text-format bar: opens on double-click (mouse) or long-press (touch) on a field; closes on outside click, Esc, or when a move / resize starts */
+Object.assign(IC, { ls: '<path d="M7 4v9M17 4v9M4 19h16M4 19l3-2.5M4 19l3 2.5M20 19l-3-2.5M20 19l-3 2.5"/>', lh: '<path d="M4 6h10M4 12h10M4 18h10M19 5v14M19 5l-2.5 3M19 5l2.5 3M19 19l-2.5-3M19 19l2.5-3"/>' });
+let FTB = null;
+const ftbTargets = () => { const E = S.ed; if (!E || !FTB) return []; return FTB.ids.map(id => E.fields.find(x => x.id === id)).filter(x => x && !x.ex); };
+const sameOf = (arr, g) => arr.length && arr.every(x => g(x) === g(arr[0])) ? g(arr[0]) : null;
+function closeFtb() { if (!FTB) return; const F = FTB; FTB = null; F.el.remove(); closeClrPop(); if (F.onClose) F.onClose(); if (F.dirty && S.ed) renderPanel(); }
+function openFtb(ids) {
+  closeFtb(); if (!S.ed || S.view !== 'edit') return;
+  const el = document.createElement('div'); el.className = 'ftb'; document.body.appendChild(el);
+  FTB = { ids: [...ids], el, open: '', dirty: false, t: Date.now() };
+  el.addEventListener('click', ftbClick); el.addEventListener('change', ftbChange);
+  renderFtb(); posFtb();
+}
+function posFtb() {
+  const F = FTB; if (!F) return; if (!S.ed || S.view !== 'edit') return closeFtb();
+  const els = F.ids.map(id => document.querySelector(`.fb[data-id="${CSS.escape(id)}"]`)).filter(Boolean); if (!els.length) return;
+  let L = 1e9, T = 1e9, B = -1e9;
+  els.forEach(e => { const r = e.getBoundingClientRect(); L = Math.min(L, r.left); T = Math.min(T, r.top); B = Math.max(B, r.bottom); });
+  const el = F.el; el.classList.remove('up'); const w = el.offsetWidth, h = el.offsetHeight;
+  if (F.onClose) { // rename: sit right on top of the name tag
+    const tg = els[0].querySelector('.tag'); if (tg) { const r = tg.getBoundingClientRect();
+      el.style.left = Math.max(8, Math.min(r.left, innerWidth - w - 8)) + 'px'; el.style.top = Math.max(8, r.bottom - h) + 'px'; return; } }
+  const l = Math.max(8, Math.min(L, innerWidth - w - 8)); let t = B + 10;
+  if (t + h > innerHeight - 8) { el.classList.add('up'); t = Math.max(8, T - 21 - 10 - h); }
+  el.style.left = l + 'px'; el.style.top = t + 'px';
+}
+function renderFtb() {
+  const F = FTB; if (!F) return; const t = ftbTargets(); if (!t.length) return closeFtb();
+  const fsT = t.filter(x => x.kind === 'text' || x.kind === 'drop'), txt = t.filter(x => x.kind === 'text' && !x.comb), mlt = txt.filter(x => x.multiline);
+  const fv = fsT.length ? sameOf(fsT, x => normFont(x.font) || '') : null, sz = sameOf(fsT, x => x.fontSize || 11), al = sameOf(txt, x => x.align || 'left');
+  const stp = (k, v, tip) => `<div class="fst" title="${tip}"><button type="button" data-f="${k}-" aria-label="減少">−</button><b>${v === null || v === undefined ? '—' : v}</b><button type="button" data-f="${k}+" aria-label="增加">+</button></div>`;
+  const g1 = fsT.length ? `<select class="fsel" data-ff="font" title="字體">${fv === null ? '<option value="__m" selected disabled>混合</option>' : ''}${Object.entries(BUILTIN).map(([kk, v]) => `<option value="${kk}" ${fv === kk ? 'selected' : ''}>${v[0]}</option>`).join('')}${Object.keys(FONTS).length ? `<optgroup label="已載入嘅字體">${Object.keys(FONTS).map(n => `<option value="c:${esc(n)}" ${fv === 'c:' + n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</optgroup>` : ''}<option value="__local">更多字體（本機）…</option></select>${stp('fs', sz, '字級（pt）')}` : '';
+  const g2 = txt.length ? [['left', 'alL', '靠左'], ['center', 'alC', '置中'], ['right', 'alR', '靠右']].map(([a, i, tt]) => `<button type="button" class="ib ${al === a ? 'on' : ''}" data-f="al:${a}" title="${tt}" aria-label="${tt}">${ic(i)}</button>`).join('') : '';
+  const g3 = (txt.length ? `<button type="button" class="ib ${F.open === 'sp' ? 'on' : ''}" data-f="open:sp" title="字距${mlt.length ? '、行距' : ''}" aria-label="字距行距">${ic('ls')}</button>` : '') + `<button type="button" class="ib ${F.open === 'cl' ? 'on' : ''}" data-f="open:cl" title="背景與框線" aria-label="背景與框線">${ic('drop')}</button>`;
+  const bar = [g1, g2, g3].filter(Boolean).join('<i class="vs"></i>');
+  let dd = '';
+  if (F.open === 'sp' && txt.length) dd = `<div class="dd"><div class="dr">${ic('ls')}${stp('ls', sameOf(txt, x => x.ls || 0), '字距（pt）')}${mlt.length ? ic('lh') + stp('lh', sameOf(mlt, x => x.lh || 1.4), '行距（字級倍數）') : ''}</div></div>`;
+  else if (F.open === 'cl') dd = `<div class="dd"><div class="dr"><button type="button" class="csw" data-f="bg" title="背景顏色">${swHtml('bg', sameOf(t, x => x.bg || '') || '')}${ic('caret')}</button><button type="button" class="csw" data-f="bd" title="框線顏色">${swHtml('bd', sameOf(t, x => (x.bw > 0 && x.border) ? x.border : '') || '')}${ic('caret')}</button>${stp('bw', sameOf(t, x => x.bw || 0), '框線粗幼（pt）')}</div></div>`;
+  F.el.innerHTML = `<div class="tb">${bar}</div>${dd}`;
+}
+function ftbClick(e) {
+  const F = FTB; if (!F) return; const b = e.target.closest('[data-f]'); if (!b) return; const t = ftbTargets(), k = b.dataset.f;
+  const done = () => { F.dirty = true; drawBoxes(); schedCommit(); renderFtb(); posFtb(); renderPanel(); };
+  const m = /^(fs|ls|lh|bw)([+-])$/.exec(k);
+  if (m) {
+    const d = m[2] === '+' ? 1 : -1;
+    if (m[1] === 'fs') t.filter(x => x.kind === 'text' || x.kind === 'drop').forEach(x => { x.fontSize = Math.max(4, Math.min(72, (x.fontSize || 11) + d)); });
+    else if (m[1] === 'ls') t.filter(x => x.kind === 'text' && !x.comb).forEach(x => { x.ls = Math.max(-2, Math.min(20, Math.round(((x.ls || 0) + d * .5) * 10) / 10)); });
+    else if (m[1] === 'lh') t.filter(x => x.kind === 'text' && !x.comb && x.multiline).forEach(x => { x.lh = Math.max(.8, Math.min(4, Math.round(((x.lh || 1.4) + d * .1) * 100) / 100)); });
+    else t.forEach(x => { const n = Math.max(0, Math.min(6, Math.round(((x.bw || 0) + d * .5) * 2) / 2)); x.bw = n; if (n > 0 && !x.border) x.border = '#262626'; });
+    return done();
+  }
+  if (k.startsWith('al:')) { t.forEach(x => { if (x.kind === 'text' && !x.comb) x.align = k.slice(3); }); return done(); }
+  if (k.startsWith('open:')) { const o = k.slice(5); F.open = F.open === o ? '' : o; closeClrPop(); renderFtb(); posFtb(); return; }
+  if (k === 'bg' || k === 'bd') {
+    const cur = k === 'bg' ? sameOf(t, x => x.bg || '') : sameOf(t, x => (x.bw > 0 && x.border) ? x.border : '');
+    openClrPop(b, cur || '', v => {
+      t.forEach(x => { if (k === 'bg') x.bg = v; else { x.border = v; x.bw = v ? (x.bw || 1) : 0; } });
+      F.dirty = true; b.innerHTML = swHtml(k === 'bg' ? 'bg' : 'bd', v || '') + ic('caret');
+      const bwv = F.el.querySelector('[data-f="bw-"]'); if (bwv && bwv.nextElementSibling) { const n = sameOf(t, x => x.bw || 0); bwv.nextElementSibling.textContent = n === null ? '—' : n; }
+      drawBoxes(); schedCommit();
+    });
+  }
+}
+function ftbChange(e) {
+  const sl = e.target.closest('select[data-ff]'), F = FTB; if (!sl || !F) return;
+  const t = ftbTargets().filter(x => x.kind === 'text' || x.kind === 'drop'), v = sl.value;
+  if (v === '__local') {
+    renderFtb();
+    const apply = nm => { t.forEach(x => { x.font = 'c:' + nm; }); commit(); drawBoxes(); if (FTB) { FTB.dirty = true; renderFtb(); posFtb(); } toast(`已載入字體：${nm}`); };
+    const chooseFile = () => { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.ttf,.otf,.woff,.ttc'; inp.onchange = async () => { const file = inp.files[0]; if (!file) return; try { apply(await loadFontFile(file)); } catch (er) { toast(er.message || '字體載入失敗', true); } }; inp.click(); };
+    if (window.queryLocalFonts) pickLocalFont(apply); else { toast('呢個瀏覽器唔支援直接讀取本機字體（請用 Chrome / Edge），改為揀字體檔'); chooseFile(); }
+    return;
+  }
+  t.forEach(x => { x.font = v || null; }); F.dirty = true; drawBoxes(); schedCommit(); renderFtb(); posFtb(); renderPanel();
+}
+function openRename(f) {
+  closeFtb(); if (!S.ed || S.view !== 'edit' || f.ex) return;
+  const E = S.ed, el = document.createElement('div'); el.className = 'ftb';
+  el.innerHTML = `<div class="tb"><input class="rnin" maxlength="60" value="${esc(f.name)}" aria-label="欄位名稱" spellcheck="false"><button type="button" class="ib" data-r="ok" title="確定" aria-label="確定">${ic('check')}</button><button type="button" class="ib" data-r="x" title="取消" aria-label="取消">${ic('x')}</button></div>`;
+  document.body.appendChild(el);
+  const inp = el.querySelector('input');
+  FTB = { ids: [f.id], el, open: '', dirty: false, t: Date.now(), cancel: false };
+  const F = FTB;
+  F.onClose = () => {
+    if (F.cancel) { setTimeout(syncFtb, 0); return; }
+    const v = inp.value.trim(); if (!v || v === f.name) { syncFtb(); return; }
+    const mem = f.kind === 'radio' ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name) : [f];
+    mem.forEach(x => { x.name = ''; }); const nn = uniqueName(v); mem.forEach(x => { x.name = nn; });
+    drawBoxes(); commit(); renderPanel();
+  };
+  el.addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (!b) return; if (b.dataset.r === 'x') F.cancel = true; closeFtb(); });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); closeFtb(); } });
+  posFtb(); inp.focus(); inp.select();
+}
+document.addEventListener('mousedown', e => { if (FTB && Date.now() - FTB.t > 400 && !(e.target.closest && e.target.closest('.ftb,.cpop,.fb'))) closeFtb(); }, true);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && FTB && FTB.onClose && !CP) { e.stopPropagation(); e.preventDefault(); FTB.cancel = true; closeFtb(); } }, true);
+addEventListener('scroll', () => { if (FTB) posFtb(); }, true);
+addEventListener('resize', () => { if (FTB) posFtb(); });
+function bindDraw(pi) {
+  const E = S.ed, p = E.pages[pi], ov = p.ov;
+  let lp = null, lpx = 0, lpy = 0, lpTouch = false; // long-press (touch) opens the text-format bar
+  const lpClear = () => { clearTimeout(lp); lp = null; };
+  ov.addEventListener('pointerdown', e => { lpTouch = e.pointerType !== 'mouse'; lpClear(); const b = lpTouch && e.target.closest('.fb'); if (!b || e.target.closest('.rz,.tag')) return; lpx = e.clientX; lpy = e.clientY;
+    lp = setTimeout(() => { lp = null; const f = E.fields.find(x => x.id === b.dataset.id); if (!f || f.ex) return; if (!selIds().includes(f.id)) { setSel([f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); } try { navigator.vibrate && navigator.vibrate(12); } catch (_) { } openFtb(selIds()); }, 520); });
+  ov.addEventListener('pointermove', e => { if (lp && Math.hypot(e.clientX - lpx, e.clientY - lpy) > 10) lpClear(); });
+  ov.addEventListener('pointerup', lpClear); ov.addEventListener('pointercancel', lpClear);
+  ov.addEventListener('contextmenu', e => { if (lpTouch && e.target.closest('.fb')) e.preventDefault(); });
+  ov.addEventListener('mousedown', e => {
+    if (document.activeElement && document.activeElement !== document.body && document.activeElement.blur) document.activeElement.blur(); // so Delete / Ctrl+Z reach the editor, not a stale input
+    const pt = ev => { const r = ov.getBoundingClientRect(); return [(ev.clientX - r.left) / p.sc, (ev.clientY - r.top) / p.sc]; };
+    const boxEl = e.target.closest('.fb'); const [x0, y0] = pt(e); const additive = e.shiftKey || e.ctrlKey || e.metaKey;
+    if (boxEl) { // select (shift / ctrl toggles) / move (whole selection) / resize (single field) / paint format
+      const f = E.fields.find(x => x.id === boxEl.dataset.id); const cur = selIds();
+      if (additive) { setSel(cur.includes(f.id) ? cur.filter(x => x !== f.id) : [...cur, f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); e.preventDefault(); return; }
+      if (E.paint && !f.ex) { applyFmt(f, E.paint); setSel([f.id]); E.tab = 'fmt'; commit(); drawBoxes(); renderPanel(); e.preventDefault(); return; }
+      if (!cur.includes(f.id) || cur.length < 2) { setSel([f.id]); E.tab = 'fmt'; drawBoxes(); renderPanel(); }
+      if (f.ex) return;
+      if (e.target.closest('.tag')) { const now = Date.now(); if (E._tg && E._tg.id === f.id && now - E._tg.t < 450) { E._tg = null; openRename(f); e.preventDefault(); return; } E._tg = { id: f.id, t: now }; }
+      const group = selIds().map(id => E.fields.find(x => x.id === id)).filter(x => x && !x.ex && x.page === pi);
+      const resize = e.target.classList.contains('rz') && group.length === 1;
+      const moveH = !resize && !!e.target.closest('.tag'); // move only via the top handle; the box body just selects
+      if (!resize && !moveH) { e.preventDefault(); return; }
+      closeFtb(); E.dragging = true;
+      const xy = resize ? null : document.createElement('div'); if (xy) { xy.className = 'xyb'; xy.style.display = 'none'; ov.appendChild(xy); }
+      const lead = group.find(g => g.id === f.id) || group[0];
+      const start = group.map(g => ({ g, x: g.x, top: g.y + g.h, w: g.w, h: g.h })); // top = top edge in pdf coords
+      const mv = ev => { const [x1, y1] = pt(ev); const dx = x1 - x0, dy = y1 - y0;
+        start.forEach(s => { if (resize) { s.g.w = Math.max(6, s.w + dx); s.g.h = Math.max(6, s.h + dy); s.g.y = s.top - s.g.h; } else { s.g.x = s.x + dx; s.g.y = s.top - s.h - dy; } });
+        drawBoxes();
+        if (xy && lead) { xy.style.display = ''; xy.textContent = `X ${Math.round(lead.x)}  Y ${Math.round(p.ph - lead.y - lead.h)}`; xy.style.left = (lead.x + lead.w / 2) * p.sc + 'px'; xy.style.top = (p.ph - lead.y) * p.sc + 10 + 'px'; ov.querySelectorAll('.fb.sel,.fb.msel').forEach(b => b.classList.add('mvg')); } };
+      const up = () => { E.dragging = false; removeEventListener('mousemove', mv); removeEventListener('mouseup', up); if (xy) xy.remove(); ov.querySelectorAll('.mvg').forEach(b => b.classList.remove('mvg')); commit(); drawBoxes(); };
+      addEventListener('mousemove', mv); addEventListener('mouseup', up); e.preventDefault(); return;
+    }
+    const prev = additive ? selIds() : [];
+    if (!additive) { setSel([]); drawBoxes(); renderPanel(); }
+    const g = document.createElement('div'); g.className = 'ghost'; ov.appendChild(g);
+    const mv = ev => { const [x1, y1] = pt(ev); g.style.cssText = `left:${Math.min(x0, x1) * p.sc}px;top:${Math.min(y0, y1) * p.sc}px;width:${Math.abs(x1 - x0) * p.sc}px;height:${Math.abs(y1 - y0) * p.sc}px`; };
+    const up = ev => { removeEventListener('mousemove', mv); removeEventListener('mouseup', up); g.remove(); const [x1, y1] = pt(ev);
+      let w = Math.abs(x1 - x0), h = Math.abs(y1 - y0), l = Math.min(x0, x1), t = Math.min(y0, y1);
+      if (E.tool === 'sel') { // rubber-band selection: every field the rectangle touches
+        if (w < 3 && h < 3) return; const r = l + w, bm = t + h;
+        const hit = E.fields.filter(f => f.page === pi && f.x < r && f.x + f.w > l && (p.ph - f.y - f.h) < bm && (p.ph - f.y) > t);
+        if (E.paint) { hit.forEach(f => applyFmt(f, E.paint)); commit(); }
+        setSel([...prev, ...hit.map(f => f.id)]); if (selIds().length) E.tab = 'fmt'; drawBoxes(); renderPanel(); return;
+      }
+      if (E.tool === 'check' || E.tool === 'radio') { if (w < 6 || h < 6) { w = h = 12; l = x0 - 6; t = y0 - 6; } else { w = h = Math.min(w, h); } }
+      else if (E.tool === 'sig') { if (w < 30 || h < 16) { w = 140; h = 44; l = x0 - 70; t = y0 - 22; } }
+      else if (w < 12 || h < 6) { w = 110; h = 18; l = x0; t = y0 - 9; }
+      addField(pi, l, t, w, h, E.tool); };
+    addEventListener('mousemove', mv); addEventListener('mouseup', up);
+  });
+}
+function uniqueName(base) {
+  const E = S.ed; const names = new Set(E.fields.map(f => f.name)); base = (base || '欄位').replace(/[\s:：.]+$/g, '').trim() || '欄位';
+  if (!names.has(base)) return base; let n = 2; while (names.has(`${base}_${n}`)) n++; return `${base}_${n}`;
+}
+function addField(pi, l, t, w, h, tool, name) {
+  const E = S.ed, p = E.pages[pi];
+  const kind = tool === 'multi' || tool === 'comb' ? 'text' : tool; const f = { id: uid(), page: pi, x: l, y: p.ph - t - h, w, h, kind, multiline: tool === 'multi', comb: tool === 'comb', options: [], align: 'left', required: false, maxLength: tool === 'comb' ? 8 : null, initial: kind === 'check' || kind === 'radio' ? false : '', ...defStyle(kind), name: uniqueName(name || (kind === 'check' ? '選項' : kind === 'radio' ? '單選' : kind === 'drop' ? '下拉' : kind === 'sig' ? '簽名' : tool === 'comb' ? '格仔' : '文字')) };
+  f.fontSize = kind === 'check' || kind === 'sig' || kind === 'radio' ? null : defFs(f);
+  if (kind === 'radio') { const sel = [E.fields.find(x => x.id === E.sel), E.fields.find(x => x.id === E.lastAdded)].find(x => x && x.kind === 'radio'); if (sel) { const mem = E.fields.filter(m => m.kind === 'radio' && m.name === sel.name); let n = mem.length + 1, v = `選項${n}`; while (mem.some(m => m.onValue === v)) v = `選項${++n}`; Object.assign(f, { name: sel.name, onValue: v, required: sel.required, border: sel.border, bw: sel.bw, bg: sel.bg }); } else f.onValue = '選項1'; }
+  E.fields.push(f); E.lastAdded = f.id; setSel([f.id]); E.tab = 'fmt'; commit(); drawBoxes(); renderPanel();
+  if (kind === 'drop' && !E.panel) editProps(f);
+  return f;
+}
+function editProps(f) {
+  const E = S.ed; const m = modal(`<h3>欄位設定</h3>
+  <div class="row"><label>名稱</label><input id="pn" value="${esc(f.name)}"></div>
+  ${f.kind === 'drop' ? `<div class="row"><label>選項</label><textarea id="po" placeholder="每行一個選項">${esc(f.options.join('\n'))}</textarea></div>` : ''}
+  <div class="acts"><button class="btn" id="px">取消</button><button class="btn pri" id="pk">${ic('check', 16)}</button></div>`);
+  $('#pn', m).focus(); $('#pn', m).select();
+  $('#px', m).onclick = () => m.remove();
+  $('#pk', m).onclick = () => { const n = $('#pn', m).value.trim(); if (n && n !== f.name) { const old = f.name; f.name = ''; f.name = uniqueName(n); } if (f.kind === 'drop') f.options = $('#po', m).value.split('\n').map(s => s.trim()).filter(Boolean); m.remove(); commit(); drawBoxes(); renderPanel(); };
+}
+document.addEventListener('keydown', e => {
+  if (S.view !== 'edit' || !S.ed) return; const t = e.target; if (t.closest && t.closest('.cpop')) return; const typing = /TEXTAREA|SELECT/.test(t.tagName) || (t.tagName === 'INPUT' && !['checkbox', 'color', 'radio', 'button'].includes(t.type));
+  if (typing) return; const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
+  if (mod && k === 'z') { e.preventDefault(); return e.shiftKey ? redo() : undo(); }
+  if (mod && k === 'y') { e.preventDefault(); return redo(); }
+  if ((e.key === 'Delete' || e.key === 'Backspace') && selIds().length) { delSel(); e.preventDefault(); return; }
+  if (mod && k === 'a' && S.ed.fields.length) { setSel(S.ed.fields.map(f => f.id)); S.ed.tab = 'fmt'; drawBoxes(); renderPanel(); e.preventDefault(); return; }
+  if (e.key === 'Escape') { if (S.ed.paint) return setPaint(false); if (selIds().length) { setSel([]); drawBoxes(); renderPanel(); } }
+});
+
+/* auto-detect: finds blank boxes, checkbox squares and underlines from rendered pixels */
+async function autoDetect() {
+  const E = S.ed; toast('偵測中…'); E.batch = true; await new Promise(r => setTimeout(r, 30));
+  let added = 0;
+  for (let pi = 0; pi < E.pages.length; pi++) {
+    const { page, pw, ph } = E.pages[pi]; const Z = 2;
+    const vp = page.getViewport({ scale: Z }); const W = Math.floor(vp.width), H = Math.floor(vp.height);
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const cx = cv.getContext('2d', { willReadFrequently: true });
+    cx.fillStyle = '#fff'; cx.fillRect(0, 0, W, H); await page.render({ canvasContext: cx, viewport: vp }).promise;
+    const data = cx.getImageData(0, 0, W, H).data; const ink = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) { const o = i * 4; ink[i] = (data[o] * .3 + data[o + 1] * .59 + data[o + 2] * .11) < 175 ? 1 : 0; }
+    // dilate by 1px to close small gaps in scanned lines
+    const d = new Uint8Array(ink); for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = y * W + x; if (ink[i] || ink[i - 1] || ink[i + 1] || ink[i - W] || ink[i + W]) d[i] = 1; }
+    const inkRatio = (x0, y0, x1, y1) => { let c = 0, n = 0; for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { n++; c += ink[y * W + x]; } return n ? c / n : 1; };
+    const boxes = [];
+    // 1) enclosed blank regions (table cells, boxes, checkboxes)
+    const seen = new Uint8Array(W * H), stack = new Int32Array(W * H);
+    for (let s = 0; s < W * H; s++) {
+      if (d[s] || seen[s]) continue;
+      let sp = 0, cnt = 0, minx = W, maxx = 0, miny = H, maxy = 0, edge = false; stack[sp++] = s; seen[s] = 1;
+      while (sp) { const i = stack[--sp]; const x = i % W, y = (i / W) | 0; cnt++; if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y; if (x === 0 || y === 0 || x === W - 1 || y === H - 1) edge = true;
+        if (x > 0 && !d[i - 1] && !seen[i - 1]) { seen[i - 1] = 1; stack[sp++] = i - 1; } if (x < W - 1 && !d[i + 1] && !seen[i + 1]) { seen[i + 1] = 1; stack[sp++] = i + 1; }
+        if (y > 0 && !d[i - W] && !seen[i - W]) { seen[i - W] = 1; stack[sp++] = i - W; } if (y < H - 1 && !d[i + W] && !seen[i + W]) { seen[i + W] = 1; stack[sp++] = i + W; } }
+      if (edge) continue;
+      const bw = (maxx - minx + 1) / Z, bh = (maxy - miny + 1) / Z, fill = cnt / ((maxx - minx + 1) * (maxy - miny + 1));
+      if (fill < .9) continue;
+      if (inkRatio(minx, miny, maxx + 1, maxy + 1) > .012) continue; // contains text
+      const sq = bw > 6 && bw < 24 && bh > 6 && bh < 24 && Math.abs(bw - bh) < 4;
+      if (sq) boxes.push({ x: minx / Z - 1, y: miny / Z - 1, w: bw + 2, h: bh + 2, kind: 'check' });
+      else if (bw >= 28 && bw <= pw * .95 && bh >= 10 && bh <= 220) boxes.push({ x: minx / Z, y: miny / Z, w: bw, h: bh, kind: 'text', big: bh > 36 });
+    }
+    // 2) underlines with blank space above
+    const rowRuns = [];
+    for (let y = 2; y < H - 2; y++) { let run = 0; for (let x = 0; x <= W; x++) { if (x < W && ink[y * W + x]) run++; else { if (run >= 50 * Z / 2 * 1.2) rowRuns.push({ y, x0: x - run, x1: x }); run = 0; } } }
+    const lines = []; for (const r of rowRuns) { const l = lines.find(L => Math.abs(L.y1 - r.y) <= 2 && Math.abs(L.x0 - r.x0) < 8 && Math.abs(L.x1 - r.x1) < 8); if (l) { l.y1 = r.y; } else lines.push({ y0: r.y, y1: r.y, x0: r.x0, x1: r.x1 }); }
+    for (const L of lines) {
+      if (L.y1 - L.y0 > 5) continue; // thick = not an underline
+      let vert = 0; for (let yy = L.y1 + 4; yy < Math.min(H, L.y1 + 16); yy++) { for (let xx = L.x0; xx < L.x0 + 4; xx++) if (ink[yy * W + xx]) { vert++; break; } }
+      if (vert >= 8) continue; // top edge of a box, not an underline
+      const hh = Math.round(16 * Z), top = Math.max(0, L.y0 - hh);
+      if (inkRatio(L.x0 + 2, top, L.x1 - 2, L.y0 - 1) > .008) continue;
+      boxes.push({ x: L.x0 / Z, y: top / Z + 2, w: (L.x1 - L.x0) / Z, h: (L.y0 - top) / Z - 2, kind: 'text', ul: true });
+    }
+    // dedupe against existing & each other
+    const overlap = (a, b) => { const ix = Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)), iy = Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y)); return ix * iy / Math.min(a.w * a.h, b.w * b.h); };
+    const items = await page.getTextContent(); const texts = items.items.filter(t => t.str.trim()).map(t => ({ s: t.str.trim(), x: t.transform[4], y: ph - t.transform[5], w: t.width, h: t.height || 10 }));
+    const placed = E.fields.filter(f => f.page === pi).map(f => ({ x: f.x, y: ph - f.y - f.h, w: f.w, h: f.h }));
+    boxes.sort((a, b) => (a.ul ? 1 : 0) - (b.ul ? 1 : 0) || a.y - b.y || a.x - b.x);
+    for (const b of boxes) {
+      if (placed.some(p => overlap(p, b) > .4)) continue;
+      placed.push(b);
+      // label guess: nearest text on the left (or right for checkbox), else above
+      let label = null, best = 1e9;
+      for (const t of texts) {
+        const cy = t.y - t.h / 2, by = b.y + b.h / 2;
+        if (b.kind === 'check') { if (Math.abs(cy - by) < 8 && t.x >= b.x + b.w - 2 && t.x - (b.x + b.w) < 60) { const dd = t.x - b.x - b.w; if (dd < best) { best = dd; label = t.s; } } }
+        else {
+          if (Math.abs(cy - by) < Math.max(8, b.h / 2 + 3) && t.x + t.w <= b.x + 3 && b.x - (t.x + t.w) < 160) { const dd = b.x - (t.x + t.w); if (dd < best) { best = dd; label = t.s; } }
+          else if (!label && t.y < b.y + 2 && b.y - t.y < 22 && t.x < b.x + b.w && t.x + t.w > b.x) { const dd = 200 + b.y - t.y; if (dd < best) { best = dd; label = t.s; } }
+        }
+      }
+      addField(pi, b.x, b.y, b.w, b.kind === 'check' ? b.w : (b.ul ? Math.min(b.h, 40) : b.h), b.big ? 'multi' : b.kind, label ? label.slice(0, 20) : null); added++;
+    }
+  }
+  E.batch = false; commit(); setSel([]); E.tab = 'list'; drawBoxes(); renderPanel(); toast(added ? `已偵測到 ${added} 個欄位，請檢查並調整` : '未偵測到欄位，請手動拖曳繪製');
+}
+async function makeThumb(pdf) {
+  const page = await pdf.getPage(1); const v = page.getViewport({ scale: 1 }); const sc = 240 / v.width; const vp = page.getViewport({ scale: sc });
+  const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height; const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+  await page.render({ canvasContext: cx, viewport: vp }).promise; return cv.toDataURL('image/jpeg', .6);
+}
+async function shrinkScans(doc, E) { // scanned (text-less) pages of big files: re-encode as 150dpi JPEG to keep the repo small
+  const n = E.pdf.numPages; if (E.bytes.byteLength / n < 600 * 1024) return;
+  const { PDFName } = PDFLib; const lp = doc.getPages(); let done = 0;
+  for (let i = 0; i < n; i++) {
+    try {
+      const pg = await E.pdf.getPage(i + 1); const tc = await pg.getTextContent(); if (tc.items.some(t => t.str.trim())) continue;
+      const L = lp[i]; if (L.getRotation().angle % 360 !== 0) continue; const mb = L.getMediaBox(), vw = pg.view;
+      if (Math.abs(vw[0] - mb.x) > 1 || Math.abs(vw[1] - mb.y) > 1 || Math.abs(vw[2] - mb.x - mb.width) > 1 || Math.abs(vw[3] - mb.y - mb.height) > 1) continue;
+      const v = pg.getViewport({ scale: 150 / 72 }); const cv = document.createElement('canvas'); cv.width = Math.ceil(v.width); cv.height = Math.ceil(v.height);
+      const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+      await pg.render({ canvasContext: cx, viewport: v, annotationMode: 0 }).promise;
+      const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', .72)); const img = await doc.embedJpg(new Uint8Array(await blob.arrayBuffer()));
+      L.node.delete(PDFName.of('Contents')); L.node.set(PDFName.of('Resources'), doc.context.obj({}));
+      L.drawImage(img, { x: mb.x, y: mb.y, width: mb.width, height: mb.height }); done++;
+    } catch (e) { console.warn('壓縮第 ' + (i + 1) + ' 頁失敗', e); }
+  }
+  if (done) toast(`已壓縮 ${done} 頁掃描圖`);
+}
+
+async function buildTemplate() {
+  const E = S.ed; const doc = await PDFDocument.load(E.bytes); const form = doc.getForm(); const pages = doc.getPages(); const { TextAlignment } = PDFLib;
+  await shrinkScans(doc, E);
+  // drop every field the editor owns (originals that were edited, and ones the admin deleted); non-editable ones stay
+  const keepEx = new Set(E.fields.filter(f => f.ex).map(f => f.name));
+  for (const f of form.getFields()) { if (!keepEx.has(f.getName())) form.removeField(f); }
+  let needFont = false; const combs = []; const radios = {};
+  for (const f of E.fields) {
+    if (f.ex) continue; const pg = pages[f.page]; const fs = f.fontSize || 11; const box = { x: f.x, y: f.y, width: f.w, height: f.h };
+    const look = { borderWidth: f.bw > 0 && f.border ? f.bw : 0, borderColor: f.bw > 0 && f.border ? hexToRgb(f.border) : undefined, backgroundColor: f.bg ? hexToRgb(f.bg) : undefined };
+    if (f.kind === 'check') { const c = form.createCheckBox(f.name); c.addToPage(pg, { ...box, ...look }); if (f.required) c.enableRequired(); if (f.initial === true) c.check(); }
+    else if (f.kind === 'radio') {
+      let rg = radios[f.name]; if (!rg) { rg = radios[f.name] = form.createRadioGroup(f.name); rg.used = new Set(); if (E.fields.some(m => m.kind === 'radio' && m.name === f.name && m.required)) rg.enableRequired(); }
+      let ov = String(f.onValue || '選項'), n = 2; const b0 = ov; while (rg.used.has(ov)) ov = `${b0}_${n++}`; rg.used.add(ov);
+      rg.addOptionToPage(ov, pg, { ...box, ...look }); if (f.initial === true) rg.select(ov);
+    }
+    else if (f.kind === 'sig') { const b = form.createButton(f.name); b.addToPage('', pg, { ...box, ...look }); if (!f.bg) clearBtnBg(b, form); if (f.required) b.enableRequired(); }
+    else if (f.kind === 'drop') { const d = form.createDropdown(f.name); d.addOptions(f.options && f.options.length ? f.options : ['']); d.addToPage(pg, { ...box, ...look }); d.setFontSize(fs); if (f.required) d.enableRequired(); if (f.font) d.acroField.dict.set(PDFLib.PDFName.of('FLFont'), PDFLib.PDFHexString.fromText(f.font)); }
+    else {
+      const t = form.createTextField(f.name); if (f.multiline) t.enableMultiline();
+      t.setAlignment(f.align === 'center' ? TextAlignment.Center : f.align === 'right' ? TextAlignment.Right : TextAlignment.Left);
+      if (f.maxLength) t.setMaxLength(f.maxLength);
+      if (f.comb && f.maxLength && !f.multiline) { t.enableCombing(); combs.push([t, f]); }
+      t.addToPage(pg, { ...box, ...look }); t.setFontSize(fs); if (f.required) t.enableRequired();
+      if (f.font) t.acroField.dict.set(PDFLib.PDFName.of('FLFont'), PDFLib.PDFHexString.fromText(f.font));
+      if (f.ls) t.acroField.dict.set(PDFLib.PDFName.of('FLSp'), PDFLib.PDFNumber.of(f.ls)); if (f.lh) t.acroField.dict.set(PDFLib.PDFName.of('FLLh'), PDFLib.PDFNumber.of(f.lh));
+      if (f.initial) { const v = String(f.initial).slice(0, f.maxLength || 1e9); t.setText(v); if (/[^\x20-\x7e]/.test(v)) needFont = true; }
+    }
+  }
+  { const nmd = doc.catalog.lookupMaybe(PDFLib.PDFName.of('Names'), PDFLib.PDFDict); if (nmd) nmd.delete(PDFLib.PDFName.of('EmbeddedFiles'));
+    const usedF = new Set(E.fields.filter(f => !f.ex && f.font && f.font.startsWith('c:')).map(f => f.font.slice(2)));
+    for (const n of usedF) if (FONTS[n]) await doc.attach(FONTS[n].bytes, `flfont-${encodeURIComponent(n)}.ttf`, { mimeType: 'font/ttf', description: n }); }
+  pages.forEach(pg => pg.node.set(PDFLib.PDFName.of('Tabs'), PDFLib.PDFName.of('S'))); // Tab order follows the field list order
+  let font = null; if (needFont) { doc.registerFontkit(fontkit); font = await doc.embedFont(await getFont(), { subset: false }); }
+  if (combs.length) { form.updateFieldAppearances(font || undefined); const cf = font || await doc.embedFont(PDFLib.StandardFonts.Helvetica); combs.forEach(([t, f]) => combAP(doc, t, f, String(f.initial || '').slice(0, f.maxLength), cf)); return doc.save({ updateFieldAppearances: false }); }
+  if (needFont) { form.updateFieldAppearances(font); return doc.save({ updateFieldAppearances: false }); }
+  return doc.save();
+}
+app.addEventListener('click', async e => {
+  const b = e.target.closest('[data-e]'); if (!b) return; const [a, arg] = b.dataset.e.split(':'), E = S.ed;
+  if (a === 'back') { if (!E.fields.some(f => !f.ex) || (E.savedJ && E.savedJ === JSON.stringify(E.fields)) || await ask('離開編輯器？未發佈的修改會丟失（已儲存的草稿不受影響）')) { S.ed = null; renderLibrary(); } return; }
+  if (a === 'tool') { E.tool = arg; E.lastAdded = null; document.querySelectorAll('[data-e^="tool:"]').forEach(x => x.classList.toggle('on', x.dataset.e === b.dataset.e)); E.pages.forEach(pp => pp.ov.classList.toggle('draw', arg !== 'sel')); return; }
+  if (a === 'undo') return undo();
+  if (a === 'redo') return redo();
+  if (a === 'auto') return autoDetect();
+  if (a === 'panel') { E.panel = !E.panel; return renderEditor(); }
+  if (a === 'draft') {
+    const name = (E.meta.name || '').trim(); if (!name) return toast('請先輸入範本名稱', true);
+    b.disabled = true;
+    try {
+      const bytes = await buildTemplate(); const thumb = await makeThumb(await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise);
+      E.draftId = await Store.saveDraft({ name, category: E.meta.category || '', note: E.meta.note || '', field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
+      E.savedJ = JSON.stringify(E.fields); await refresh(); toast('已儲存草稿，用家暫時睇唔到');
+    } catch (er) { console.error(er); toast('儲存草稿失敗：' + (er.message || er), true); }
+    b.disabled = false; return;
+  }
+  if (a === 'pub') {
+    if (!E.fields.length && !(await ask('此 PDF 未有任何欄位，仍要發佈？'))) return;
+    const names = [...new Set(S.all.filter(t => !t.draft).map(t => t.name))];
+    const m = modal(`<h3>發佈範本</h3>
+    <div class="row"><label>名稱</label><input id="mn" list="nl" value="${esc(E.meta.name)}"><datalist id="nl">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist></div>
+    <div class="row"><label>部門</label><input id="mc" list="dl" value="${esc(E.meta.category)}" placeholder="例：人事部、財務部"><datalist id="dl">${[...new Set(S.all.filter(t => !t.draft).map(t => t.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
+    <div class="row"><label>發佈人</label><input id="mb" placeholder="你的名字" value="${esc((() => { try { return localStorage.getItem('fl_by') || ''; } catch (e) { return ''; } })())}"></div>
+    <div class="row"><label>備註</label><input id="mt" placeholder="此版本改動（可留空）" value="${esc(E.meta.note || '')}"></div>
+    <div id="mh" style="color:var(--mute);font-size:12px"></div>
+    <div class="acts"><button class="btn" id="mx">取消</button><button class="btn pri" id="mk">${ic('upload', 16)}</button></div>`);
+    const hint = () => { const n = $('#mn', m).value.trim(); const ex = S.all.filter(t => t.name === n && !t.draft); $('#mh', m).textContent = ex.length ? `已有同名範本，發佈後會成為 v${nextVersion(S.all, n)}，舊版自動停用` : '新範本 v1'; }; hint(); $('#mn', m).oninput = hint;
+    $('#mx', m).onclick = () => m.remove();
+    $('#mk', m).onclick = async () => {
+      const name = $('#mn', m).value.trim(); if (!name) return toast('請輸入名稱', true);
+      const k = $('#mk', m); k.disabled = true;
+      try {
+        const bytes = await buildTemplate(); const thumb = await makeThumb(await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise);
+        const by = $('#mb', m).value.trim(); try { localStorage.setItem('fl_by', by); } catch (e) { }
+        await Store.publish({ name, by, category: $('#mc', m).value.trim(), note: $('#mt', m).value.trim(), field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }));
+        if (E.draftId) { try { await Store.remove({ id: E.draftId, file_path: (S.all.find(x => x.id === E.draftId) || {}).file_path }); } catch (e2) { console.warn(e2); } }
+        m.remove(); S.ed = null; await refresh(); renderLibrary(); toast('已發佈');
+      } catch (er) { console.error(er); k.disabled = false; toast('發佈失敗：' + (er.message || er), true); }
+    };
+  }
+});
+
+async function boot() {
+  await initAuth();
+  if (CLOUD && !S.user) return renderLogin();
+  if (GH && !S.admin) return renderGate();
+  await refresh();
+  renderLibrary();
+}
+boot();
+</script>
+
+</body></html>

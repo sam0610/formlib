@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v53</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v54</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -397,6 +397,7 @@ const IC = {
   device:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>', cursor:'<path d="M5 3l14 8-6 2-2 6z"/>'
 };
 const ic = (n, s) => `<svg class="ic" viewBox="0 0 24 24"${s ? ` style="width:${s}px;height:${s}px"` : ''}>${IC[n] || ''}</svg>`;
+const ibl = (id, icon, label, tip, cls = '') => `<button class="ib tb ${cls}" data-act="${id}" title="${esc(tip)}">${ic(icon)}<span class="tl">${label}</span></button>`;
 const ib = (id, icon, tip, cls = '') => `<button class="ib ${cls}" data-act="${id}" title="${esc(tip)}">${ic(icon)}</button>`;
 function toast(msg, err) { const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), err ? 4500 : 2200); }
 const fmtDate = s => s ? new Date(s).toLocaleDateString('zh-HK') : '';
@@ -589,8 +590,8 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v53</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
-  ${CLOUD ? ib('logout', 'logout', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ib('ghout', 'logout', '主管登出') : ib('ghin', 'lock', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v54</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
   app.innerHTML = `<div class="login"><h2>${ic('lock')} 登入表格範本庫</h2>
@@ -819,9 +820,10 @@ async function openFill(t) {
 }
 async function renderFill() {
   S.view = 'fill'; const F = S.fill;
-  app.innerHTML = header(`<button class="ib" data-f="back" title="返回">${ic('back')}</button><span class="tbtitle">${esc(F.t.name)}</span><span class="chip v">v${F.t.version}</span><div class="sp"></div>
-  <button class="ib ${F.flatten ? 'on' : ''}" data-f="flat" title="鎖定內容（輸出後不可再修改）">${ic('lock')}</button>
-  <button class="ib" data-f="clear" title="清除全部">${ic('eraser')}</button><button class="ib pri" data-f="dl" title="下載已填 PDF">${ic('download')}</button>`).replace('<div class="sp"></div><div class="sp"></div>', '<div class="sp"></div>')
+  const FT = (k, icon, label, tip, cls = '') => `<button class="ib tb ${cls}" data-f="${k}" title="${tip}">${ic(icon)}<span class="tl">${label}</span></button>`;
+  app.innerHTML = header(`${FT('back', 'back', '返回', '返回範本清單')}<span class="tbtitle">${esc(F.t.name)}</span>${F.t.code ? `<span class="chip cd">${esc(F.t.code)}</span>` : ''}<span class="chip v">v${F.t.version}</span><div class="sp"></div>
+  ${S.admin ? FT('editt', 'edit', '修改表格', '修改此表格嘅欄位／更新版本') : ''}${FT('flat', 'lock', '鎖定內容', '鎖定內容（輸出後不可再修改）', F.flatten ? 'on' : '')}
+  ${FT('clear', 'eraser', '清除', '清除全部已填內容')}${FT('dl', 'download', '下載 PDF', '下載已填 PDF', 'pri')}`).replace('<div class="sp"></div><div class="sp"></div>', '<div class="sp"></div>')
   + '<div class="pages" id="pages"></div>' + `<div class="zoomb"><button type="button" data-z="out" title="縮小（Ctrl −／Ctrl＋滾輪）" aria-label="縮小">−</button><button type="button" data-z="fit" id="zlab" title="還原 100%（Ctrl 0）">${Math.round(S.zoom * 100)}%</button><button type="button" data-z="in" title="放大（Ctrl +／Ctrl＋滾輪）" aria-label="放大">+</button></div>`;
   const box = $('#pages'); const avail = Math.min(app.clientWidth, 980); F.pg = [];
   for (let i = 1; i <= F.pdf.numPages; i++) {
@@ -952,6 +954,7 @@ async function buildFilled(force) {
 app.addEventListener('click', async e => {
   const b = e.target.closest('[data-f]'); if (!b) return; const a = b.dataset.f, F = S.fill;
   if (a === 'back') { S.fill = null; return renderLibrary(); }
+  if (a === 'editt') { const t = F && F.t; if (!t) return; S.fill = null; return editExisting(t); }
   if (a === 'flat') { F.flatten = !F.flatten; b.classList.toggle('on', F.flatten); return toast(F.flatten ? '已鎖定：輸出後不可再編輯' : '輸出後仍可再編輯'); }
   if (a === 'clear') { if (!(await ask('清除所有已填內容？'))) return; Object.keys(F.values).forEach(k => F.values[k] = typeof F.values[k] === 'boolean' ? false : ''); return renderFill(); }
   if (a === 'dl') {

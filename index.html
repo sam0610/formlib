@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v45</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v50</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -199,6 +199,10 @@ textarea.fin{resize:none;padding:2px}
 .bnp .brw .ar{color:var(--mute);display:grid;place-items:center}.bnp .brw .ic{width:15px;height:15px}
 .bnp .brs .res{font-size:11.5px;color:var(--ok);padding-left:24px;margin-top:1px}.bnp .brs .res.bad{color:var(--bad)}
 .bnp .ba{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.ftb .ftbm{display:none}
+.ftb.mini .tb,.ftb.mini .dd{display:none}
+.ftb.mini .ftbm{display:inline-grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--mute);box-shadow:0 4px 14px var(--shadow);cursor:pointer}
+.ftb.mini .ftbm:hover{color:var(--pri-ink);border-color:var(--pri-line)}.ftb .ftbm .ic{width:17px;height:17px}
 .bnp .note2{font-size:11.5px;color:var(--mute);margin:6px 0 0}
 
 /* design-mode look per object type */
@@ -278,6 +282,10 @@ textarea.fin{resize:none;padding:2px}
 .sig{position:absolute;display:flex;align-items:center;justify-content:center;gap:4px;border:1.5px dashed #7b8498;background:rgba(220,232,255,.55);color:#2457d6;cursor:pointer;border-radius:3px;padding:0;font:inherit;font-size:12px;overflow:hidden}
 .sig img{max-width:100%;max-height:100%;object-fit:contain}
 .sig.req{border-color:#d1434b}
+body.handmode .pages,body.handmode .pages *{cursor:grab!important}body.panning .pages,body.panning .pages *{cursor:grabbing!important;user-select:none}
+.pr.msrc{opacity:.25}.plins{height:3px;margin:-1.5px 6px;background:var(--pri-ink);border-radius:2px;position:relative;z-index:3;pointer-events:none}.plins::before{content:"";position:absolute;left:-3px;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--pri-ink)}
+.pr.gh{box-shadow:5px 5px 0 -1px var(--surface),5px 5px 0 0 var(--pri-ink),10px 10px 0 -1px var(--surface),10px 10px 0 0 var(--pri-ink),0 8px 22px var(--shadow)}.pr.gh .gct{position:absolute;right:-8px;top:-10px;min-width:24px;height:24px;font-weight:700;font-size:12.5px;box-shadow:0 4px 10px var(--shadow)}
+.mchip{position:fixed;z-index:60;pointer-events:none;display:flex;align-items:center;gap:6px;background:var(--toast-bg);color:var(--toast-fg);border-radius:99px;padding:3px 12px 3px 4px;font-size:12.5px;white-space:nowrap;max-width:min(320px,90vw);box-shadow:0 6px 18px var(--shadow)}.mchip .gct{position:static;min-width:22px;height:22px;box-shadow:none;background:var(--pri);color:#fff;border-radius:999px;display:grid;place-items:center;font-weight:700;font-size:12px;padding:0 5px}.mchip .mlb{overflow:hidden;text-overflow:ellipsis}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -492,27 +500,66 @@ const GHub = {
     if (GHTOKEN) { const r = await this.api(`/contents/${t.file_path}?ref=${encodeURIComponent(GH.branch)}`, { headers: { Accept: 'application/vnd.github.raw+json' } }); if (!r.ok) throw await this.err(r); return await r.blob(); }
     const r = await fetch(this.raw(t.file_path)); if (!r.ok) throw new Error('下載範本失敗 ' + r.status); return await r.blob();
   },
-  async files(meta, blob) {
-    const fid = uid(), file_path = `${GH.dir}/files/${fid}.pdf`, thumb_path = meta.thumb ? `${GH.dir}/files/${fid}.jpg` : '';
-    await this.upload(file_path, new Uint8Array(await blob.arrayBuffer()), `上載 ${meta.name}`);
-    if (thumb_path) await this.upload(thumb_path, this.ub64(meta.thumb.split(',')[1]), `縮圖 ${meta.name}`);
-    const { thumb, ...rest } = meta; return { ...rest, file_path, thumb_path };
+  async gql(query, variables) {
+    const r = await fetch('https://api.github.com/graphql', { method: 'POST', cache: 'no-store', headers: { Authorization: 'Bearer ' + GHTOKEN, 'Content-Type': 'application/json' }, body: JSON.stringify({ query, variables }) });
+    if (!r.ok) throw await this.err(r); const j = await r.json(); if (j.errors && j.errors.length) { const e = new Error(j.errors[0].message); e.gql = true; throw e; } return j.data;
   },
-  async publish(meta, blob) {
-    const m = await this.files(meta, blob);
-    await this.mutate(items => { const version = nextVersion(items, m.name); return [...items.map(x => x.name === m.name && x.active ? { ...x, active: false } : x), { ...m, id: uid(), version, active: true, draft: false, created_at: new Date().toISOString() }]; }, `發佈 ${m.name}`);
+  // one atomic commit: new files + updated index.json + deleted old files (2 requests instead of ~8)
+  async commitAll(msg, files, fn) {
+    const [owner, name] = GH.repo.split('/'); let last = null;
+    for (let i = 0; i < 4; i++) {
+      if (i) await new Promise(z => setTimeout(z, 800 * i));
+      const d = await this.gql('query($o:String!,$n:String!,$r:String!,$e:String!){repository(owner:$o,name:$n){ref(qualifiedName:$r){target{oid}} object(expression:$e){... on Blob{text isTruncated}}}}', { o: owner, n: name, r: 'refs/heads/' + GH.branch, e: GH.branch + ':' + this.idx() });
+      const rep = d && d.repository; if (!rep || !rep.ref) throw new Error('GraphQL：找不到分支'); if (rep.object && rep.object.isTruncated) throw new Error('GraphQL：index.json 太大');
+      const { next, del } = fn(rep.object ? JSON.parse(rep.object.text || '[]') : []);
+      const add = [...files.map(f => ({ path: f.path, contents: this.b64(f.bytes) })), { path: this.idx(), contents: this.b64(new TextEncoder().encode(JSON.stringify(next, null, 1))) }];
+      try {
+        await this.gql('mutation($i:CreateCommitOnBranchInput!){createCommitOnBranch(input:$i){commit{oid}}}', { i: { branch: { repositoryNameWithOwner: GH.repo, branchName: GH.branch }, message: { headline: msg }, expectedHeadOid: rep.ref.target.oid, fileChanges: { additions: add, deletions: (del || []).map(p => ({ path: p })) } } });
+        return next;
+      } catch (e) { last = e; if (/expected|head|oid|fast.?forward|stale/i.test(e.message || '')) { console.warn('分支已更新，重試', e.message); continue; } throw e; }
+    }
+    throw last || new Error('提交失敗');
+  },
+  async commitWith(msg, files, fn) { // fn(items) -> { next, del: [paths] }
+    const t0 = performance.now();
+    try { const r = await this.commitAll(msg, files, fn); console.info(`[儲存] 單次提交 ${Math.round(performance.now() - t0)}ms`); return r; }
+    catch (e) {
+      console.warn('單次提交失敗，改用逐檔上傳', e);
+      for (const f of files) await this.upload(f.path, f.bytes, msg);
+      let del = []; const next = await this.mutate(items => { const r = fn(items); del = r.del || []; return r.next; }, msg);
+      for (const p of del) await this.delFile(p, '清理舊檔案'); console.info(`[儲存] 逐檔上傳 ${Math.round(performance.now() - t0)}ms`); return next;
+    }
+  },
+  async prep(meta, blob) {
+    const fid = uid(), file_path = `${GH.dir}/files/${fid}.pdf`, thumb_path = meta.thumb ? `${GH.dir}/files/${fid}.jpg` : '';
+    const files = [{ path: file_path, bytes: new Uint8Array(await blob.arrayBuffer()) }]; if (thumb_path) files.push({ path: thumb_path, bytes: this.ub64(meta.thumb.split(',')[1]) });
+    const { thumb, ...rest } = meta; return { m: { ...rest, file_path, thumb_path }, files };
+  },
+  async publish(meta, blob, dropId) {
+    const { m, files } = await this.prep(meta, blob);
+    await this.commitWith(`發佈 ${m.name}${m.by ? '（' + m.by + '）' : ''}`, files, items => {
+      const version = nextVersion(items, m.name); const same = items.find(x => x.name === m.name && !x.draft && x.tid);
+      const cur = { ...m, id: uid(), tid: same ? same.tid : uid(), version, active: true, draft: false, created_at: new Date().toISOString() };
+      let next = [...items.map(x => x.name === m.name && x.active ? { ...x, active: false } : x), cur];
+      const drop = new Set(next.filter(x => x.name === m.name && !x.draft).sort((a, b) => b.version - a.version).slice(3).map(x => x.id)); // keep this version + 2 older
+      if (dropId) drop.add(dropId); // the draft this template was made from
+      const gone = next.filter(x => drop.has(x.id)); next = next.filter(x => !drop.has(x.id));
+      return { next, del: gone.flatMap(g => [g.file_path, g.thumb_path].filter(Boolean)) };
+    });
   },
   async setActive(t) { await this.mutate(items => items.map(x => x.name === t.name && !x.draft ? { ...x, active: x.id === t.id } : x), `使用 ${t.name} v${t.version}`); },
   async deactivate(t) { await this.mutate(items => items.map(x => x.id === t.id ? { ...x, active: false } : x), `停用 ${t.name}`); },
   async saveDraft(meta, blob, id) {
-    const m = await this.files(meta, blob); let old = null, rid = null;
-    await this.mutate(items => { old = items.find(x => x.draft && (x.id === id || x.name === m.name)) || null; rid = old ? old.id : uid(); const e = { ...m, id: rid, version: 0, active: false, draft: true, created_at: new Date().toISOString() }; return old ? items.map(x => x.id === rid ? e : x) : [...items, e]; }, `草稿 ${m.name}`);
-    if (old) { await this.delFile(old.file_path, '清理舊草稿'); if (old.thumb_path) await this.delFile(old.thumb_path, '清理舊草稿'); }
+    const { m, files } = await this.prep(meta, blob); let rid = null;
+    await this.commitWith(`草稿 ${m.name}`, files, items => {
+      const old = items.find(x => x.draft && (x.id === id || x.name === m.name)) || null; rid = old ? old.id : uid();
+      const e = { ...m, id: rid, version: 0, active: false, draft: true, created_at: new Date().toISOString() };
+      return { next: old ? items.map(x => x.id === rid ? e : x) : [...items, e], del: old ? [old.file_path, old.thumb_path].filter(Boolean) : [] };
+    });
     return rid;
   },
   async remove(t) {
-    let gone = null; await this.mutate(items => { gone = items.find(x => x.id === t.id) || null; return items.filter(x => x.id !== t.id); }, `刪除 ${t.name} ${t.draft ? '草稿' : 'v' + t.version}`);
-    if (gone) { await this.delFile(gone.file_path, '清理檔案'); if (gone.thumb_path) await this.delFile(gone.thumb_path, '清理檔案'); }
+    await this.commitWith(`刪除 ${t.name} ${t.draft ? '草稿' : 'v' + t.version}`, [], items => { const g = items.find(x => x.id === t.id); return { next: items.filter(x => x.id !== t.id), del: g ? [g.file_path, g.thumb_path].filter(Boolean) : [] }; });
   },
   async setNote(t, note) { await this.mutate(items => items.map(x => x.id === t.id ? { ...x, note } : x), `備註 ${t.name} v${t.version}`); },
   async verify() { const r = await this.api(''); if (!r.ok) return false; const j = await r.json(); return !!(j.permissions && (j.permissions.push || j.permissions.admin)); }
@@ -538,7 +585,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v45</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v50</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ib('logout', 'logout', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ib('ghout', 'logout', '主管登出') : ib('ghin', 'lock', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -960,7 +1007,7 @@ async function renderEditor() {
     const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height; cv.style.width = '100%'; cv.style.height = '100%';
     const ov = document.createElement('div'); ov.className = 'ov' + (E.tool === 'sel' ? '' : ' draw'); wrap.append(cv, ov); box.appendChild(wrap);
     E.pages.push({ page, sc, fit, ph: v1.height, pw: v1.width, ov, cv });
-    await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+    await page.render({ canvasContext: cv.getContext('2d'), viewport: vp, annotationMode: 0 }).promise; // no baked-in widgets: the editor draws every field itself, so a moved field leaves no ghost behind
     bindDraw(i - 1);
   }
   drawBoxes(); renderPanel(); updHist(); const edl = document.querySelector('.edl'); if (edl) edl.classList.toggle('painting', !!E.paint);
@@ -974,7 +1021,7 @@ async function zoomRerender(gen) {
     if (gen !== S.zgen) return; const sc = it.fit * S.zoom, k = window.devicePixelRatio > 1 ? 1.5 : 1;
     let vp = it.page.getViewport({ scale: sc * k }); const px = vp.width * vp.height; if (px > 3.2e7) vp = it.page.getViewport({ scale: sc * k * Math.sqrt(3.2e7 / px) });
     const tmp = document.createElement('canvas'); tmp.width = Math.floor(vp.width); tmp.height = Math.floor(vp.height);
-    try { await it.page.render({ canvasContext: tmp.getContext('2d'), viewport: vp }).promise; } catch (_) { continue; }
+    try { await it.page.render({ canvasContext: tmp.getContext('2d'), viewport: vp, annotationMode: S.view === 'edit' ? 0 : 1 }).promise; } catch (_) { continue; }
     if (gen !== S.zgen) return; it.cv.width = tmp.width; it.cv.height = tmp.height; it.cv.getContext('2d').drawImage(tmp, 0, 0);
   }
 }
@@ -1142,22 +1189,22 @@ function renderPanel() {
     const id = r.dataset.pf, touch = ev.pointerType !== 'mouse', f0 = E.fields.find(x => x.id === id); if (!f0) return;
     const sx = ev.clientX, sy = ev.clientY; let armed = !touch, drag = false, tgt = null, after = false, tm = null;
     const cands = () => [...box.querySelectorAll('.pr')].filter(x => x !== r && (E.fields.find(y => y.id === x.dataset.pf) || {}).page === f0.page);
-    const clr = () => { box.querySelectorAll('.pr').forEach(x => { x.classList.remove('dtb', 'dta', 'col'); x.style.transform = ''; }); box.querySelectorAll('.plgap').forEach(x => x.remove()); document.querySelectorAll('.pr.gh').forEach(x => x.remove()); };
+    const clr = () => { box.querySelectorAll('.pr').forEach(x => { x.classList.remove('dtb', 'dta', 'col', 'msrc'); x.style.transform = ''; }); box.querySelectorAll('.plgap').forEach(x => x.remove()); document.querySelectorAll('.pr.gh,.mchip').forEach(x => x.remove()); };
     if (touch) tm = setTimeout(() => { armed = true; r.classList.add('drg'); try { navigator.vibrate && navigator.vibrate(10); } catch (_) { } }, 350);
     const selSet = new Set(selIds()); const multi = selSet.size > 1 && selSet.has(id) && !f0.ex; let MS = null;
     const mrows = () => grp().filter(x => selSet.has(x.dataset.pf) && !(E.fields.find(y => y.id === x.dataset.pf) || {}).ex);
     const mvMulti = e => {
       if (!MS) {
         const rows = mrows(); if (rows.length < 2) { MS = { off: true }; return; }
-        const r0 = r.getBoundingClientRect(), h = r.offsetHeight, ghost = r.cloneNode(true); ghost.classList.add('drg', 'gh'); ghost.style.cssText = `position:fixed;left:${r0.left}px;width:${r0.width}px;top:${r0.top}px;z-index:60;pointer-events:none;margin:0`;
-        ghost.insertAdjacentHTML('beforeend', `<span class="gct">${rows.length}</span>`); document.body.appendChild(ghost);
-        rows.forEach(x => x.classList.add('col'));
+        const r0 = r.getBoundingClientRect(), h = r.offsetHeight, ghost = document.createElement('div'); ghost.className = 'mchip gh'; ghost.innerHTML = `<span class="gct">${rows.length}</span><span class="mlb"></span>`; document.body.appendChild(ghost);
+        rows.forEach(x => x.classList.add('msrc'));
         const others = grp().filter(x => !rows.includes(x)); const cs = others.map(x => { const b = x.getBoundingClientRect(); return b.top + b.height / 2; });
-        const sp = document.createElement('div'); sp.className = 'plgap sp'; sp.style.height = h * rows.length + 'px';
+        const sp = document.createElement('div'); sp.className = 'plins';
         MS = { rows, ghost, others, cs, sp, h, oy: e.clientY - r0.top, k: 0 };
       }
-      if (MS.off) return; const M = MS; M.ghost.style.top = e.clientY - M.oy + 'px';
+      if (MS.off) return; const M = MS; M.ghost.style.left = Math.min(e.clientX + 16, innerWidth - M.ghost.offsetWidth - 8) + 'px'; M.ghost.style.top = e.clientY - 12 + 'px';
       let k = 0; M.cs.forEach(c => { if (c < e.clientY) k++; }); M.k = k;
+      { const pv = k > 0 ? E.fields.find(y => y.id === M.others[k - 1].dataset.pf) : null; M.ghost.querySelector('.mlb').textContent = pv ? `放喺「${pv.name}」之後` : '放去最前'; }
       if (M.others.length) { if (k < M.others.length) M.others[k].before(M.sp); else M.others[M.others.length - 1].after(M.sp); }
     };
     const applyMulti = () => {
@@ -1294,13 +1341,17 @@ Object.assign(IC, { ls: '<path d="M7 4v9M17 4v9M4 19h16M4 19l3-2.5M4 19l3 2.5M20
 let FTB = null;
 const ftbTargets = () => { const E = S.ed; if (!E || !FTB) return []; return FTB.ids.map(id => E.fields.find(x => x.id === id)).filter(x => x && !x.ex); };
 const sameOf = (arr, g) => arr.length && arr.every(x => g(x) === g(arr[0])) ? g(arr[0]) : null;
-function closeFtb() { if (!FTB) return; const F = FTB; FTB = null; F.el.remove(); closeClrPop(); if (F.onClose) F.onClose(); if (F.dirty && S.ed) renderPanel(); }
+const FTB_IDLE = 2800;
+function ftbTouch() { const F = FTB; if (!F) return; clearTimeout(F.idle); F.idle = setTimeout(ftbCollapse, FTB_IDLE); }
+function ftbCollapse() { const F = FTB; if (!F || F.onClose) return; if (F.open || CP || F.el.matches(':hover') || F.el.contains(document.activeElement)) return ftbTouch(); F.el.classList.add('mini'); posFtb(); } // tuck the bar away into a small button when idle
+function ftbExpand() { const F = FTB; if (!F) return; F.el.classList.remove('mini'); posFtb(); ftbTouch(); }
+function closeFtb() { if (!FTB) return; const F = FTB; FTB = null; clearTimeout(F.idle); F.el.remove(); closeClrPop(); if (F.onClose) F.onClose(); if (F.dirty && S.ed) renderPanel(); }
 function openFtb(ids) {
   closeFtb(); if (!S.ed || S.view !== 'edit') return;
   const el = document.createElement('div'); el.className = 'ftb'; document.body.appendChild(el);
   FTB = { ids: [...ids], el, open: '', dirty: false, t: Date.now() };
-  el.addEventListener('click', ftbClick); el.addEventListener('change', ftbChange);
-  renderFtb(); posFtb();
+  el.addEventListener('click', ftbClick); el.addEventListener('change', ftbChange); ['pointermove', 'pointerdown', 'keydown', 'focusin', 'change'].forEach(v => el.addEventListener(v, ftbTouch));
+  renderFtb(); posFtb(); ftbTouch();
 }
 function posFtb() {
   const F = FTB; if (!F) return; if (!S.ed || S.view !== 'edit') return closeFtb();
@@ -1327,10 +1378,11 @@ function renderFtb() {
   let dd = '';
   if (F.open === 'sp' && txt.length) dd = `<div class="dd"><div class="dr">${ic('ls')}${stp('ls', sameOf(txt, x => x.ls || 0), '字距（pt）')}${mlt.length ? ic('lh') + stp('lh', sameOf(mlt, x => x.lh || 1.4), '行距（字級倍數）') : ''}</div></div>`;
   else if (F.open === 'cl') dd = `<div class="dd"><div class="dr"><button type="button" class="csw" data-f="bg" title="背景顏色">${swHtml('bg', sameOf(t, x => x.bg || '') || '')}${ic('caret')}</button><button type="button" class="csw" data-f="bd" title="框線顏色">${swHtml('bd', sameOf(t, x => (x.bw > 0 && x.border) ? x.border : '') || '')}${ic('caret')}</button>${stp('bw', sameOf(t, x => x.bw || 0), '框線粗幼（pt）')}</div></div>`;
-  F.el.innerHTML = `<div class="tb">${bar}</div>${dd}`;
+  F.el.innerHTML = `<div class="tb">${bar}</div>${dd}<button type="button" class="ftbm" data-f="expand" title="展開格式列" aria-label="展開格式列">${ic('aa')}</button>`;
 }
 function ftbClick(e) {
   const F = FTB; if (!F) return; const b = e.target.closest('[data-f]'); if (!b) return; const t = ftbTargets(), k = b.dataset.f;
+  if (k === 'expand') return ftbExpand();
   const done = () => { F.dirty = true; drawBoxes(); schedCommit(); renderFtb(); posFtb(); renderPanel(); };
   const m = /^(fs|ls|lh|bw)([+-])$/.exec(k);
   if (m) {
@@ -1570,12 +1622,32 @@ function editProps(f) {
   $('#px', m).onclick = () => m.remove();
   $('#pk', m).onclick = () => { const n = $('#pn', m).value.trim(); if (n && n !== f.name) { const old = f.name; f.name = ''; f.name = uniqueName(n); } if (f.kind === 'drop') f.options = $('#po', m).value.split('\n').map(s => s.trim()).filter(Boolean); m.remove(); commit(); drawBoxes(); renderPanel(); };
 }
+
+/* 空白鍵／中鍵拖動平移頁面（編輯模式） */
+(() => {
+  let space = false, pan = null;
+  const typing = t => t && (/TEXTAREA|SELECT/.test(t.tagName) || (t.tagName === 'INPUT' && !['checkbox', 'color', 'radio', 'button'].includes(t.type)) || t.isContentEditable);
+  const upd = () => document.body.classList.toggle('handmode', space && S.view === 'edit');
+  document.addEventListener('keydown', e => { if (e.code !== 'Space' || S.view !== 'edit' || !S.ed || typing(e.target) || (e.target.closest && e.target.closest('.cpop,.cxm,.bnp,.mask'))) return; e.preventDefault(); if (!space) { space = true; upd(); } }, true);
+  document.addEventListener('keyup', e => { if (e.code === 'Space' && space) { space = false; upd(); } }, true);
+  window.addEventListener('blur', () => { space = false; upd(); });
+  document.addEventListener('pointerdown', e => {
+    if (S.view !== 'edit' || !S.ed) return; const box = e.target.closest && e.target.closest('.pages'); if (!box) return;
+    if (!(e.button === 1 || (e.button === 0 && space))) return;
+    e.preventDefault(); e.stopPropagation(); pan = { id: e.pointerId, x: e.clientX, y: e.clientY, box }; document.body.classList.add('panning');
+  }, true);
+  document.addEventListener('pointermove', e => { if (!pan || e.pointerId !== pan.id) return; const dx = e.clientX - pan.x, dy = e.clientY - pan.y; pan.x = e.clientX; pan.y = e.clientY; pan.box.scrollLeft -= dx; window.scrollBy(0, -dy); }, true);
+  const end = e => { if (pan && e.pointerId === pan.id) { pan = null; document.body.classList.remove('panning'); } };
+  document.addEventListener('pointerup', end, true); document.addEventListener('pointercancel', end, true);
+  document.addEventListener('auxclick', e => { if (e.button === 1 && e.target.closest && e.target.closest('.pages')) e.preventDefault(); }, true);
+})();
 document.addEventListener('keydown', e => {
   if (S.view !== 'edit' || !S.ed) return; const t = e.target; if (t.closest && t.closest('.cpop')) return; const typing = /TEXTAREA|SELECT/.test(t.tagName) || (t.tagName === 'INPUT' && !['checkbox', 'color', 'radio', 'button'].includes(t.type));
   if (typing) return; const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
   if (mod && k === 'c' && selIds().length) { e.preventDefault(); copySel(); return; }
   if (mod && k === 'v' && CLIP) { e.preventDefault(); pasteClip(null); return; }
   if (mod && k === 'd' && selIds().length) { e.preventDefault(); dupSel(); return; }
+  if (mod && /^Arrow(Left|Right|Up|Down)$/.test(e.key) && selIds().length) { e.preventDefault(); const d = e.shiftKey ? 10 : 1, sg = e.key === 'ArrowRight' ? [d, 0] : e.key === 'ArrowLeft' ? [-d, 0] : e.key === 'ArrowUp' ? [0, d] : [0, -d]; edSel().forEach(f => { f.x += sg[0]; f.y += sg[1]; }); drawBoxes(); schedCommit(); return; }
   if (e.key === 'F2' && selIds().length) { e.preventDefault(); const ids = selIds(), f = S.ed.fields.find(x => x.id === ids[0]); if (ids.length > 1) openBatch(innerWidth / 2 - 165, 90); else if (f && !f.ex) openRename(f); return; }
   if (mod && k === 'z') { e.preventDefault(); return e.shiftKey ? redo() : undo(); }
   if (mod && k === 'y') { e.preventDefault(); return redo(); }
@@ -1655,23 +1727,33 @@ async function makeThumb(pdf) {
   const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height; const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
   await page.render({ canvasContext: cx, viewport: vp }).promise; return cv.toDataURL('image/jpeg', .6);
 }
-async function shrinkScans(doc, E) { // scanned (text-less) pages of big files: re-encode as 150dpi JPEG to keep the repo small
+async function shrinkScans(doc, E) { // scanned (text-less) pages of big files: re-encode as 150dpi JPEG to keep the repo small (result cached per page for later saves)
   const n = E.pdf.numPages; if (E.bytes.byteLength / n < 600 * 1024) return;
-  const { PDFName } = PDFLib; const lp = doc.getPages(); let done = 0;
+  const { PDFName } = PDFLib; const lp = doc.getPages(); let done = 0, fresh = 0; E.shr = E.shr || {};
   for (let i = 0; i < n; i++) {
     try {
-      const pg = await E.pdf.getPage(i + 1); const tc = await pg.getTextContent(); if (tc.items.some(t => t.str.trim())) continue;
-      const L = lp[i]; if (L.getRotation().angle % 360 !== 0) continue; const mb = L.getMediaBox(), vw = pg.view;
-      if (Math.abs(vw[0] - mb.x) > 1 || Math.abs(vw[1] - mb.y) > 1 || Math.abs(vw[2] - mb.x - mb.width) > 1 || Math.abs(vw[3] - mb.y - mb.height) > 1) continue;
-      const v = pg.getViewport({ scale: 150 / 72 }); const cv = document.createElement('canvas'); cv.width = Math.ceil(v.width); cv.height = Math.ceil(v.height);
-      const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
-      await pg.render({ canvasContext: cx, viewport: v, annotationMode: 0 }).promise;
-      const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', .72)); if (blob.size > E.bytes.byteLength / n * .8) continue; const img = await doc.embedJpg(new Uint8Array(await blob.arrayBuffer()));
+      let jb = E.shr[i];
+      if (jb === undefined) {
+        jb = null; const pg = await E.pdf.getPage(i + 1); const tc = await pg.getTextContent();
+        if (!tc.items.some(t => t.str.trim())) {
+          const L = lp[i], mb = L.getMediaBox(), vw = pg.view;
+          if (L.getRotation().angle % 360 === 0 && !(Math.abs(vw[0] - mb.x) > 1 || Math.abs(vw[1] - mb.y) > 1 || Math.abs(vw[2] - mb.x - mb.width) > 1 || Math.abs(vw[3] - mb.y - mb.height) > 1)) {
+            const v = pg.getViewport({ scale: 150 / 72 }); const cv = document.createElement('canvas'); cv.width = Math.ceil(v.width); cv.height = Math.ceil(v.height);
+            const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+            await pg.render({ canvasContext: cx, viewport: v, annotationMode: 0 }).promise;
+            const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', .72));
+            if (blob.size <= E.bytes.byteLength / n * .8) jb = new Uint8Array(await blob.arrayBuffer());
+          }
+        }
+        E.shr[i] = jb; if (jb) fresh++;
+      }
+      if (!jb) continue;
+      const L = lp[i], mb = L.getMediaBox(); const img = await doc.embedJpg(jb);
       L.node.delete(PDFName.of('Contents')); L.node.set(PDFName.of('Resources'), doc.context.obj({}));
       L.drawImage(img, { x: mb.x, y: mb.y, width: mb.width, height: mb.height }); done++;
-    } catch (e) { console.warn('壓縮第 ' + (i + 1) + ' 頁失敗', e); }
+    } catch (e) { console.warn('壓縮第 ' + (i + 1) + ' 頁失敗', e); E.shr[i] = null; }
   }
-  if (done) toast(`已壓縮 ${done} 頁掃描圖`);
+  if (fresh) toast(`已壓縮 ${fresh} 頁掃描圖`);
 }
 
 async function buildTemplate() {
@@ -1724,9 +1806,9 @@ app.addEventListener('click', async e => {
     const name = (E.meta.name || '').trim(); if (!name) return toast('請先輸入範本名稱', true);
     b.disabled = true;
     try {
-      const bytes = await buildTemplate(); const thumb = await makeThumb(await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise);
+      const t0 = performance.now(); const bytes = await buildTemplate(); const t1 = performance.now(); const thumb = await makeThumb(E.pdf); console.info(`[儲存] 組 PDF ${Math.round(t1 - t0)}ms，縮圖 ${Math.round(performance.now() - t1)}ms，大小 ${(bytes.length / 1048576).toFixed(1)}MB`);
       E.draftId = await Store.saveDraft({ name, category: E.meta.category || '', note: E.meta.note || '', field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
-      E.savedJ = JSON.stringify(E.fields); await refresh(); toast('已儲存草稿，用家暫時睇唔到');
+      E.savedJ = JSON.stringify(E.fields); toast('已儲存草稿，用家暫時睇唔到'); refresh();
     } catch (er) { console.error(er); toast('儲存草稿失敗：' + (er.message || er), true); }
     b.disabled = false; return;
   }
@@ -1746,10 +1828,10 @@ app.addEventListener('click', async e => {
       const name = $('#mn', m).value.trim(); if (!name) return toast('請輸入名稱', true);
       const k = $('#mk', m); k.disabled = true;
       try {
-        const bytes = await buildTemplate(); const thumb = await makeThumb(await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise);
+        const t0 = performance.now(); const bytes = await buildTemplate(); const t1 = performance.now(); const thumb = await makeThumb(E.pdf); console.info(`[儲存] 組 PDF ${Math.round(t1 - t0)}ms，縮圖 ${Math.round(performance.now() - t1)}ms，大小 ${(bytes.length / 1048576).toFixed(1)}MB`);
         const by = $('#mb', m).value.trim(); try { localStorage.setItem('fl_by', by); } catch (e) { }
-        await Store.publish({ name, by, category: $('#mc', m).value.trim(), note: $('#mt', m).value.trim(), field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }));
-        if (E.draftId) { try { await Store.remove({ id: E.draftId, file_path: (S.all.find(x => x.id === E.draftId) || {}).file_path }); } catch (e2) { console.warn(e2); } }
+        await Store.publish({ name, by, category: $('#mc', m).value.trim(), note: $('#mt', m).value.trim(), field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
+        if (E.draftId && !GH) { try { await Store.remove({ id: E.draftId, file_path: (S.all.find(x => x.id === E.draftId) || {}).file_path }); } catch (e2) { console.warn(e2); } }
         m.remove(); S.ed = null; await refresh(); renderLibrary(); toast('已發佈');
       } catch (er) { console.error(er); k.disabled = false; toast('發佈失敗：' + (er.message || er), true); }
     };

@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v50</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v53</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -286,6 +286,7 @@ body.handmode .pages,body.handmode .pages *{cursor:grab!important}body.panning .
 .pr.msrc{opacity:.25}.plins{height:3px;margin:-1.5px 6px;background:var(--pri-ink);border-radius:2px;position:relative;z-index:3;pointer-events:none}.plins::before{content:"";position:absolute;left:-3px;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--pri-ink)}
 .pr.gh{box-shadow:5px 5px 0 -1px var(--surface),5px 5px 0 0 var(--pri-ink),10px 10px 0 -1px var(--surface),10px 10px 0 0 var(--pri-ink),0 8px 22px var(--shadow)}.pr.gh .gct{position:absolute;right:-8px;top:-10px;min-width:24px;height:24px;font-weight:700;font-size:12.5px;box-shadow:0 4px 10px var(--shadow)}
 .mchip{position:fixed;z-index:60;pointer-events:none;display:flex;align-items:center;gap:6px;background:var(--toast-bg);color:var(--toast-fg);border-radius:99px;padding:3px 12px 3px 4px;font-size:12.5px;white-space:nowrap;max-width:min(320px,90vw);box-shadow:0 6px 18px var(--shadow)}.mchip .gct{position:static;min-width:22px;height:22px;box-shadow:none;background:var(--pri);color:#fff;border-radius:999px;display:grid;place-items:center;font-weight:700;font-size:12px;padding:0 5px}.mchip .mlb{overflow:hidden;text-overflow:ellipsis}
+.cc{font-size:11.5px;color:var(--mute);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;margin-top:1px}.chip.cd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -435,6 +436,7 @@ const Local = {
   },
   async remove(t) { await this.run('readwrite', s => s.delete(t.id)); },
   async setNote(t, note) { const f = await this.run('readonly', s => s.get(t.id)); f.note = note; await this.run('readwrite', s => s.put(f)); },
+  async updateInfo(t, info) { const all = await this.run('readonly', s => s.getAll()); for (const f of all.filter(x => x.name === t.name && !x.draft)) { Object.assign(f, info); await this.run('readwrite', s => s.put(f)); } },
   async clear() { await this.run('readwrite', s => s.clear()); },
   async deactivate(t) { const f = await this.run('readonly', s => s.get(t.id)); f.active = false; await this.run('readwrite', s => s.put(f)); }
 };
@@ -459,7 +461,8 @@ const Cloud = {
     r = await sb.from('templates').insert({ ...meta, version: 0, active: false, draft: true, file_path: path, created_by: S.user.id }).select('id').single(); if (r.error) throw r.error; return r.data.id;
   },
   async remove(t) { const r = await sb.from('templates').delete().eq('id', t.id); if (r.error) throw r.error; await sb.storage.from('templates').remove([t.file_path]); },
-  async setNote(t, note) { const r = await sb.from('templates').update({ note }).eq('id', t.id); if (r.error) throw r.error; }
+  async setNote(t, note) { const r = await sb.from('templates').update({ note }).eq('id', t.id); if (r.error) throw r.error; },
+  async updateInfo(t, info) { const r = await sb.from('templates').update(info).eq('name', t.name).eq('draft', false); if (r.error) throw r.error; }
 };
 /* GitHub 模式：公開 repo 內 index.json 作資料庫，PDF 與縮圖為檔案；讀取免登入，寫入需 token（主管） */
 const GHub = {
@@ -562,6 +565,7 @@ const GHub = {
     await this.commitWith(`刪除 ${t.name} ${t.draft ? '草稿' : 'v' + t.version}`, [], items => { const g = items.find(x => x.id === t.id); return { next: items.filter(x => x.id !== t.id), del: g ? [g.file_path, g.thumb_path].filter(Boolean) : [] }; });
   },
   async setNote(t, note) { await this.mutate(items => items.map(x => x.id === t.id ? { ...x, note } : x), `備註 ${t.name} v${t.version}`); },
+  async updateInfo(t, info) { await this.mutate(items => items.map(x => x.name === t.name && !x.draft ? { ...x, ...info } : x), `修改資料 ${t.name}`); },
   async verify() { const r = await this.api(''); if (!r.ok) return false; const j = await r.json(); return !!(j.permissions && (j.permissions.push || j.permissions.admin)); }
 };
 const Store = CLOUD ? Cloud : GH ? GHub : Local;
@@ -585,7 +589,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v50</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v53</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ib('logout', 'logout', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ib('ghout', 'logout', '主管登出') : ib('ghin', 'lock', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -661,7 +665,7 @@ function ghLogin() {
 function renderLibrary() {
   S.view = 'library'; if (S.sideOpen === undefined) S.sideOpen = window.innerWidth > 720;
   const q = S.q.toLowerCase();
-  const found = S.all.filter(t => t.active && !t.draft && (!q || (t.name + (t.category || '') + (t.note || '')).toLowerCase().includes(q)));
+  const found = S.all.filter(t => t.active && !t.draft && (!q || (t.name + (t.code || '') + (t.category || '') + (t.note || '')).toLowerCase().includes(q)));
   const groups = new Map(); found.forEach(t => { const k = t.category || NONE; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(t); });
   const keys = [...groups.keys()].sort((a, b) => a === NONE ? 1 : b === NONE ? -1 : a.localeCompare(b, 'zh-HK'));
   const list = found.filter(t => !S.cat || (S.cat === NONE ? !t.category : t.category === S.cat));
@@ -678,8 +682,8 @@ function renderLibrary() {
     <div class="ca">${ib('edit:' + t.id, 'edit', '繼續編輯草稿')}${ib('deld:' + t.id, 'trash', '刪除草稿', 'dng')}</div></div>`).join('')}</div>` : '';
   const grid = list.length ? `<div class="gh">${ic('folder', 18)}<span>${esc(S.cat ? label(S.cat) : '全部範本')}</span><span class="chip">${list.length}</span></div><div class="grid">${list.map(t => `<div class="card" data-open="${t.id}">
     <div class="thumb" style="${t.thumb ? `background-image:url(${t.thumb})` : ''}"></div>
-    <div class="cb"><div class="cn">${esc(t.name)}</div><div class="cm"><span class="chip v">v${t.version}</span>${t.category ? `<span class="chip">${esc(t.category)}</span>` : ''}<span>${fmtDate(t.created_at)}</span></div></div>
-    ${S.admin ? `<div class="ca">${ib('edit:' + t.id, 'edit', '修改欄位／更新版本')}${ib('hist:' + t.id, 'history', '版本記錄')}${ib('del:' + t.id, 'trash', '停用此範本', 'dng')}</div>` : ''}
+    <div class="cb"><div class="cn">${esc(t.name)}</div>${t.code ? `<div class="cc">${esc(t.code)}</div>` : ''}<div class="cm"><span class="chip v">v${t.version}</span>${t.category ? `<span class="chip">${esc(t.category)}</span>` : ''}<span>${fmtDate(t.created_at)}</span></div></div>
+    ${S.admin ? `<div class="ca">${ib('info:' + t.id, 'pen', '修改名稱／編號／部門')}${ib('edit:' + t.id, 'edit', '修改欄位／更新版本')}${ib('hist:' + t.id, 'history', '版本記錄')}${ib('del:' + t.id, 'trash', '停用此範本', 'dng')}</div>` : ''}
   </div>`).join('')}</div>` : `<div class="empty">${ic('file')}<div>${S.all.some(t => t.active && !t.draft) ? '找不到符合的範本' : (S.admin ? '未有範本，按右上角 ＋ 或把 PDF 拖到此頁' : '暫時未有範本')}</div></div>`;
   app.innerHTML = header() + `<div class="bar">${ib('side', 'menu', S.sideOpen ? '收起部門側欄' : '顯示部門側欄', S.sideOpen ? 'on' : '')}<div class="srch">${ic('search', 18)}<input id="q" placeholder="搜尋範本" value="${esc(S.q)}"></div>
   ${PREVIEW ? ib('role', 'user', S.admin ? '目前：管理員視角（按此切換到用家）' : '目前：用家視角（按此切換到管理員）', S.admin ? 'on' : '') : ''}${S.admin ? ib('new', 'plus', '上載 PDF 建立範本', 'pri') : ''}</div>
@@ -698,6 +702,7 @@ app.addEventListener('click', async e => {
     if (act === 'side') { S.sideOpen = !S.sideOpen; return renderLibrary(); }
     if (act === 'role') { S.admin = !S.admin; return renderLibrary(); }
     const t = S.all.find(x => x.id === id);
+    if (act === 'info' && t) return editInfo(t);
     if (act === 'edit' && t) return editExisting(t);
     if (act === 'deld' && t) { if (await ask(`刪除草稿「${t.name}」？`)) { try { await Store.remove(t); await refresh(); renderLibrary(); toast('已刪除草稿'); } catch (er) { toast(er.message, true); } } return; }
     if (act === 'del' && t) { if (await ask(`停用「${t.name}」？（可在版本記錄還原）`)) { try { await Store.deactivate(t); await refresh(); renderLibrary(); } catch (er) { toast(er.message, true); } } return; }
@@ -713,11 +718,32 @@ app.addEventListener('click', async e => {
   const c = e.target.closest('[data-open]');
   if (c) openFill(S.all.find(x => x.id === c.dataset.open));
 });
+
+function editInfo(t) {
+  const cats = [...new Set(S.all.filter(x => !x.draft).map(x => x.category).filter(Boolean))];
+  const m = modal(`<h3>修改範本資料</h3><p class="note">只改資料，唔使重新上載 PDF。所有版本會一齊更新；其他系統用內部編號（tid）讀取，改名同改編號唔受影響。</p>
+  <div class="row"><label>名稱</label><input id="im-n" value="${esc(t.name)}" maxlength="80"></div>
+  <div class="row"><label>編號</label><input id="im-c" value="${esc(t.code || '')}" placeholder="表格編號，例：SNC_004AG_HQB（可留空）" maxlength="60"></div>
+  <div class="row"><label>部門</label><input id="im-d" list="im-dl" value="${esc(t.category || '')}" placeholder="例：人事部、財務部"><datalist id="im-dl">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
+  <div class="acts"><button class="btn" id="im-x">取消</button><button class="btn pri" id="im-k">${ic('check', 16)} 儲存</button></div>`);
+  $('#im-x', m).onclick = () => m.remove();
+  const go = async () => {
+    const name = $('#im-n', m).value.trim(), code = $('#im-c', m).value.trim(), category = $('#im-d', m).value.trim();
+    if (!name) return toast('請輸入名稱', true);
+    if (name !== t.name && S.all.some(x => !x.draft && x.name === name)) return toast('已有同名範本，請用另一個名稱', true);
+    if (name === t.name && code === (t.code || '') && category === (t.category || '')) return m.remove();
+    const k = $('#im-k', m); k.disabled = true;
+    try { await Store.updateInfo(t, { name, code, category }); m.remove(); await refresh(); renderLibrary(); toast('已更新資料'); }
+    catch (er) { console.error(er); k.disabled = false; toast('更新失敗：' + (er.message || er), true); }
+  };
+  $('#im-k', m).onclick = go; m.querySelectorAll('input').forEach(i => i.addEventListener('keydown', e => { if (e.isComposing || e.keyCode === 229) return; if (e.key === 'Enter') { e.preventDefault(); go(); } }));
+  setTimeout(() => $('#im-n', m).focus(), 30);
+}
 function showHistory(name) {
   const m = modal('');
   const draw = () => {
     const vs = S.all.filter(t => t.name === name && !t.draft).sort((a, b) => b.version - a.version);
-    $('.dlg', m).innerHTML = `<h3>${esc(name)} · 版本記錄</h3><div class="vlist">${vs.map(v => `<div class="vi ${v.active ? 'act' : ''}"><b>v${v.version}</b><span style="flex:1;color:var(--mute)">${fmtDate(v.created_at)} ${esc(v.note || '')}</span>
+    $('.dlg', m).innerHTML = `<h3>${esc(name)} · 版本記錄</h3><div class="vlist">${vs.map(v => `<div class="vi ${v.active ? 'act' : ''}"><b>v${v.version}</b>${v.code ? `<span class="chip cd">${esc(v.code)}</span>` : ''}<span style="flex:1;color:var(--mute)">${fmtDate(v.created_at)} ${esc(v.note || '')}</span>
     ${S.admin ? `<button class="ib" data-nt="${v.id}" title="編輯備註">${ic('pen')}</button>` : ''}
     ${v.active ? `<span class="chip v">使用中</span>` : `<button class="ib" data-use="${v.id}" title="設為使用中（改回用這個版本）">${ic('check')}</button>`}
     <button class="ib" data-dl="${v.id}" title="下載">${ic('download')}</button>
@@ -965,7 +991,7 @@ async function startEditor(blob, name, tpl) {
     const doc = await PDFDocument.load(bytes); await loadAttachedFonts(doc); const raw = await readFields(doc); const cnt = {}; raw.forEach(f => cnt[f.name] = (cnt[f.name] || 0) + 1);
     // single-widget text / checkbox / dropdown fields become fully editable; anything else is kept as-is
     const existing = raw.map(f => { const ok = f.kind === 'radio' || (cnt[f.name] === 1 && ['text', 'check', 'drop', 'sig'].includes(f.kind)); return { ...f, id: uid(), ex: !ok, ...(f.kind === 'radio' ? { initial: !!f.onValue && f.initial === f.onValue, options: [], onValue: f.onValue || '選項' } : {}), fontSize: f.kind === 'check' || f.kind === 'sig' || f.kind === 'radio' ? null : (f.fontSize || defFs(f)) }; });
-    const meta = tpl ? { name: tpl.name, category: tpl.category || '', note: tpl.draft ? (tpl.note || '') : '' } : { name, category: '', note: '' };
+    const meta = tpl ? { name: tpl.name, category: tpl.category || '', code: tpl.code || '', note: tpl.draft ? (tpl.note || '') : '' } : (() => { const mm = /^(.*?)\s*[（(]\s*([A-Za-z0-9][A-Za-z0-9_\-\/ .]{2,})\s*[）)]\s*$/.exec(name || ''); return mm && mm[1] ? { name: mm[1].trim(), category: '', code: mm[2].trim(), note: '' } : { name, category: '', code: '', note: '' }; })();
     S.ed = { hist: [JSON.stringify(existing)], hi: 0, savedJ: (tpl && tpl.draft) ? JSON.stringify(existing) : null, paint: null, bytes, pdf, fields: existing, sel: null, multi: [], tool: 'sel', meta, draftId: tpl && tpl.draft ? tpl.id : null, pages: [], tpl, panel: window.innerWidth > 900 };
     await renderEditor();
   } catch (e) { console.error(e); toast('無法讀取此 PDF：' + (e.message || e), true); renderLibrary(); }
@@ -1515,7 +1541,9 @@ function openBatch(x, y) {
   if (objs.length < 2) return toast(all.length > objs.length ? '單選按鈕係以群組命名，請逐個重新命名' : '請先選取最少 2 個欄位', true);
   const top = f => f.y + f.h, ord = { read: [...objs].sort((a, b) => a.page - b.page || (Math.abs(top(a) - top(b)) > 10 ? top(b) - top(a) : a.x - b.x)), col: [...objs].sort((a, b) => a.page - b.page || (Math.abs(a.x - b.x) > 10 ? a.x - b.x : top(b) - top(a))), list: E.fields.filter(f => objs.includes(f)) };
   const pre = objs.map(f => f.name.includes('_') ? f.name.slice(0, f.name.lastIndexOf('_')) : '');
-  const st = { g: pre[0] && pre.every(p => p === pre[0]) ? pre[0] : '', sep: '_', o: 'read', suf: {}, touched: false }; // suf: id -> suffix
+  const cnt = {}; pre.forEach(p => { if (p) cnt[p] = (cnt[p] || 0) + 1; }); const topPre = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0] || '';
+  const st = { g: pre[0] && pre.every(p => p === pre[0]) ? pre[0] : topPre, sep: '_', o: 'read', suf: {}, touched: false }; // suf: id -> suffix
+  const auto = new Set(); objs.forEach(f => { const i = f.name.lastIndexOf('_'); if (i >= 0 && i < f.name.length - 1) { st.suf[f.id] = f.name.slice(i + 1); auto.add(f.id); } }); // 原名有「_」就自動提取後綴
   const el = document.createElement('div'); el.className = 'bnp'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', '批次命名');
   const taken = new Set(E.fields.filter(f => !objs.includes(f)).map(f => f.name));
   const render = () => {
@@ -1543,7 +1571,7 @@ function openBatch(x, y) {
   const out = e => { if (!el.contains(e.target) && !(e.target.closest && e.target.closest('.toast'))) closeBnp(); }, key = e => { if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); closeBnp(); } };
   BNP = { el, out, key }; document.addEventListener('pointerdown', out, true); document.addEventListener('keydown', key, true);
   const first = el.querySelector('#bn-g'); if (first) { first.focus(); first.select(); }
-  guessLabels(ord.read).then(lb => { if (BNP !== null && BNP.el === el && !st.touched) { ord.read.forEach((f, i) => { if (lb[i]) st.suf[f.id] = lb[i]; }); const a = document.activeElement; if (a && a.id === 'bn-g') { const pos = a.selectionStart; render(); const g = el.querySelector('#bn-g'); g.focus(); try { g.setSelectionRange(pos, pos); } catch (e) { } } else render(); } });
+  guessLabels(ord.read).then(lb => { if (BNP !== null && BNP.el === el && !st.touched) { ord.read.forEach((f, i) => { if (lb[i] && !auto.has(f.id)) st.suf[f.id] = lb[i]; }); const a = document.activeElement; if (a && a.id === 'bn-g') { const pos = a.selectionStart; render(); const g = el.querySelector('#bn-g'); g.focus(); try { g.setSelectionRange(pos, pos); } catch (e) { } } else render(); } });
 }
 function bindDraw(pi) {
   const E = S.ed, p = E.pages[pi], ov = p.ov;
@@ -1807,7 +1835,7 @@ app.addEventListener('click', async e => {
     b.disabled = true;
     try {
       const t0 = performance.now(); const bytes = await buildTemplate(); const t1 = performance.now(); const thumb = await makeThumb(E.pdf); console.info(`[儲存] 組 PDF ${Math.round(t1 - t0)}ms，縮圖 ${Math.round(performance.now() - t1)}ms，大小 ${(bytes.length / 1048576).toFixed(1)}MB`);
-      E.draftId = await Store.saveDraft({ name, category: E.meta.category || '', note: E.meta.note || '', field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
+      E.draftId = await Store.saveDraft({ name, category: E.meta.category || '', code: E.meta.code || '', note: E.meta.note || '', field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
       E.savedJ = JSON.stringify(E.fields); toast('已儲存草稿，用家暫時睇唔到'); refresh();
     } catch (er) { console.error(er); toast('儲存草稿失敗：' + (er.message || er), true); }
     b.disabled = false; return;
@@ -1817,12 +1845,13 @@ app.addEventListener('click', async e => {
     const names = [...new Set(S.all.filter(t => !t.draft).map(t => t.name))];
     const m = modal(`<h3>發佈範本</h3>
     <div class="row"><label>名稱</label><input id="mn" list="nl" value="${esc(E.meta.name)}"><datalist id="nl">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist></div>
+    <div class="row"><label>編號</label><input id="mcd" value="${esc(E.meta.code || '')}" placeholder="表格編號，例：SNC_004AG_HQB（可留空）" maxlength="60"></div>
     <div class="row"><label>部門</label><input id="mc" list="dl" value="${esc(E.meta.category)}" placeholder="例：人事部、財務部"><datalist id="dl">${[...new Set(S.all.filter(t => !t.draft).map(t => t.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join('')}</datalist></div>
     <div class="row"><label>發佈人</label><input id="mb" placeholder="你的名字" value="${esc((() => { try { return localStorage.getItem('fl_by') || ''; } catch (e) { return ''; } })())}"></div>
     <div class="row"><label>備註</label><input id="mt" placeholder="此版本改動（可留空）" value="${esc(E.meta.note || '')}"></div>
     <div id="mh" style="color:var(--mute);font-size:12px"></div>
     <div class="acts"><button class="btn" id="mx">取消</button><button class="btn pri" id="mk">${ic('upload', 16)}</button></div>`);
-    const hint = () => { const n = $('#mn', m).value.trim(); const ex = S.all.filter(t => t.name === n && !t.draft); $('#mh', m).textContent = ex.length ? `已有同名範本，發佈後會成為 v${nextVersion(S.all, n)}，舊版自動停用` : '新範本 v1'; }; hint(); $('#mn', m).oninput = hint;
+    const hint = () => { const n = $('#mn', m).value.trim(); const ex = S.all.filter(t => t.name === n && !t.draft); { const a = ex.find(x => x.active) || ex[0]; if (a) { if (a.code && !$('#mcd', m).value.trim()) $('#mcd', m).value = a.code; if (a.category && !$('#mc', m).value.trim()) $('#mc', m).value = a.category; } } const cur = ex.find(x => x.active) || ex[0], nc = $('#mcd', m).value.trim(); $('#mh', m).textContent = (ex.length ? `已有同名範本，發佈後會成為 v${nextVersion(S.all, n)}，舊版自動停用` : '新範本 v1') + (cur && (cur.code || '') !== nc ? `；編號由「${cur.code || '（無）'}」改為「${nc || '（無）'}」，舊版本保留舊編號` : ''); }; hint(); $('#mn', m).oninput = hint; $('#mcd', m).oninput = hint;
     $('#mx', m).onclick = () => m.remove();
     $('#mk', m).onclick = async () => {
       const name = $('#mn', m).value.trim(); if (!name) return toast('請輸入名稱', true);
@@ -1830,7 +1859,7 @@ app.addEventListener('click', async e => {
       try {
         const t0 = performance.now(); const bytes = await buildTemplate(); const t1 = performance.now(); const thumb = await makeThumb(E.pdf); console.info(`[儲存] 組 PDF ${Math.round(t1 - t0)}ms，縮圖 ${Math.round(performance.now() - t1)}ms，大小 ${(bytes.length / 1048576).toFixed(1)}MB`);
         const by = $('#mb', m).value.trim(); try { localStorage.setItem('fl_by', by); } catch (e) { }
-        await Store.publish({ name, by, category: $('#mc', m).value.trim(), note: $('#mt', m).value.trim(), field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
+        await Store.publish({ name, by, code: $('#mcd', m).value.trim(), category: $('#mc', m).value.trim(), note: $('#mt', m).value.trim(), field_count: new Set(E.fields.map(f => f.name)).size, thumb }, new Blob([bytes], { type: 'application/pdf' }), E.draftId);
         if (E.draftId && !GH) { try { await Store.remove({ id: E.draftId, file_path: (S.all.find(x => x.id === E.draftId) || {}).file_path }); } catch (e2) { console.warn(e2); } }
         m.remove(); S.ed = null; await refresh(); renderLibrary(); toast('已發佈');
       } catch (er) { console.error(er); k.disabled = false; toast('發佈失敗：' + (er.message || er), true); }

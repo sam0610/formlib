@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v54</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v55</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -287,6 +287,12 @@ body.handmode .pages,body.handmode .pages *{cursor:grab!important}body.panning .
 .pr.gh{box-shadow:5px 5px 0 -1px var(--surface),5px 5px 0 0 var(--pri-ink),10px 10px 0 -1px var(--surface),10px 10px 0 0 var(--pri-ink),0 8px 22px var(--shadow)}.pr.gh .gct{position:absolute;right:-8px;top:-10px;min-width:24px;height:24px;font-weight:700;font-size:12.5px;box-shadow:0 4px 10px var(--shadow)}
 .mchip{position:fixed;z-index:60;pointer-events:none;display:flex;align-items:center;gap:6px;background:var(--toast-bg);color:var(--toast-fg);border-radius:99px;padding:3px 12px 3px 4px;font-size:12.5px;white-space:nowrap;max-width:min(320px,90vw);box-shadow:0 6px 18px var(--shadow)}.mchip .gct{position:static;min-width:22px;height:22px;box-shadow:none;background:var(--pri);color:#fff;border-radius:999px;display:grid;place-items:center;font-weight:700;font-size:12px;padding:0 5px}.mchip .mlb{overflow:hidden;text-overflow:ellipsis}
 .cc{font-size:11.5px;color:var(--mute);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;margin-top:1px}.chip.cd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.login.g{display:flex;flex-direction:column;gap:12px}.login.g h2{margin:0;gap:10px;font-size:18px}.login.g .note{margin:-4px 0 0}
+.login input.t{width:100%;height:42px;margin:0;padding:0 12px;border-radius:9px}.login input.t:focus{outline:2px solid var(--pri-ink);outline-offset:0}
+.fld{position:relative;display:block}.eye{position:absolute;right:4px;top:4px;width:34px;height:34px;border:0;background:transparent;color:var(--mute);border-radius:8px;display:grid;place-items:center;cursor:pointer;padding:0}.eye:hover{background:var(--hover);color:var(--ink)}.eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.login .chk{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:13px;cursor:pointer;width:fit-content}.login .chk input{width:16px;height:16px;margin:0;padding:0;accent-color:var(--pri);flex:none}
+.login .msg{color:var(--bad);font-size:12.5px;margin:-4px 0}.login.g .btn{height:42px;margin-top:0;font-weight:600;gap:6px}.login.g .btn .ic{width:16px;height:16px}
+.login .ft{border-top:1px solid var(--line);margin:2px -22px 0;padding:12px 22px 0;display:flex;justify-content:center}.login .lk{border:0;background:transparent;color:var(--mute);font:inherit;font-size:12.5px;cursor:pointer;padding:2px;text-decoration:underline;text-underline-offset:3px}.login .lk:hover{color:var(--pri-ink)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -590,7 +596,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v54</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v55</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -618,15 +624,18 @@ async function renderGate(msg = '', mode = '') {
   app.innerHTML = '<div class="spin"></div>';
   let auth = null; try { auth = await fetchAuth(); } catch (e) { msg = e.message; }
   const setup = mode === 'setup' || !auth;
-  app.innerHTML = `<div class="login"><h2>${LOGO} 表格範本庫</h2>` + (setup
-    ? `<p class="note" style="margin:0">${auth ? '重新設定管理員密碼與 GitHub token。' : '首次設定：貼上 GitHub token，並設定管理員密碼。'}</p>
-    <input id="gt" type="password" placeholder="GitHub token（github_pat_…）" autocomplete="off"><input id="p1" type="password" placeholder="新管理員密碼（至少 10 個字元）" autocomplete="new-password"><input id="p2" type="password" placeholder="再輸入一次密碼" autocomplete="new-password">`
-    : `<input id="pw" type="password" placeholder="管理員密碼" autocomplete="current-password"><label class="note" style="display:flex;gap:6px;align-items:center;margin:0"><input id="rm" type="checkbox"> 在此裝置記住</label>`)
-    + `<div id="gm" style="color:var(--bad);min-height:20px">${esc(msg)}</div><button class="btn pri" id="go" title="確定">${ic('check', 16)}</button>`
-    + (auth ? `<button class="btn" id="sw" style="margin-top:8px">${setup ? '返回輸入密碼' : '重新設定密碼／更換 token'}</button>` : '') + '</div>';
-  const fail = m => { $('#gm').textContent = m; };
+  const EYE = '<svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>', EYE2 = '<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 6.2A10 10 0 0 1 12 6c6 0 10 6 10 6a17 17 0 0 1-3.2 3.7M6.5 6.9A17 17 0 0 0 2 12s4 7 10 7a9.6 9.6 0 0 0 4-.9"/></svg>';
+  const pwf = (id, ph, ac) => `<label class="fld"><input class="t" id="${id}" type="password" placeholder="${ph}" autocomplete="${ac}" style="padding-right:42px"><button class="eye" type="button" data-eye title="顯示密碼" aria-label="顯示密碼">${EYE}</button></label>`;
+  app.innerHTML = `<div class="login g"><h2>${LOGO} 表格範本庫</h2>` + (setup
+    ? `<p class="note">${auth ? '重新設定管理員密碼與 GitHub token（舊密碼會失效）。' : '首次設定：貼上 GitHub token，並設定管理員密碼。'}</p>
+    <input class="t" id="gt" type="password" placeholder="GitHub token（github_pat_…）" autocomplete="off">${pwf('p1', '新管理員密碼（至少 10 個字元）', 'new-password')}${pwf('p2', '再輸入一次密碼', 'new-password')}`
+    : `<p class="note">輸入管理員密碼以發佈或修改範本</p>${pwf('pw', '管理員密碼', 'current-password')}<label class="chk"><input id="rm" type="checkbox"> 在此裝置記住（只限自己嘅電腦）</label>`)
+    + `<div id="gm" class="msg" role="alert" ${msg ? '' : 'hidden'}>${esc(msg)}</div><button class="btn pri" id="go">${setup ? '儲存設定' : '登入 ' + ic('chev', 16)}</button>`
+    + (auth ? `<div class="ft"><button type="button" class="lk" id="sw">${setup ? '返回輸入密碼' : '重新設定密碼／更換 token'}</button></div>` : '') + '</div>';
+  app.querySelectorAll('[data-eye]').forEach(b => b.onclick = () => { const i = b.previousElementSibling, show = i.type === 'password'; i.type = show ? 'text' : 'password'; b.innerHTML = show ? EYE2 : EYE; b.title = b.ariaLabel = show ? '隱藏密碼' : '顯示密碼'; });
+  const fail = m => { const g = $('#gm'); g.textContent = m; g.hidden = !m; };
   const enter = async (tok, remember) => { GHTOKEN = tok; try { if (remember) localStorage.setItem('flgh', tok); } catch (e) { } S.admin = await GHub.verify(); if (!S.admin) { GHTOKEN = ''; try { localStorage.removeItem('flgh'); } catch (e) { } return fail('此 token 沒有 formlib 的寫入權限'); } await refresh(); renderLibrary(); };
-  if ($('#sw')) $('#sw').onclick = () => renderGate('', setup ? '' : 'setup');
+  if ($('#sw')) $('#sw').onclick = async () => { if (!setup && !(await ask('會更換管理員密碼同 GitHub token，舊密碼會失效。確定要重新設定？'))) return; renderGate('', setup ? '' : 'setup'); };
   const go = async () => {
     const b = $('#go'); b.disabled = true;
     try {

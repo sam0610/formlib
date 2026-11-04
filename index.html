@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v59</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v60</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -636,7 +636,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v59</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v60</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -903,7 +903,7 @@ function fieldEl(f, sc, ph) {
     const paint = () => { const v = [...inp.value]; cells.forEach((c, i) => { c.textContent = v[i] || ''; }); const pos = document.activeElement === inp ? Math.min([...inp.value.slice(0, inp.selectionStart || 0)].length, n - 1) : -1; cells.forEach((c, i) => c.classList.toggle('cur', i === pos)); };
     inp.oninput = () => { F.values[f.name] = inp.value; paint(); }; ['focus', 'blur', 'keyup', 'click', 'select'].forEach(ev => inp.addEventListener(ev, paint)); paint();
   }
-  else { const ml = f.multiline || f.h > 36; el = document.createElement(ml ? 'textarea' : 'input'); el.className = 'fin'; el.value = F.values[f.name] || ''; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : (ml ? Math.min(12 * sc, 15) : Math.max(8, Math.min(h * .62, 16)))}px;text-align:${f.align || 'left'};letter-spacing:${(f.ls || 0) * sc}px${ml ? `;line-height:${f.lh || DEF_LH}` : ''}`; if (f.maxLength) el.maxLength = f.maxLength; if (f.required) el.classList.add('req'); el.oninput = () => { F.values[f.name] = el.value; $$all('.fin', f.name, el); }; el.dataset.fname = f.name; styleBox(el, f, sc); }
+  else { const ml = f.multiline || f.h > 36; el = document.createElement(ml ? 'textarea' : 'input'); el.className = 'fin'; el.value = F.values[f.name] || ''; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : (ml ? 10 * sc : Math.max(8, Math.min(h * .62, 16)))}px;text-align:${f.align || 'left'};letter-spacing:${(f.ls || 0) * sc}px${ml ? `;line-height:${f.lh || DEF_LH}` : ''}`; if (f.maxLength) el.maxLength = f.maxLength; if (f.required) el.classList.add('req'); el.oninput = () => { F.values[f.name] = el.value; $$all('.fin', f.name, el); }; el.dataset.fname = f.name; styleBox(el, f, sc); }
   if (f.font && (f.kind === 'text' || f.kind === 'drop')) el.style.fontFamily = fontCss(f.font);
   return el;
 }
@@ -971,7 +971,7 @@ function spacedAP(doc, tf, f, val, cf) {
   let ops = '/Tx BMC q\n'; const bgc = col(f.bg && hexToRgb(f.bg)); if (bgc) ops += `${bgc} rg 0 0 ${w} ${h} re f\n`;
   const bdc = bw ? col(hexToRgb(f.border)) : null; if (bdc) ops += `${bdc} RG ${bw} w ${bw / 2} ${bw / 2} ${w - bw} ${h - bw} re S\n`;
   ops += `${bw} ${bw} ${w - 2 * bw} ${h - 2 * bw} re W n BT /F1 ${fs} Tf 0 g\n`;
-  const first = ml ? h - pad - fs * .95 : h / 2 - fs * .33;
+  const first = ml ? h - pad - ((lhp - fs) / 2 + fs * .88) : h / 2 - fs * .33;
   lines.forEach((ln, i) => { const lw = wid(ln); const x = f.align === 'center' ? (w - lw) / 2 : f.align === 'right' ? w - pad - lw : pad; ops += `${ls} Tc 1 0 0 1 ${x.toFixed(2)} ${(first - i * lhp).toFixed(2)} Tm ${ln ? cf.encodeText(ln).toString() : '<>'} Tj\n`; });
   ops += 'ET Q EMC';
   const ctx = doc.context; const ref = ctx.register(ctx.stream(ops, { Type: 'XObject', Subtype: 'Form', BBox: [0, 0, w, h], Resources: { Font: { F1: cf.ref } } }));
@@ -1149,7 +1149,7 @@ function drawBoxes() {
       const kk = kindKey(f); const d = document.createElement('div'); d.className = `fb k-${kk}` + (f.ex ? ' ex' : '') + (sids.includes(f.id) ? (sids.length > 1 ? ' msel' : ' sel') : ''); d.dataset.id = f.id;
       d.style.cssText = `left:${f.x * p.sc}px;top:${(p.ph - f.y - f.h) * p.sc}px;width:${f.w * p.sc}px;height:${f.h * p.sc}px`;
       if (f.font) d.style.fontFamily = fontCss(f.font);
-      const fs = (f.fontSize || 11) * p.sc; const jc = f.align === 'center' ? 'center' : f.align === 'right' ? 'flex-end' : 'flex-start';
+      const fs = (f.fontSize || (kk === 'multi' ? 10 : 11)) * p.sc; const jc = f.align === 'center' ? 'center' : f.align === 'right' ? 'flex-end' : 'flex-start';
       const pv = `<i class="pv" style="background:${f.bg || 'transparent'};border:${f.bw > 0 && f.border && !noBd(f) ? `${Math.max(1, f.bw * p.sc)}px solid ${f.border}` : '0'}"></i>`;
       let inner = '';
       const lsp = `letter-spacing:${(f.ls || 0) * p.sc}px;`;

@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v58</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v59</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -636,7 +636,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v58</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v59</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -903,7 +903,7 @@ function fieldEl(f, sc, ph) {
     const paint = () => { const v = [...inp.value]; cells.forEach((c, i) => { c.textContent = v[i] || ''; }); const pos = document.activeElement === inp ? Math.min([...inp.value.slice(0, inp.selectionStart || 0)].length, n - 1) : -1; cells.forEach((c, i) => c.classList.toggle('cur', i === pos)); };
     inp.oninput = () => { F.values[f.name] = inp.value; paint(); }; ['focus', 'blur', 'keyup', 'click', 'select'].forEach(ev => inp.addEventListener(ev, paint)); paint();
   }
-  else { const ml = f.multiline || f.h > 36; el = document.createElement(ml ? 'textarea' : 'input'); el.className = 'fin'; el.value = F.values[f.name] || ''; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : (ml ? Math.min(12 * sc, 15) : Math.max(8, Math.min(h * .62, 16)))}px;text-align:${f.align || 'left'};letter-spacing:${(f.ls || 0) * sc}px${f.lh ? `;line-height:${f.lh}` : ''}`; if (f.maxLength) el.maxLength = f.maxLength; if (f.required) el.classList.add('req'); el.oninput = () => { F.values[f.name] = el.value; $$all('.fin', f.name, el); }; el.dataset.fname = f.name; styleBox(el, f, sc); }
+  else { const ml = f.multiline || f.h > 36; el = document.createElement(ml ? 'textarea' : 'input'); el.className = 'fin'; el.value = F.values[f.name] || ''; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : (ml ? Math.min(12 * sc, 15) : Math.max(8, Math.min(h * .62, 16)))}px;text-align:${f.align || 'left'};letter-spacing:${(f.ls || 0) * sc}px${ml ? `;line-height:${f.lh || DEF_LH}` : ''}`; if (f.maxLength) el.maxLength = f.maxLength; if (f.required) el.classList.add('req'); el.oninput = () => { F.values[f.name] = el.value; $$all('.fin', f.name, el); }; el.dataset.fname = f.name; styleBox(el, f, sc); }
   if (f.font && (f.kind === 'text' || f.kind === 'drop')) el.style.fontFamily = fontCss(f.font);
   return el;
 }
@@ -954,8 +954,9 @@ function combAP(doc, tf, f, val, cf) {
   tf.acroField.getWidgets()[0].setNormalAppearance(ref);
 }
 /* text with letter / line spacing: pdf-lib cannot do this, so write the widget appearance stream ourselves */
+const DEF_LH = 1.4; // 多行欄位預設行距（字級倍數）：編輯畫面、填表畫面、輸出 PDF 一致
 function spacedAP(doc, tf, f, val, cf) {
-  const w = f.w, h = f.h, ml = tf.isMultiline(), fs = f.fontSize || (ml ? 10 : 11), ls = f.ls || 0, lhp = f.lh ? f.lh * fs : cf.heightAtSize(fs);
+  const w = f.w, h = f.h, ml = tf.isMultiline(), fs = f.fontSize || (ml ? 10 : 11), ls = f.ls || 0, lhp = (f.lh || DEF_LH) * fs;
   const bw = f.bw > 0 && f.border ? f.bw : 0, pad = bw + 2, avail = w - 2 * pad;
   const wid = t => cf.widthOfTextAtSize(t, fs) + ls * Math.max(0, t.length - 1);
   let lines = [];
@@ -1006,7 +1007,7 @@ async function buildFilled(force) {
   for (const fd of F.fields) { if (fd.kind !== 'check') continue; try { cleanCheckAP(doc, form.getCheckBox(fd.name)); } catch (e) { console.warn('剔位去框失敗', fd.name, e); } }
   const fcache = {}; F.fields.forEach(fd => { fd._pf = null; });
   for (const fd of F.fields) { if (!fd.font || (fd.kind !== 'text' && fd.kind !== 'drop')) continue; const tx = String(F.values[fd.name] || ''); if (!tx) continue; const pf = await pickFieldFont(doc, fd.font, tx, fcache); if (!pf) continue; fd._pf = pf; try { const fl = form.getField(fd.name); if (fl instanceof PDFTextField || fl instanceof PDFDropdown) fl.updateAppearances(pf); } catch (e) { console.warn('字體套用失敗', fd.name, e); } }
-  const spaced = F.fields.filter(f => f.kind === 'text' && !f.comb && (f.ls || f.lh) && String(F.values[f.name] || '') !== '');
+  const spaced = F.fields.filter(f => f.kind === 'text' && !f.comb && (f.ls || f.lh || f.multiline) && String(F.values[f.name] || '') !== '');
   const combs = F.fields.filter(f => f.kind === 'text' && f.comb && f.maxLength);
   if (combs.length) { const cf = font || await doc.embedFont(PDFLib.StandardFonts.Helvetica); for (const f of combs) { try { combAP(doc, form.getTextField(f.name), f, String(F.values[f.name] || ''), f._pf || cf); } catch (e) { console.warn('格仔輸入套用失敗', f.name, e); } } }
   if (spaced.length) { const cf = font || await doc.embedFont(PDFLib.StandardFonts.Helvetica); for (const f of spaced) { try { spacedAP(doc, form.getTextField(f.name), f, String(F.values[f.name]), f._pf || cf); } catch (e) { console.warn('字距/行距套用失敗', f.name, e); } } }
@@ -1153,7 +1154,7 @@ function drawBoxes() {
       let inner = '';
       const lsp = `letter-spacing:${(f.ls || 0) * p.sc}px;`;
       if (kk === 'text') inner = `<span class="smp" style="font-size:${fs}px;justify-content:${jc};${lsp}">${esc(f.initial || 'AaBb 範例')}</span>`;
-      else if (kk === 'multi') { const lh = fs * (f.lh || 1.5); inner = `<i class="ml" style="background-image:repeating-linear-gradient(to bottom,transparent 0,transparent ${lh - 1}px,rgba(14,143,163,.5) ${lh - 1}px,rgba(14,143,163,.5) ${lh}px)"></i><span class="smp" style="font-size:${fs}px;justify-content:${jc};align-items:flex-start;white-space:normal;line-height:${f.lh || 1.5};${lsp}">${esc(f.initial || 'AaBb 範例')}</span>`; }
+      else if (kk === 'multi') { const lh = fs * (f.lh || DEF_LH); inner = `<i class="ml" style="background-image:repeating-linear-gradient(to bottom,transparent 0,transparent ${lh - 1}px,rgba(14,143,163,.5) ${lh - 1}px,rgba(14,143,163,.5) ${lh}px)"></i><span class="smp" style="font-size:${fs}px;justify-content:${jc};align-items:flex-start;white-space:normal;line-height:${f.lh || DEF_LH};${lsp}">${esc(f.initial || 'AaBb 範例')}</span>`; }
       else if (kk === 'comb') { const n = Math.max(1, Math.min(f.maxLength || 8, 40)); const ch = [...String(f.initial || '')]; inner = `<span class="cells" style="font-size:${fs}px">${Array.from({ length: n }, (_, i) => `<u>${esc(ch[i] || '')}</u>`).join('')}</span>`; }
       else if (kk === 'radio') inner = f.initial === true ? '<i class="rdot"></i>' : '';
       else if (kk === 'drop') inner = `<span class="smp" style="font-size:${fs}px;justify-content:${jc};padding-right:${16}px">${esc(f.initial || (f.options && f.options[0]) || 'AaBb 範例')}</span><svg class="chv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>`;
@@ -1951,7 +1952,7 @@ async function buildTemplate() {
       if (f.comb && f.maxLength && !f.multiline) { t.enableCombing(); combs.push([t, f]); }
       t.addToPage(pg, { ...box, ...look }); t.setFontSize(fs); if (f.required) t.enableRequired();
       if (f.font) t.acroField.dict.set(PDFLib.PDFName.of('FLFont'), PDFLib.PDFHexString.fromText(f.font));
-      if (f.ls) t.acroField.dict.set(PDFLib.PDFName.of('FLSp'), PDFLib.PDFNumber.of(f.ls)); if (f.lh) t.acroField.dict.set(PDFLib.PDFName.of('FLLh'), PDFLib.PDFNumber.of(f.lh));
+      if (f.ls) t.acroField.dict.set(PDFLib.PDFName.of('FLSp'), PDFLib.PDFNumber.of(f.ls)); if (f.multiline) t.acroField.dict.set(PDFLib.PDFName.of('FLLh'), PDFLib.PDFNumber.of(f.lh || DEF_LH));
       if (f.initial) { const v = String(f.initial).slice(0, f.maxLength || 1e9); t.setText(v); if (/[^\x20-\x7e]/.test(v)) needFont = true; }
     }
   }

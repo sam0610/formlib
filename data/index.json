@@ -20,22 +20,6 @@
   "category": "人事部",
   "note": "",
   "field_count": 53,
-  "file_path": "data/files/50460e17-7a13-410d-b5ce-c84facd7b582.pdf",
-  "thumb_path": "data/files/50460e17-7a13-410d-b5ce-c84facd7b582.jpg",
-  "id": "54de383d-3ea1-473d-b05a-0388a53655ad",
-  "tid": "4ea36b9d-42de-4c3f-ac3d-ee1c0ece163b",
-  "version": 1,
-  "active": false,
-  "draft": false,
-  "created_at": "2026-11-03T00:32:07.283Z",
-  "code": "SNC_004AG_HQB"
- },
- {
-  "name": "晉升申請表",
-  "by": "SAM",
-  "category": "人事部",
-  "note": "",
-  "field_count": 53,
   "file_path": "data/files/154ae195-5d5d-49c8-ad24-e5567b25a0e8.pdf",
   "thumb_path": "data/files/154ae195-5d5d-49c8-ad24-e5567b25a0e8.jpg",
   "id": "ee65ac3b-a6ec-4b84-988b-ccca44d833e4",
@@ -90,7 +74,7 @@
   "id": "ae264014-f005-410f-9c82-151cde0874a9",
   "tid": "4ea36b9d-42de-4c3f-ac3d-ee1c0ece163b",
   "version": 3,
-  "active": true,
+  "active": false,
   "draft": false,
   "created_at": "2026-11-04T05:05:40.130Z"
  },
@@ -109,5 +93,21 @@
   "active": true,
   "draft": false,
   "created_at": "2026-11-04T05:49:45.713Z"
+ },
+ {
+  "name": "晉升申請表",
+  "by": "SAM",
+  "code": "SNC_004AG_HQB",
+  "category": "人事部",
+  "note": "",
+  "field_count": 53,
+  "file_path": "data/files/165dcba4-3fb4-4fd5-8327-bf90d9e734fe.pdf",
+  "thumb_path": "data/files/165dcba4-3fb4-4fd5-8327-bf90d9e734fe.jpg",
+  "id": "3cba304d-c9ad-495a-a1b7-0a1c93ed3eb4",
+  "tid": "4ea36b9d-42de-4c3f-ac3d-ee1c0ece163b",
+  "version": 4,
+  "active": true,
+  "draft": false,
+  "created_at": "2026-11-04T05:49:57.314Z"
  }
 ]

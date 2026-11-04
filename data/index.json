@@ -37,22 +37,6 @@
   "category": "人事部",
   "note": "",
   "field_count": 39,
-  "file_path": "data/files/1b887e25-0d5b-477f-84e7-ab7b656446f9.pdf",
-  "thumb_path": "data/files/1b887e25-0d5b-477f-84e7-ab7b656446f9.jpg",
-  "id": "981e252f-62f9-4efb-8e15-ec23b9e5fdd4",
-  "tid": "b7237606-ea1b-42b2-ab08-bab1dd47d048",
-  "version": 6,
-  "active": false,
-  "draft": false,
-  "created_at": "2026-11-04T01:14:55.155Z"
- },
- {
-  "name": "員工調薪申請表",
-  "by": "SAM",
-  "code": "SNC_004P_HQC",
-  "category": "人事部",
-  "note": "",
-  "field_count": 39,
   "file_path": "data/files/d4280a53-5f64-4e04-a565-31e687b5e6e2.pdf",
   "thumb_path": "data/files/d4280a53-5f64-4e04-a565-31e687b5e6e2.jpg",
   "id": "2cfb0ca6-f5ac-4dbc-98f5-564ae547a8f2",
@@ -90,7 +74,7 @@
   "id": "fd880568-d351-4e03-a7ed-34a0ecc5ffaf",
   "tid": "b7237606-ea1b-42b2-ab08-bab1dd47d048",
   "version": 8,
-  "active": true,
+  "active": false,
   "draft": false,
   "created_at": "2026-11-04T05:49:45.713Z"
  },
@@ -112,16 +96,18 @@
  },
  {
   "name": "員工調薪申請表",
-  "category": "人事部",
+  "by": "SAM",
   "code": "SNC_004P_HQC",
+  "category": "人事部",
   "note": "",
   "field_count": 39,
-  "file_path": "data/files/3975e202-2b08-4ceb-9ebb-1924a378e13a.pdf",
-  "thumb_path": "data/files/3975e202-2b08-4ceb-9ebb-1924a378e13a.jpg",
-  "id": "20ace2e9-09d8-4c3b-9f2f-4345be53e97b",
-  "version": 0,
-  "active": false,
-  "draft": true,
-  "created_at": "2026-11-04T06:44:14.374Z"
+  "file_path": "data/files/a19f4801-3b28-4e1a-bf1b-c7e1edd5eef7.pdf",
+  "thumb_path": "data/files/a19f4801-3b28-4e1a-bf1b-c7e1edd5eef7.jpg",
+  "id": "537d7feb-2075-4208-869a-6e1ab5de521b",
+  "tid": "b7237606-ea1b-42b2-ab08-bab1dd47d048",
+  "version": 9,
+  "active": true,
+  "draft": false,
+  "created_at": "2026-11-04T06:44:27.699Z"
  }
 ]

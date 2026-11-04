@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v57</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v58</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -75,7 +75,7 @@ textarea.fin{resize:none;padding:2px}
 .fb:not(.sel):not(.msel) .tag{display:none}
 .xyb{position:absolute;z-index:6;transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-fg);font-size:11px;font-variant-numeric:tabular-nums;padding:2px 8px;border-radius:99px;white-space:nowrap;pointer-events:none}
 .fb .rz{position:absolute;right:-5px;bottom:-5px;width:11px;height:11px;background:#2457d6;border:2px solid #fff;border-radius:50%;cursor:nwse-resize}
-.fb:not(.sel) .rz{display:none}
+.fb:not(.sel):not(.msel) .rz{display:none}
 .ov.draw{cursor:crosshair}
 .ftb{position:fixed;z-index:60;display:flex;flex-direction:column;align-items:flex-start;gap:6px;max-width:calc(100vw - 16px)}
 .ftb.up{flex-direction:column-reverse}
@@ -224,6 +224,7 @@ textarea.fin{resize:none;padding:2px}
 .csw .ic{width:14px;height:14px}
 .sw{position:relative;display:block;width:24px;height:24px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,0,0,.18);background-color:#fff;background-image:linear-gradient(45deg,#c9ccd3 25%,transparent 25%,transparent 75%,#c9ccd3 75%),linear-gradient(45deg,#c9ccd3 25%,transparent 25%,transparent 75%,#c9ccd3 75%);background-size:10px 10px;background-position:0 0,5px 5px}
 .sw b{position:absolute;inset:0;display:block;box-sizing:border-box}
+.sw.none::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:2.5px;background:#d1434b;transform:rotate(-45deg);pointer-events:none}
 .cpop{position:fixed;z-index:95;width:262px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 14px 44px var(--shadow)}
 .cgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .cs{position:relative;aspect-ratio:1;border-radius:9px;border:1px solid rgba(0,0,0,.22);padding:0;overflow:hidden;cursor:pointer;background-color:#fff}
@@ -293,11 +294,36 @@ body.handmode .pages,body.handmode .pages *{cursor:grab!important}body.panning .
 .login .chk{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:13px;cursor:pointer;width:fit-content}.login .chk input{width:16px;height:16px;margin:0;padding:0;accent-color:var(--pri);flex:none}
 .login .msg{color:var(--bad);font-size:12.5px;margin:-4px 0}.login.g .btn{height:42px;margin-top:0;font-weight:600;gap:6px}.login.g .btn .ic{width:16px;height:16px}
 .login .ft{border-top:1px solid var(--line);margin:2px -22px 0;padding:12px 22px 0;display:flex;justify-content:center}.login .lk{border:0;background:transparent;color:var(--mute);font:inherit;font-size:12.5px;cursor:pointer;padding:2px;text-decoration:underline;text-underline-offset:3px}.login .lk:hover{color:var(--pri-ink)}
-.fck[type=checkbox]{-webkit-appearance:none;appearance:none;background:transparent;border:0;border-radius:2px;cursor:pointer}
-.fck[type=checkbox]:hover{background-color:rgba(36,87,214,.10)}.fck[type=checkbox]:focus-visible{outline:2px solid #2457d6;outline-offset:1px}
+.fck[type=checkbox]{-webkit-appearance:none;appearance:none;background-color:rgba(220,232,255,.6);border:0;border-radius:2px;cursor:pointer}
+.fck[type=checkbox]:hover{background-color:rgba(190,212,255,.85)}.fck[type=checkbox]:focus-visible{outline:2px solid #2457d6;outline-offset:1px}
 .fck[type=checkbox]:checked{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 12.5l5 5L20 6.5' fill='none' stroke='%23111' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:78% 78%}
 .sig{border:0;background:transparent}.sig:hover,.sig:focus-visible{background:rgba(36,87,214,.10)}.sig.req{color:#d1434b}
 .fin{border-color:transparent}
+
+.ftb .tb{position:relative;flex-wrap:wrap;overflow:visible;gap:2px}
+.ftb .chip{height:32px;border:0;border-radius:8px;background:transparent;color:var(--ink);padding:0 8px;display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.ftb .chip:hover,.ftb .chip.open{background:var(--hover)}.ftb .chip.open{box-shadow:inset 0 0 0 1px var(--pri)}
+.ftb .chip .ic{width:17px;height:17px;flex:none}.ftb .chip .cc .ic{width:11px;height:11px;color:var(--mute)}.ftb .chip .cc{display:inline-flex}
+.ftb .chip .fn{font-weight:600;max-width:5.5em;overflow:hidden;text-overflow:ellipsis}.ftb .chip .mini,.ftb .mini{color:var(--mute);font-size:11.5px}
+.ftb .pop{position:absolute;top:calc(100% + 6px);z-index:5;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px;box-shadow:0 10px 30px var(--shadow);display:grid;gap:8px;min-width:200px}
+.ftb.up .pop,.ftb.up .menu{top:auto;bottom:calc(100% + 6px)}
+.ftb .pr2{display:flex;align-items:center;gap:8px;justify-content:space-between}.ftb .pr2 label{font-size:12px;color:var(--mute);min-width:34px}
+.ftb .combo{position:relative;display:inline-flex;border:1px solid var(--line);border-radius:8px;background:var(--bg);height:30px}
+.ftb .combo input{width:52px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;padding:0 6px;text-align:center;outline:none;border-radius:8px 0 0 8px}
+.ftb .combo input:focus{box-shadow:inset 0 0 0 1.5px var(--pri)}
+.ftb .combo>button{width:24px;border:0;border-left:1px solid var(--line);background:transparent;color:var(--mute);cursor:pointer;border-radius:0 8px 8px 0}
+.ftb .combo .lst{position:absolute;top:calc(100% + 4px);left:0;min-width:100%;max-height:190px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px var(--shadow);z-index:8;padding:4px}
+.ftb .combo .lst div{padding:4px 12px;border-radius:6px;cursor:pointer;text-align:center;font-size:13px}.ftb .combo .lst div:hover,.ftb .combo .lst div.cur{background:var(--hover)}
+.ftb .menu{position:absolute;top:calc(100% + 6px);z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;box-shadow:0 10px 30px var(--shadow)}
+.ftb .menu.ico{display:flex;flex-wrap:wrap;gap:2px;max-width:226px}
+.ftb .menu.ico button{width:34px;height:32px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer;position:relative}
+.ftb .menu.ico button:hover{background:var(--hover)}.ftb .menu.ico button.on{background:var(--hover);color:var(--pri)}.ftb .menu.ico button.dis{opacity:.4}
+.ftb .menu.ico .ic{width:17px;height:17px}.ftb .menu.ico .brk{flex-basis:100%;height:1px;background:var(--line);margin:2px 0}
+.ftb .menu.ico button[data-tip]:hover::after{content:attr(data-tip);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--surface);font-size:11.5px;padding:3px 8px;border-radius:6px;white-space:nowrap;z-index:9;pointer-events:none}
+.ftb.up .menu.ico button[data-tip]:hover::after{top:auto;bottom:calc(100% + 6px)}
+.ftb .ubr{display:flex;gap:6px}.ftb .ubr button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;height:30px;font:inherit;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;justify-content:center;padding:0 8px;white-space:nowrap}
+.ftb .ubr button:hover{background:var(--hover)}.ftb .ubr .ic{width:15px;height:15px}
+.ftb .sw.none::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:2.5px;background:#d1434b;transform:rotate(-45deg)}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -601,7 +627,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v57</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v58</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -1144,7 +1170,7 @@ const kindKey = f => f.kind === 'check' ? 'check' : f.kind === 'radio' ? 'radio'
 const PAL = ['', '#111111', '#6b7280', '#e5e7eb', '#ffffff', '#c0392b', '#ef93b0', '#fbd5d5', '#d98030', '#fad54a', '#fff5aa', '#3a7d44', '#d8eed9', '#4aa3a3', '#2850cc', '#d3e2ff', '#703cb4'];
 const clrSplit = v => { const m = /^#([0-9a-f]{6})([0-9a-f]{2})?$/i.exec(v || ''); return m ? { hex: '#' + m[1].toLowerCase(), a: m[2] ? Math.round(parseInt(m[2], 16) / 2.55) : 100 } : { hex: '', a: 100 }; };
 const clrJoin = (hex, a) => !hex ? null : (a >= 100 ? hex : hex + Math.round(a * 2.55).toString(16).padStart(2, '0'));
-const swHtml = (kind, v) => `<i class="sw"><b style="${kind === 'bd' ? (v ? `border:4px solid ${v}` : 'border:3px dashed #9aa3b5') : (v ? `background:${v}` : '')}"></b></i>`;
+const swHtml = (kind, v) => `<i class="sw${!v || /^#[0-9a-f]{6}00$/i.test(v) ? ' none' : ''}"><b style="${kind === 'bd' ? (v ? `border:4px solid ${v}` : 'border:3px dashed #9aa3b5') : (v ? `background:${v}` : '')}"></b></i>`;
 let CP = null;
 function closeClrPop() { if (!CP) return; const c = CP; CP = null; c.el.remove(); c.anchor.classList.remove('on'); document.removeEventListener('pointerdown', c.out, true); document.removeEventListener('keydown', c.key, true); if (S.ed) commit(); }
 function openClrPop(anchor, cur, onChange) {
@@ -1204,7 +1230,7 @@ function renderPanel() {
       ${txt.some(x => x.multiline) ? stepRow('pm-lh', '行距', same(txt.filter(x => x.multiline), x => x.lh || 0) || '', 0.8, 4, 0.1, '預設', '倍', '行與行之間距離（字級倍數，留空＝預設）') : ''}`;
     props = `<p class="note" style="margin:0 0 4px">已選 <b>${sel.length}</b> 個欄位${sel.length > ed.length ? `（${sel.length - ed.length} 個不可編輯，只會被刪除）` : ''}。設定會套用到全部可編輯欄位。</p>
     ${sec('align', 'aL', '對齊', secAlign)}${sec('field', 'sliders', '欄位設定', secField)}${sec('text', 'text', '文字格式', secText)}${sec('look', 'drop', '外觀', ed.length ? colorRows('pm', cur) : '')}
-    <div class="acts" style="margin:6px 0 0;justify-content:space-between"><div style="display:flex;gap:4px"><button class="ib" data-pm="clear" title="取消選取">${ic('x')}</button>${ed.length ? brushBtn : ''}${ed.length > 1 ? `<button class="ib" data-pm="batch" title="批次命名（F2）">${ic('batch')}</button>` : ''}</div><button class="ib dng" data-pm="del" title="刪除已選欄位">${ic('trash')}</button></div>`;
+    <div class="acts" style="margin:6px 0 0;justify-content:space-between"><div style="display:flex;gap:4px"><button class="ib" data-pm="clear" title="取消選取">${ic('x')}</button>${ed.length > 1 ? `<button class="ib" data-pm="batch" title="批次命名（F2）">${ic('batch')}</button>` : ''}</div><button class="ib dng" data-pm="del" title="刪除已選欄位">${ic('trash')}</button></div>`;
   } else if (f) {
     const k = kindKey(f); const txt = k === 'text' || k === 'multi'; const cmb = k === 'comb'; const rad = k === 'radio'; const rn = rad ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name).length : 0; const hasFont = txt || cmb || k === 'drop';
     const cw = f.w / (f.maxLength || 8), cnote = (f.fontSize || 11) > cw ? `<span style="color:var(--bad)">每格約闊 ${cw.toFixed(1)}pt，字級偏大，字會超出格</span>` : `每格約闊 ${cw.toFixed(1)}pt`;
@@ -1228,8 +1254,8 @@ function renderPanel() {
     props = f.ex ? `<div class="row"><label>名稱</label><input value="${esc(f.name)}" disabled></div><p class="note">此欄位類型（${esc(f.kind)}）或含多個位置，保留原樣，只可刪除。</p><div class="acts" style="margin:0"><button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>` : `${sec('field', 'sliders', '欄位設定', secField)}${sec('text', 'text', '文字格式', secText)}${sec('look', 'drop', '外觀', colorRows('pp', f))}
     <div class="acts" style="margin:6px 0 0;justify-content:space-between">${brushBtn}<button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>`;
   }
-  const tab = E.tab || 'list';
-  box.innerHTML = `<div class="ptabs"><button class="ptab ${tab === 'list' ? 'on' : ''}" data-tab="list" title="欄位清單">${ic('fields')}<span>欄位</span><span class="chip">${E.fields.length}</span></button><button class="ptab ${tab === 'fmt' ? 'on' : ''}" data-tab="fmt" title="名稱與格式">${ic('aa')}<span>格式</span></button></div>` +
+  const tab = E.tab || 'fmt';
+  box.innerHTML = `<div class="ptabs"><button class="ptab ${tab === 'fmt' ? 'on' : ''}" data-tab="fmt" title="名稱與格式">${ic('aa')}<span>格式</span></button><button class="ptab ${tab === 'list' ? 'on' : ''}" data-tab="list" title="欄位清單">${ic('fields')}<span>欄位</span><span class="chip">${E.fields.length}</span></button></div>` +
     (tab === 'list' ? `<div class="plist">${rows || '<p class="note" style="padding:8px">尚未有欄位。選工具後在頁面拖曳，或按魔術棒自動偵測。</p>'}</div>` : `<div class="pprops">${props}</div>`);
   const q = s => box.querySelector(s); const redraw = () => { drawBoxes(); };
   box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { E.tab = b.dataset.tab; renderPanel(); });
@@ -1424,46 +1450,92 @@ function posFtb() {
   if (t + h > innerHeight - 8) { el.classList.add('up'); t = Math.max(8, T - 21 - 10 - h); }
   el.style.left = l + 'px'; el.style.top = t + 'px';
 }
+const FTB_PRE = { fs: [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 36], ls: [-1, 0, .5, 1, 1.5, 2, 3, 5], lh: [1, 1.2, 1.4, 1.6, 2], bw: [0, .5, 1, 1.5, 2, 3, 4] };
+const FTB_TIP = { txt: '文字（字體、字級）', al: '文字對齊', sp: '間距（字距、行距）', look: '外觀（底色、框線）', sz: '統一大小', ar: '對齊物件' };
+const FTB_AO = [['l', 'aL', '靠左對齊'], ['c', 'aC', '水平置中'], ['r', 'aR', '靠右對齊'], ['t', 'aT', '頂端對齊'], ['m', 'aM', '垂直置中'], ['b', 'aB', '底端對齊']];
+const FTB_REF = [['first', '第一個'], ['max', '最大'], ['min', '最細'], ['avg', '平均']];
+const fcombo = (id, v, fmt) => `<span class="combo" data-c="${id}"><input value="${v === null || v === undefined ? '' : fmt(v)}" placeholder="—" inputmode="decimal" aria-label="${id}"><button type="button" data-f="cb:${id}" aria-label="常用值" tabindex="-1">▾</button></span>`;
+const ftbFontName = fv => fv === null ? '混合' : fv === undefined ? '' : (BUILTIN[fv] ? BUILTIN[fv][0].replace(/（預設）/, '') : String(fv).replace(/^c:/, ''));
 function renderFtb() {
   const F = FTB; if (!F) return; const t = ftbTargets(); if (!t.length) return closeFtb();
-  const fsT = t.filter(x => x.kind === 'text' || x.kind === 'drop'), txt = t.filter(x => x.kind === 'text' && !x.comb), mlt = txt.filter(x => x.multiline);
-  const fv = fsT.length ? sameOf(fsT, x => normFont(x.font) || '') : null, sz = sameOf(fsT, x => x.fontSize || 11), al = sameOf(txt, x => x.align || 'left');
-  const stp = (k, v, tip) => `<div class="fst" title="${tip}"><button type="button" data-f="${k}-" aria-label="減少">−</button><b>${v === null || v === undefined ? '—' : v}</b><button type="button" data-f="${k}+" aria-label="增加">+</button></div>`;
-  const g1 = fsT.length ? `<select class="fsel" data-ff="font" title="字體">${fv === null ? '<option value="__m" selected disabled>混合</option>' : ''}${Object.entries(BUILTIN).map(([kk, v]) => `<option value="${kk}" ${fv === kk ? 'selected' : ''}>${v[0]}</option>`).join('')}${Object.keys(FONTS).length ? `<optgroup label="已載入嘅字體">${Object.keys(FONTS).map(n => `<option value="c:${esc(n)}" ${fv === 'c:' + n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</optgroup>` : ''}<option value="__local">更多字體（本機）…</option></select>${stp('fs', sz, '字級（pt）')}` : '';
-  const g2 = txt.length ? [['left', 'alL', '靠左'], ['center', 'alC', '置中'], ['right', 'alR', '靠右']].map(([a, i, tt]) => `<button type="button" class="ib ${al === a ? 'on' : ''}" data-f="al:${a}" title="${tt}" aria-label="${tt}">${ic(i)}</button>`).join('') : '';
-  const g3 = (txt.length ? `<button type="button" class="ib ${F.open === 'sp' ? 'on' : ''}" data-f="open:sp" title="字距${mlt.length ? '、行距' : ''}" aria-label="字距行距">${ic('ls')}</button>` : '') + `<button type="button" class="ib ${F.open === 'cl' ? 'on' : ''}" data-f="open:cl" title="背景與框線" aria-label="背景與框線">${ic('drop')}</button>`;
-  const bar = [g1, g2, g3].filter(Boolean).join('<i class="vs"></i>');
-  let dd = '';
-  if (F.open === 'sp' && txt.length) dd = `<div class="dd"><div class="dr">${ic('ls')}${stp('ls', sameOf(txt, x => x.ls || 0), '字距（pt）')}${mlt.length ? ic('lh') + stp('lh', sameOf(mlt, x => x.lh || 1.4), '行距（字級倍數）') : ''}</div></div>`;
-  else if (F.open === 'cl') dd = `<div class="dd"><div class="dr"><button type="button" class="csw" data-f="bg" title="背景顏色">${swHtml('bg', sameOf(t, x => x.bg || '') || '')}${ic('caret')}</button><button type="button" class="csw" data-f="bd" title="框線顏色">${swHtml('bd', sameOf(t, x => (x.bw > 0 && x.border) ? x.border : '') || '')}${ic('caret')}</button>${stp('bw', sameOf(t, x => x.bw || 0), '框線粗幼（pt）')}</div></div>`;
-  F.el.innerHTML = `<div class="tb">${bar}</div>${dd}<button type="button" class="ftbm" data-f="expand" title="展開格式列" aria-label="展開格式列">${ic('aa')}</button>`;
+  const fsT = t.filter(x => x.kind === 'text' || x.kind === 'drop'), txt = t.filter(x => x.kind === 'text' && !x.comb), mlt = txt.filter(x => x.multiline), multi = t.length > 1, noB = t.every(noBd);
+  const fv = fsT.length ? sameOf(fsT, x => normFont(x.font) || '') : undefined, sz = sameOf(fsT, x => x.fontSize || 11), al = sameOf(txt, x => x.align || 'left'), ls = sameOf(txt, x => x.ls || 0);
+  const bgV = sameOf(t, x => x.bg || ''), bdT = t.filter(x => !noBd(x)), bwV = bdT.length ? sameOf(bdT, x => x.bw || 0) : 0;
+  const chip = (k, inner) => `<button type="button" class="chip ${F.open === k ? 'open' : ''}" data-f="open:${k}" title="${FTB_TIP[k]}" aria-label="${FTB_TIP[k]}">${inner}<span class="cc">${ic('caret')}</span></button>`;
+  const lookInner = `${swHtml('bg', bgV || '')}${!noB && bwV > 0 ? `<span class="mini">框 ${bwV}</span>` : ''}`;
+  const cTxt = fsT.length ? chip('txt', `${ic('aa')}<b class="fn">${esc(ftbFontName(fv))}</b><span class="mini">${sz === null ? '—' : sz}</span>`) : '';
+  const cAl = txt.length ? chip('al', ic(al === 'center' ? 'alC' : al === 'right' ? 'alR' : 'alL')) : '';
+  const cSp = txt.length ? chip('sp', `${ic('ls')}<span class="mini">${ls === null ? '—' : ls}</span>`) : '';
+  const cLook = chip('look', lookInner);
+  const cSz = multi ? chip('sz', ic('size')) : '', cAr = multi ? chip('ar', ic(({ l: 'aL', c: 'aC', r: 'aR', t: 'aT', m: 'aM', b: 'aB' })[F.ao || 'l'])) : '';
+  const sep = '<i class="vs"></i>';
+  const grpA = multi ? [cLook, cSz, cAr] : [cTxt, cAl, cSp], grpB = multi ? [cTxt, cAl, cSp] : [cLook];
+  const bar = [grpA.filter(Boolean).join(''), grpB.filter(Boolean).join('')].filter(Boolean).join(sep);
+  let pop = '';
+  if (F.open === 'txt' && fsT.length) {
+    pop = `<div class="pop"><div class="pr2"><label>字體</label><select class="fsel" data-ff="font" title="字體">${fv === null ? '<option value="__m" selected disabled>混合</option>' : ''}${Object.entries(BUILTIN).map(([kk, v]) => `<option value="${kk}" ${fv === kk ? 'selected' : ''}>${v[0]}</option>`).join('')}${Object.keys(FONTS).length ? `<optgroup label="已載入嘅字體">${Object.keys(FONTS).map(n => `<option value="c:${esc(n)}" ${fv === 'c:' + n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</optgroup>` : ''}<option value="__local">更多字體（本機／字體檔）…</option></select></div><div class="pr2"><label>字級</label>${fcombo('fs', sz, x => x)}</div></div>`;
+  } else if (F.open === 'al' && txt.length) {
+    pop = `<div class="menu ico">${[['left', 'alL', '靠左'], ['center', 'alC', '置中'], ['right', 'alR', '靠右']].map(([a, i, tt]) => `<button type="button" class="${al === a ? 'on' : ''}" data-f="al:${a}" data-tip="${tt}" title="${tt}" aria-label="${tt}">${ic(i)}</button>`).join('')}</div>`;
+  } else if (F.open === 'sp' && txt.length) {
+    pop = `<div class="pop"><div class="pr2"><label>字距</label>${fcombo('ls', ls, x => x)}</div>${mlt.length ? `<div class="pr2"><label>行距</label>${fcombo('lh', sameOf(mlt, x => x.lh || 1.4), x => x + '×')}</div>` : ''}</div>`;
+  } else if (F.open === 'look') {
+    pop = `<div class="pop"><div class="pr2"><label>底色</label><button type="button" class="csw" data-f="bg" title="底色">${swHtml('bg', bgV || '')}${ic('caret')}</button></div>${noB ? '' : `<div class="pr2"><label>框色</label><button type="button" class="csw" data-f="bd" title="框線顏色">${swHtml('bd', sameOf(bdT, x => (x.bw > 0 && x.border) ? x.border : '') || '')}${ic('caret')}</button></div><div class="pr2"><label>框粗</label>${fcombo('bw', bwV, x => x)}</div>`}</div>`;
+  } else if (F.open === 'sz' && multi) {
+    pop = `<div class="pop"><div class="ubr"><button type="button" data-f="sz:w">${ic('sameW')}同寬</button><button type="button" data-f="sz:h">${ic('sameH')}同高</button><button type="button" data-f="sz:wh">${ic('size')}同寬高</button></div><div class="pr2"><label>以…為準</label><select class="fsel" data-ref="1">${FTB_REF.map(([k, n]) => `<option value="${k}" ${(F.ref || 'first') === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div></div>`;
+  } else if (F.open === 'ar' && multi) {
+    pop = `<div class="menu ico">${FTB_AO.map(([k, i, tt]) => `<button type="button" class="${(F.ao || 'l') === k ? 'on' : ''}" data-f="ao:${k}" data-tip="${tt}" title="${tt}" aria-label="${tt}">${ic(i)}</button>`).join('')}<i class="brk"></i>${[['dh', 'dH', '水平平均分佈（3 個或以上）'], ['dv', 'dV', '垂直平均分佈（3 個或以上）']].map(([k, i, tt]) => `<button type="button" class="${t.length < 3 ? 'dis' : ''}" data-f="ao:${k}" data-tip="${tt}" title="${tt}" aria-label="${tt}">${ic(i)}</button>`).join('')}</div>`;
+  }
+  F.el.innerHTML = `<div class="tb">${bar}${pop}</div><button type="button" class="ftbm" data-f="expand" title="展開格式列" aria-label="展開格式列">${ic('aa')}</button>`;
+  const ob = F.el.querySelector('.chip.open'), pp = F.el.querySelector('.pop,.menu'); if (ob && pp) pp.style.left = ob.offsetLeft + 'px';
+}
+function ftbSetNum(id, v) {
+  const F = FTB; if (!F || !isFinite(v)) return; const t = ftbTargets();
+  if (id === 'fs') { const n = Math.max(4, Math.min(72, Math.round(v))); t.filter(x => x.kind === 'text' || x.kind === 'drop').forEach(x => { x.fontSize = n; }); }
+  else if (id === 'ls') { const n = Math.max(-2, Math.min(20, Math.round(v * 10) / 10)); t.filter(x => x.kind === 'text' && !x.comb).forEach(x => { x.ls = n; }); }
+  else if (id === 'lh') { const n = Math.max(.8, Math.min(4, Math.round(v * 100) / 100)); t.filter(x => x.kind === 'text' && !x.comb && x.multiline).forEach(x => { x.lh = n; }); }
+  else if (id === 'bw') { const n = Math.max(0, Math.min(6, Math.round(v * 2) / 2)); t.filter(x => !noBd(x)).forEach(x => { x.bw = n; if (n > 0 && !x.border) x.border = '#262626'; }); }
+  F.dirty = true; drawBoxes(); schedCommit(); renderFtb(); posFtb(); renderPanel();
+}
+function ftbSameSize(md) {
+  const F = FTB, l = ftbTargets(); if (!F || l.length < 2) return; const mode = F.ref || 'first';
+  const pick = k => { const a = l.map(f => f[k]); return mode === 'max' ? Math.max(...a) : mode === 'min' ? Math.min(...a) : mode === 'avg' ? a.reduce((s, v) => s + v, 0) / a.length : l[0][k]; };
+  const W = pick('w'), H = pick('h'); l.forEach(f => { if (md !== 'h') f.w = W; if (md !== 'w') { const top = f.y + f.h; f.h = H; f.y = top - H; } });
+  F.dirty = true; drawBoxes(); commit(); renderPanel(); renderFtb(); posFtb(); toast('已統一大小');
 }
 function ftbClick(e) {
   const F = FTB; if (!F) return; const b = e.target.closest('[data-f]'); if (!b) return; const t = ftbTargets(), k = b.dataset.f;
   if (k === 'expand') return ftbExpand();
   const done = () => { F.dirty = true; drawBoxes(); schedCommit(); renderFtb(); posFtb(); renderPanel(); };
-  const m = /^(fs|ls|lh|bw)([+-])$/.exec(k);
-  if (m) {
-    const d = m[2] === '+' ? 1 : -1;
-    if (m[1] === 'fs') t.filter(x => x.kind === 'text' || x.kind === 'drop').forEach(x => { x.fontSize = Math.max(4, Math.min(72, (x.fontSize || 11) + d)); });
-    else if (m[1] === 'ls') t.filter(x => x.kind === 'text' && !x.comb).forEach(x => { x.ls = Math.max(-2, Math.min(20, Math.round(((x.ls || 0) + d * .5) * 10) / 10)); });
-    else if (m[1] === 'lh') t.filter(x => x.kind === 'text' && !x.comb && x.multiline).forEach(x => { x.lh = Math.max(.8, Math.min(4, Math.round(((x.lh || 1.4) + d * .1) * 100) / 100)); });
-    else t.forEach(x => { const n = Math.max(0, Math.min(6, Math.round(((x.bw || 0) + d * .5) * 2) / 2)); x.bw = n; if (n > 0 && !x.border) x.border = '#262626'; });
-    return done();
-  }
-  if (k.startsWith('al:')) { t.forEach(x => { if (x.kind === 'text' && !x.comb) x.align = k.slice(3); }); return done(); }
   if (k.startsWith('open:')) { const o = k.slice(5); F.open = F.open === o ? '' : o; closeClrPop(); renderFtb(); posFtb(); return; }
+  if (k.startsWith('cb:')) { // 數字格嘅常用值清單
+    const id = k.slice(3), c = b.closest('.combo'), old = c.querySelector('.lst'); document.querySelectorAll('.ftb .lst').forEach(x => x.remove()); if (old) return;
+    const inp = c.querySelector('input'), cur = parseFloat(inp.value), l = document.createElement('div'); l.className = 'lst';
+    l.innerHTML = FTB_PRE[id].map(v => `<div class="${v === cur ? 'cur' : ''}" data-f="cv:${id}:${v}">${id === 'lh' ? v + '×' : v}</div>`).join(''); c.appendChild(l); return;
+  }
+  if (k.startsWith('cv:')) { const [, id, v] = k.split(':'); return ftbSetNum(id, parseFloat(v)); }
+  if (k.startsWith('al:')) { t.forEach(x => { if (x.kind === 'text' && !x.comb) x.align = k.slice(3); }); F.open = ''; return done(); }
+  if (k.startsWith('sz:')) return ftbSameSize(k.slice(3));
+  if (k.startsWith('ao:')) {
+    const a = k.slice(3); if (a === 'dh' || a === 'dv') { if (t.length < 3) return toast('平均分佈要選 3 個或以上'); distSel(a === 'dh'); }
+    else { F.ao = a; alignSel(a); F.open = ''; }
+    F.dirty = true; renderFtb(); posFtb(); return;
+  }
   if (k === 'bg' || k === 'bd') {
-    const cur = k === 'bg' ? sameOf(t, x => x.bg || '') : sameOf(t, x => (x.bw > 0 && x.border) ? x.border : '');
+    const bdT = t.filter(x => !noBd(x));
+    const cur = k === 'bg' ? sameOf(t, x => x.bg || '') : sameOf(bdT, x => (x.bw > 0 && x.border) ? x.border : '');
     openClrPop(b, cur || '', v => {
-      t.forEach(x => { if (k === 'bg') x.bg = v; else { x.border = v; x.bw = v ? (x.bw || 1) : 0; } });
+      t.forEach(x => { if (k === 'bg') x.bg = v; else if (!noBd(x)) { x.border = v; x.bw = v ? (x.bw || 1) : 0; } });
       F.dirty = true; b.innerHTML = swHtml(k === 'bg' ? 'bg' : 'bd', v || '') + ic('caret');
-      const bwv = F.el.querySelector('[data-f="bw-"]'); if (bwv && bwv.nextElementSibling) { const n = sameOf(t, x => x.bw || 0); bwv.nextElementSibling.textContent = n === null ? '—' : n; }
+      const cl = F.el.querySelector('[data-f="open:look"]'); if (cl) { const bwv = sameOf(bdT, x => x.bw || 0); cl.innerHTML = swHtml('bg', sameOf(t, x => x.bg || '') || '') + (bdT.length && bwv > 0 ? `<span class="mini">框 ${bwv}</span>` : '') + `<span class="cc">${ic('caret')}</span>`; }
+      const bwi = F.el.querySelector('.combo[data-c="bw"] input'); if (bwi) { const n = sameOf(bdT, x => x.bw || 0); bwi.value = n === null ? '' : n; }
       drawBoxes(); schedCommit();
     });
   }
 }
 function ftbChange(e) {
+  const F0 = FTB; if (!F0) return;
+  const ci = e.target.closest && e.target.closest('.combo input'); if (ci) { const id = ci.closest('.combo').dataset.c, v = parseFloat(ci.value); if (isFinite(v)) ftbSetNum(id, v); else { renderFtb(); posFtb(); } return; }
+  const rf = e.target.closest && e.target.closest('select[data-ref]'); if (rf) { F0.ref = rf.value; return; }
   const sl = e.target.closest('select[data-ff]'), F = FTB; if (!sl || !F) return;
   const t = ftbTargets().filter(x => x.kind === 'text' || x.kind === 'drop'), v = sl.value;
   if (v === '__local') {
@@ -1541,6 +1613,9 @@ function openCx(x, y) {
     if (eds.length >= 3) rows.push({ t: '分佈', i: 'dH', sub: [{ t: '水平平均分佈', i: 'dH', fn: () => distSel(true) }, { t: '垂直平均分佈', i: 'dV', fn: () => distSel(false) }] });
     rows.push({ t: '統一大小', i: 'sameW', sub: [{ t: '同寬度', i: 'sameW', fn: () => sameSize('w') }, { t: '同高度', i: 'sameH', fn: () => sameSize('h') }, { t: '同寬同高', i: 'size', fn: () => sameSize('wh') }] });
   }
+  { const kinds = new Set(eds.map(kindKey)), same = x => !x.ex && kinds.has(kindKey(x)), all = E.fields.filter(same), pg = E.fields.filter(x => same(x) && eds.some(y => y.page === x.page)), lbl = [...kinds].map(k => ({ text: '文字', multi: '多行文字', comb: '格仔', check: '剔選', radio: '單選', drop: '下拉', sig: '簽名' }[k] || k)).join('／');
+    const pick = list => { setSel(list.map(x => x.id)); drawBoxes(); renderPanel(); };
+    rows.push({ sep: 1 }, { t: `選取全部同類（${lbl}）`, i: 'cursor', sub: [{ t: `所有頁面（${all.length} 個）`, i: 'cursor', fn: () => pick(all) }, { t: `只限同一頁（${pg.length} 個）`, i: 'cursor', fn: () => pick(pg) }] }); }
   rows.push({ sep: 1 }, { t: '複製', i: 'copy', kb: 'Ctrl+C', fn: () => copySel() });
   if (CLIP) rows.push({ t: '貼上', i: 'paste', kb: 'Ctrl+V', fn: () => pasteClip(null) });
   rows.push({ t: '原地複製', i: 'copy', kb: 'Ctrl+D', fn: dupSel }, { sep: 1 }, { t: '刪除', i: 'trash', kb: 'Del', cls: 'dng', fn: delSel });
@@ -1627,14 +1702,15 @@ function bindDraw(pi) {
       if (f.ex) return;
       if (e.target.closest('.tag')) { const now = Date.now(); if (E._tg && E._tg.id === f.id && now - E._tg.t < 450) { E._tg = null; openRename(f); e.preventDefault(); return; } E._tg = { id: f.id, t: now }; }
       const group = selIds().map(id => E.fields.find(x => x.id === id)).filter(x => x && !x.ex && x.page === pi);
-      const resize = e.target.classList.contains('rz') && group.length === 1;
+      const resize = e.target.classList.contains('rz'); // 單選或多選都可以用右下角圓點調整大小；多選時全部一齊加減同一幅度
       const moveH = !resize && !!e.target.closest('.tag'); // move only via the top handle; the box body just selects
       if (!resize && !moveH) { e.preventDefault(); return; }
       closeFtb(); E.dragging = true;
       const xy = resize ? null : document.createElement('div'); if (xy) { xy.className = 'xyb'; xy.style.display = 'none'; ov.appendChild(xy); }
       const lead = group.find(g => g.id === f.id) || group[0];
       const start = group.map(g => ({ g, x: g.x, top: g.y + g.h, w: g.w, h: g.h })); // top = top edge in pdf coords
-      const mv = ev => { const [x1, y1] = pt(ev); const dx = x1 - x0, dy = y1 - y0;
+      const mnW = Math.min(...start.map(s => s.w)), mnH = Math.min(...start.map(s => s.h));
+      const mv = ev => { const [x1, y1] = pt(ev); let dx = x1 - x0, dy = y1 - y0; if (resize) { dx = Math.max(dx, 6 - mnW); dy = Math.max(dy, 6 - mnH); }
         start.forEach(s => { if (resize) { s.g.w = Math.max(6, s.w + dx); s.g.h = Math.max(6, s.h + dy); s.g.y = s.top - s.g.h; } else { s.g.x = s.x + dx; s.g.y = s.top - s.h - dy; } });
         drawBoxes();
         if (xy && lead) { xy.style.display = ''; xy.textContent = `X ${Math.round(lead.x)}  Y ${Math.round(p.ph - lead.y - lead.h)}`; xy.style.left = (lead.x + lead.w / 2) * p.sc + 'px'; xy.style.top = (p.ph - lead.y) * p.sc + 10 + 'px'; ov.querySelectorAll('.fb.sel,.fb.msel').forEach(b => b.classList.add('mvg')); } };

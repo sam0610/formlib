@@ -212,6 +212,8 @@ textarea.fin{resize:none;padding:2px}
 .fb.k-drop{border-color:#7a3fc0;background:rgba(130,70,200,.12)}
 .fb.k-sig{border-color:#1f8a4c;border-style:dashed;background:rgba(31,138,76,.10)}
 .fb.ex{border-style:dashed;border-color:#7b8498;background:rgba(120,130,150,.15)}
+.fb.fx{border:1.5px dashed #0e8fa3!important;background:rgba(14,143,163,.1)}.fb.fx .tag{background:#0e8fa3}
+.fin.fx,.fck.fx,.cmb.fx,select.fx{pointer-events:none}.fin.fx{background:transparent;border-color:transparent;color:#111}
 .fb.k-multi .tag,.fb.k-multi .rz{background:#0e8fa3}.fb.k-check .tag,.fb.k-check .rz{background:#c4591f}.fb.k-drop .tag,.fb.k-drop .rz{background:#7a3fc0}.fb.k-sig .tag,.fb.k-sig .rz{background:#1f8a4c}
 .fb .pv,.fb .ml{position:absolute;inset:0;pointer-events:none;box-sizing:border-box}
 .fb .chv{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:#7a3fc0;fill:none;stroke-width:2.4;pointer-events:none}
@@ -641,7 +643,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v63</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v64</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -830,6 +832,7 @@ async function readFields(doc) {
     try { if (kind === 'text') { const a = f.getAlignment(); align = a === 1 ? 'center' : a === 2 ? 'right' : 'left'; const ml = f.getMaxLength(); maxLength = ml == null ? null : ml; } } catch (e) { }
     try { required = f.isRequired(); } catch (e) { }
     let ffont = null; try { const v = f.acroField.dict.lookup(PDFLib.PDFName.of('FLFont')); if (v && v.decodeText) ffont = v.decodeText() || null; } catch (e) { }
+    let fixed = false; try { fixed = kind !== 'sig' && f.isReadOnly(); } catch (e) { }
     let comb = false; try { comb = kind === 'text' && f.isCombed() && !!maxLength; } catch (e) { }
     let ls = 0, lh = 0; try { const g = k => { const v = f.acroField.dict.lookup(PDFLib.PDFName.of(k)); return v && v.asNumber ? v.asNumber() : 0; }; ls = g('FLSp'); lh = g('FLLh'); } catch (e) { }
     try { const m = (f.acroField.getDefaultAppearance() || '').match(/([\d.]+)\s+Tf/); fontSize = m && parseFloat(m[1]) > 0 ? parseFloat(m[1]) : null; } catch (e) { }
@@ -844,7 +847,7 @@ async function readFields(doc) {
       if (!border) bw = 0;
       if (kind === 'check' || kind === 'sig') { border = null; bw = 0; }
       let onValue = null; if (kind === 'radio') { try { const nm = w.getOnValue().decodeText(); onValue = options.includes(nm) ? nm : (/^\d+$/.test(nm) && options[+nm] != null ? options[+nm] : (options[wi] ?? nm)); } catch (e) { onValue = options[wi]; } }
-      out.push({ name, kind, page: pi, x: r.x, y: r.y, w: r.width, h: r.height, options, initial, multiline, onValue, align, maxLength, required, fontSize, border, bw, bg, ls, lh, comb, font: ffont });
+      out.push({ name, kind, page: pi, x: r.x, y: r.y, w: r.width, h: r.height, options, initial, multiline, onValue, align, maxLength, required, fontSize, border, bw, bg, ls, lh, comb, font: ffont, fixed });
     });
   }
   return out;
@@ -913,7 +916,7 @@ async function renderFill() {
     F.pg.push({ page, fit, ph: v1.height, pw: v1.width, wrap, cv, ov, idx: i - 1 });
     F.fields.filter(f => f.page === i - 1).forEach(f => ov.appendChild(fieldEl(f, sc, v1.height)));
   }
-  const first = $('.fin,.fck'); if (first && !('ontouchstart' in window)) first.focus();
+  const first = $('.fin:not(.fx),.fck:not(.fx)'); if (first && !('ontouchstart' in window)) first.focus();
 }
 function fieldEl(f, sc, ph) {
   const F = S.fill; const left = f.x * sc, top = (ph - f.y - f.h) * sc, w = f.w * sc, h = f.h * sc;
@@ -932,6 +935,7 @@ function fieldEl(f, sc, ph) {
   }
   else { const ml = f.multiline || f.h > 36; el = document.createElement(ml ? 'textarea' : 'input'); el.className = 'fin'; el.value = F.values[f.name] || ''; el.style.cssText = `left:${left}px;top:${top}px;width:${w}px;height:${h}px;font-size:${f.fontSize ? f.fontSize * sc : (ml ? 10 * sc : Math.max(8, Math.min(h * .62, 16)))}px;text-align:${f.align || 'left'};letter-spacing:${(f.ls || 0) * sc}px${ml ? `;line-height:${f.lh || DEF_LH}` : ''}`; if (f.maxLength) el.maxLength = f.maxLength; if (f.required) el.classList.add('req'); el.oninput = () => { F.values[f.name] = el.value; $$all('.fin', f.name, el); }; el.dataset.fname = f.name; styleBox(el, f, sc); }
   if (f.font && (f.kind === 'text' || f.kind === 'drop')) el.style.fontFamily = fontCss(f.font);
+  if (f.fixed) { el.classList.add('fx'); el.classList.remove('req'); el.tabIndex = -1; if ('readOnly' in el) el.readOnly = true; el.querySelectorAll('input').forEach(i => { i.readOnly = true; i.tabIndex = -1; }); }
   return el;
 }
 function styleBox(el, f, sc) { if (f.bg) el.style.background = f.bg; if (f.bw > 0 && f.border && !noBd(f)) { el.style.border = `${Math.max(1, f.bw * sc)}px solid ${f.border}`; } }
@@ -1047,9 +1051,9 @@ app.addEventListener('click', async e => {
   if (a === 'back') { S.fill = null; return renderLibrary(); }
   if (a === 'editt') { const t = F && F.t; if (!t) return; S.fill = null; return editExisting(t); }
   if (a === 'flat') { F.flatten = !F.flatten; b.classList.toggle('on', F.flatten); return toast(F.flatten ? '已鎖定：輸出後不可再編輯' : '輸出後仍可再編輯'); }
-  if (a === 'clear') { if (!(await ask('清除所有已填內容？'))) return; Object.keys(F.values).forEach(k => F.values[k] = typeof F.values[k] === 'boolean' ? false : ''); return renderFill(); }
+  if (a === 'clear') { if (!(await ask('清除所有已填內容？'))) return; { const keep = new Set(F.fields.filter(f => f.fixed).map(f => f.name)); Object.keys(F.values).forEach(k => { if (!keep.has(k)) F.values[k] = typeof F.values[k] === 'boolean' ? false : ''; }); } return renderFill(); }
   if (a === 'dl') {
-    const miss = F.fields.find(f => f.required && (f.kind === 'check' ? !F.values[f.name] : !String(F.values[f.name] || '').trim()));
+    const miss = F.fields.find(f => f.required && !f.fixed && (f.kind === 'check' ? !F.values[f.name] : !String(F.values[f.name] || '').trim()));
     if (miss) { const el = document.querySelector(`[data-fname="${CSS.escape(miss.name)}"]`); if (el) { el.scrollIntoView({ block: 'center' }); el.focus(); } return toast(`請先填寫必填欄位：${miss.name}`, true); }
     try { b.disabled = true; toast('正在產生 PDF…'); const out = await buildFilled(PREVIEW); download(out, `${F.t.name}_${new Date().toISOString().slice(0, 10)}.pdf`); }
     catch (er) { console.error(er); toast('產生失敗：' + (er.message || er), true); } finally { b.disabled = false; }
@@ -1174,7 +1178,7 @@ function drawBoxes() {
   E.pages.forEach((p, pi) => {
     p.ov.querySelectorAll('.fb').forEach(x => x.remove());
     E.fields.filter(f => f.page === pi).forEach(f => {
-      const kk = kindKey(f); const d = document.createElement('div'); d.className = `fb k-${kk}` + (f.ex ? ' ex' : '') + (sids.includes(f.id) ? (sids.length > 1 ? ' msel' : ' sel') : ''); d.dataset.id = f.id;
+      const kk = kindKey(f); const d = document.createElement('div'); d.className = `fb k-${kk}` + (f.ex ? ' ex' : '') + (f.fixed && !f.ex ? ' fx' : '') + (sids.includes(f.id) ? (sids.length > 1 ? ' msel' : ' sel') : ''); d.dataset.id = f.id;
       d.style.cssText = `left:${f.x * p.sc}px;top:${(p.ph - f.y - f.h) * p.sc}px;width:${f.w * p.sc}px;height:${f.h * p.sc}px`;
       if (f.font) d.style.fontFamily = fontCss(f.font);
       const fs = (f.fontSize || (kk === 'multi' ? 10 : 11)) * p.sc; const jc = f.align === 'center' ? 'center' : f.align === 'right' ? 'flex-end' : 'flex-start';
@@ -1189,7 +1193,7 @@ function drawBoxes() {
       else if (kk === 'check') inner = `<svg class="tick" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>`;
       else if (kk === 'sig') inner = `<span class="sg"><svg viewBox="0 0 24 24">${IC.pen}</svg>簽名</span>`;
       if (kk === 'multi' && sids.length === 1 && sids[0] === f.id && E.tab !== 'list' && !SECX.has('split') && document.getElementById('epanel')) inner += splitPrev(f);
-      d.innerHTML = `${pv}${inner}<span class="tag${f.ex ? ' ro' : ''}" title="拖動移動；雙擊改名">${f.ex ? '' : '<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg>'}<span class="nm">${esc(f.name)}${kk === 'radio' ? ' · ' + esc(f.onValue || '') : ''}</span></span>${f.ex ? '' : '<i class="rz"></i>'}${ord && ord.has(f.id) ? `<i class="ord" title="Tab 次序">${ord.get(f.id)}</i>` : ''}`;
+      d.innerHTML = `${pv}${inner}<span class="tag${f.ex ? ' ro' : ''}" title="拖動移動；雙擊改名">${f.ex ? '' : '<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg>'}<span class="nm">${f.fixed && !f.ex ? '固定 · ' : ''}${esc(f.name)}${kk === 'radio' ? ' · ' + esc(f.onValue || '') : ''}</span></span>${f.ex ? '' : '<i class="rz"></i>'}${ord && ord.has(f.id) ? `<i class="ord" title="Tab 次序">${ord.get(f.id)}</i>` : ''}`;
       p.ov.appendChild(d);
     });
   });  syncFtb();
@@ -1291,7 +1295,8 @@ function renderPanel() {
     <div class="row"><label>預設</label><input id="pp-def" value="${esc(f.initial || '')}" placeholder="預設內容（可留空）"></div>` : ''}
     ${k === 'check' ? `<div class="row"><label>預設</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-chk" type="checkbox" ${f.initial === true ? 'checked' : ''} style="flex:none;height:auto"> 預設剔選</label></div>` : ''}
     ${k === 'drop' ? `<div class="row"><label>選項</label><textarea id="pp-opt" placeholder="每行一個選項">${esc((f.options || []).join('\n'))}</textarea></div>` : ''}
-    <div class="row"><label>必填</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-req" type="checkbox" ${f.required ? 'checked' : ''} style="flex:none;height:auto"> ${k === 'sig' ? '必須簽名' : '填寫者必須填寫'}</label></div>`;
+    <div class="row"><label>必填</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-req" type="checkbox" ${f.required ? 'checked' : ''} style="flex:none;height:auto"> ${k === 'sig' ? '必須簽名' : '填寫者必須填寫'}</label></div>
+    ${k === 'sig' ? '' : `<div class="row"><label>固定</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-fix" type="checkbox" ${f.fixed ? 'checked' : ''} style="flex:none;height:auto"> 填寫者唔可以修改</label></div>`}`;
     const secText = `${hasFont ? fontRow('pp-font', f.font || '', false) : ''}
     ${hasFont ? `<div class="row"><label>字級</label><input id="pp-fs" type="number" min="6" max="36" step="0.5" value="${f.fontSize || 11}"><span class="note" style="margin:0">pt</span></div>` : ''}
     ${txt ? `<div class="row"><label>對齊</label><div class="seg">${alignBtns('data-pa', f.align || 'left')}</div></div>` : ''}
@@ -1446,6 +1451,7 @@ function renderPanel() {
   const ck = q('#pp-chk'); if (ck) ck.onchange = e => { f.initial = e.target.checked; commit(); };
   const op = q('#pp-opt'); if (op) op.oninput = e => { f.options = e.target.value.split('\n').map(x => x.trim()).filter(Boolean); schedCommit(); };
   q('#pp-req').onchange = e => { f.required = e.target.checked; radioReq(f); commit(); };
+  if (q('#pp-fix')) q('#pp-fix').onchange = e => { const mem = f.kind === 'radio' ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name) : [f]; mem.forEach(x => { x.fixed = e.target.checked; }); commit(); drawBoxes(); };
   wireColors('pp', () => [f]);
   wireFont('pp-font', () => [f]);
   wireNum('pp-cn', 1, 40, 1, 8, n => { f.maxLength = Math.max(1, Math.round(n) || 8); const cw = f.w / f.maxLength, el = q('#pp-cnote'); if (el) el.innerHTML = (f.fontSize || 11) > cw ? `<span style="color:var(--bad)">每格約闊 ${cw.toFixed(1)}pt，字級偏大，字會超出格</span>。每格一個字；要加減格數，可拉闊欄位或改格數。` : `每格約闊 ${cw.toFixed(1)}pt。每格一個字；要加減格數，可拉闊欄位或改格數。`; });
@@ -1701,6 +1707,8 @@ function openCx(x, y) {
   { const kinds = new Set(eds.map(kindKey)), same = x => !x.ex && kinds.has(kindKey(x)), all = E.fields.filter(same), pg = E.fields.filter(x => same(x) && eds.some(y => y.page === x.page)), lbl = [...kinds].map(k => ({ text: '文字', multi: '多行文字', comb: '格仔', check: '剔選', radio: '單選', drop: '下拉', sig: '簽名' }[k] || k)).join('／');
     const pick = list => { setSel(list.map(x => x.id)); drawBoxes(); renderPanel(); };
     rows.push({ sep: 1 }, { t: `選取全部同類（${lbl}）`, i: 'cursor', sub: [{ t: `所有頁面（${all.length} 個）`, i: 'cursor', fn: () => pick(all) }, { t: `只限同一頁（${pg.length} 個）`, i: 'cursor', fn: () => pick(pg) }] }); }
+  { const fx = eds.filter(x => !x.ex && x.kind !== 'sig');
+    if (fx.length) { const all = fx.every(x => x.fixed); rows.push({ sep: 1 }, { t: all ? '取消固定（可填寫）' : '固定（唔俾填寫）', i: 'lock', fn: () => { const names = new Set(fx.filter(x => x.kind === 'radio').map(x => x.name)); const tgt = new Set(fx.map(x => x.id)); E.fields.forEach(x => { if (tgt.has(x.id) || (x.kind === 'radio' && names.has(x.name))) x.fixed = !all; }); commit(); drawBoxes(); renderPanel(); toast(all ? '已取消固定' : `已固定 ${fx.length} 個欄位，填寫時唔可以修改`); } }); } }
   rows.push({ sep: 1 }, { t: '複製', i: 'copy', kb: 'Ctrl+C', fn: () => copySel() });
   if (CLIP) rows.push({ t: '貼上', i: 'paste', kb: 'Ctrl+V', fn: () => pasteClip(null) });
   rows.push({ t: '原地複製', i: 'copy', kb: 'Ctrl+D', fn: dupSel }, { sep: 1 }, { t: '刪除', i: 'trash', kb: 'Del', cls: 'dng', fn: delSel });
@@ -2033,6 +2041,7 @@ async function buildTemplate() {
       if (f.initial) { const v = String(f.initial).slice(0, f.maxLength || 1e9); t.setText(v); if (/[^\x20-\x7e]/.test(v)) needFont = true; }
     }
   }
+  for (const nm of new Set(E.fields.filter(f => f.fixed && !f.ex && f.kind !== 'sig').map(f => f.name))) { try { form.getField(nm).enableReadOnly(); } catch (e) { console.warn('固定失敗', nm, e); } } // 固定＝PDF 標準「只讀」旗標，各閱讀器都不可改
   { const nmd = doc.catalog.lookupMaybe(PDFLib.PDFName.of('Names'), PDFLib.PDFDict); if (nmd) nmd.delete(PDFLib.PDFName.of('EmbeddedFiles'));
     const usedF = new Set(E.fields.filter(f => !f.ex && f.font && f.font.startsWith('c:')).map(f => f.font.slice(2)));
     for (const n of usedF) if (FONTS[n]) await doc.attach(FONTS[n].bytes, `flfont-${encodeURIComponent(n)}.ttf`, { mimeType: 'font/ttf', description: n }); }

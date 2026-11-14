@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>表格範本庫 v60</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
+<title>表格範本庫 v60</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#3b4fd1"><link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"><link rel="icon" type="image/svg+xml" href="icons/icon.svg"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="範本庫"></head><body>
 <style>
 /* layout: sticky toolbar over a card grid (library) or a stack of PDF pages (fill / edit). PDF pages stay white paper in both themes. */
 :root{--bg:#f4f5f7;--surface:#fff;--hover:#eef1f6;--chip:#eef1f6;--ink:#1d2330;--mute:#667088;--line:#e1e4ea;
@@ -36,7 +36,7 @@ select{height:38px;border:1px solid var(--line);border-radius:10px;padding:0 10p
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;padding-bottom:30px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:.15s;min-width:0}
 .card:hover{box-shadow:0 6px 20px var(--shadow);transform:translateY(-2px)}
-.thumb{aspect-ratio:3/4;background:var(--thumb) center/cover no-repeat;border-bottom:1px solid var(--line)}
+.thumb{aspect-ratio:3/4;background:var(--thumb) center/contain no-repeat;border-bottom:1px solid var(--line)}
 .cb{padding:10px 12px 8px}
 .cn{font-weight:600;overflow-wrap:anywhere}
 .cm{color:var(--mute);font-size:12px;display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
@@ -333,6 +333,11 @@ body.handmode .pages,body.handmode .pages *{cursor:grab!important}body.panning .
 .pst em{margin-left:auto;font-style:normal;font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums;font-weight:400}
 .pbar{height:6px;background:var(--hover);border-radius:99px;overflow:hidden}.pbar>div{height:100%;width:0;background:var(--pri);border-radius:99px;transition:width .3s}
 .pnote{font-size:11.5px;color:var(--mute)}.pok{color:#1f9d55}@keyframes prgr{to{transform:rotate(360deg)}}
+.fb .spl{position:absolute;left:0;right:0;height:0;border-top:1.5px dashed #0e8fa3;pointer-events:none;z-index:1}
+.fb .spt{position:absolute;left:3px;transform:translateY(-50%);font-size:9px;line-height:14px;min-width:14px;text-align:center;padding:0 3px;border-radius:3px;background:#0e8fa3;color:#fff;font-weight:600;pointer-events:none;z-index:1;font-variant-numeric:tabular-nums}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.splsum{margin:2px 0 8px!important;font-variant-numeric:tabular-nums}
+.fb .ord{position:absolute;right:-1px;top:-1px;min-width:16px;height:16px;padding:0 4px;border-radius:0 2px 0 6px;background:#1d2330;color:#fff;font:600 10px/16px system-ui,sans-serif;text-align:center;pointer-events:none;z-index:2;font-variant-numeric:tabular-nums}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -636,7 +641,7 @@ async function refresh() { try { S.all = await Store.list(); } catch (e) { conso
 const LOGO = '<svg class="lg" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#3b4fd1"/><rect x="110" y="110" width="140" height="140" rx="30" fill="#fff"/><path d="M148 182l28 28 48-58" fill="none" stroke="#3b4fd1" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/><g fill="#fff"><rect x="262" y="110" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="290" y="150" width="84" height="14" rx="7"/><rect x="290" y="182" width="56" height="14" rx="7"/><rect x="110" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="138" y="302" width="84" height="14" rx="7"/><rect x="138" y="334" width="56" height="14" rx="7"/><rect x="262" y="262" width="140" height="140" rx="30" fill-opacity=".55"/><rect x="288" y="306" width="88" height="52" rx="12" fill="none" stroke="#fff" stroke-width="10"/><rect x="306" y="319" width="7" height="26" rx="3.5"/></g></svg>';
 const app = $('#app');
 function header(extra = '') {
-  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v60</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
+  return `<div class="hdr"><div class="logo">${LOGO}<span>表格範本庫 <small style="font-weight:500;color:var(--mute);font-size:11px">v63</small></span></div>${extra ? '' : '<div class="sp"></div>'}${extra}
   ${CLOUD ? ibl('logout', 'logout', '登出', `登出 ${S.user ? S.user.email : ''}`) : GH ? (S.admin ? ibl('ghout', 'logout', '登出', '主管登出') : ibl('ghin', 'lock', '主管登入', '主管登入（發佈／修改範本）')) : `<span class="badge" title="資料只存於此瀏覽器，未連接雲端">${ic('device', 13)} ${PREVIEW ? '示範' : '本機'}</span>`}</div>`;
 }
 function renderLogin(msg = '') {
@@ -852,9 +857,31 @@ async function getFont() {
   for (const u of [CFG.fontUrl, 'fonts/font.ttf'].filter(Boolean)) { try { const r = await fetch(u); if (r.ok) return (cjkBytes = await r.arrayBuffer()); } catch (e) { } }
   throw new Error('找不到中文字型 fonts/font.ttf');
 }
+/* 加密 PDF（只有「限制編輯／列印」嘅擁有者密碼）：pdf.js 可以睇，但 pdf-lib 唔可以改 → 逐頁畫成圖片重新組成一份冇加密嘅 PDF（文字唔可以選取，但可以照常加欄位） */
+async function flattenEncrypted(pdf) {
+  const out = await PDFDocument.create(), n = Math.min(pdf.numPages, 60);
+  for (let i = 1; i <= n; i++) {
+    const page = await pdf.getPage(i), vp1 = page.getViewport({ scale: 1 }), sc = Math.min(2.5, 2600 / Math.max(vp1.width, vp1.height)), vp = page.getViewport({ scale: sc });
+    const cv = document.createElement('canvas'); cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+    const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+    await page.render({ canvasContext: cx, viewport: vp }).promise;
+    const jpg = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.9)); const img = await out.embedJpg(await jpg.arrayBuffer());
+    out.addPage([vp1.width, vp1.height]).drawImage(img, { x: 0, y: 0, width: vp1.width, height: vp1.height });
+    cv.width = cv.height = 0;
+  }
+  return out.save();
+}
 async function loadPdf(blob) {
-  const bytes = await blob.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise;
+  let bytes = await blob.arrayBuffer(), pdf;
+  try { pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise; }
+  catch (e) { if (e && e.name === 'PasswordException') throw new Error('呢份 PDF 要開啟密碼，請先喺其他軟件移除密碼再上載'); throw e; }
+  let enc = false; try { await PDFDocument.load(bytes, { updateMetadata: false }); } catch (e) { enc = /encrypt/i.test(e && e.message || ''); if (!enc) throw e; }
+  if (enc) {
+    toast('呢份 PDF 有加密，正在轉換…');
+    const flat = await flattenEncrypted(pdf); bytes = flat.buffer.slice(flat.byteOffset, flat.byteOffset + flat.byteLength);
+    pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes.slice(0)) }).promise;
+    toast('已將加密 PDF 轉成圖片版本（文字唔可以選取）');
+  }
   return { bytes, pdf };
 }
 async function openFill(t) {
@@ -1085,6 +1112,7 @@ function edToolbar() {
   ${Object.entries(TOOLS).map(([k, v]) => TB(`data-e="tool:${k}"`, v.icon, LBL[k], `${v.tip}${k === 'sel' ? '（點選或拖曳框選多個欄位；Shift／Ctrl 加選；Ctrl+A 全選；雙擊或長按欄位開啟文字格式）' : '（在頁面上拖曳繪製）'}`, E.tool === k ? 'on' : '')).join('')}
   <span class="sep tall"></span>${TB('data-e="undo"', 'undo', '復原', '復原（Ctrl+Z）', '', !(E.hi > 0))}${TB('data-e="redo"', 'redo', '重做', '重做（Ctrl+Shift+Z 或 Ctrl+Y）', '', !(E.hi < E.hist.length - 1))}
   <span class="sep tall"></span>${TB('data-e="auto"', 'wand', '偵測', '自動偵測欄位')}
+  ${TB('data-e="order"', 'list', '次序', '顯示欄位次序號碼（按 Tab／Shift+Tab 逐個揀欄位）', E.showOrder ? 'on' : '')}
   ${TB('data-e="panel"', 'menu', '欄位', '欄位清單與屬性', E.panel ? 'on' : '')}
   ${TB('data-e="draft"', 'save', '草稿', '儲存為草稿（用家睇唔到，可稍後繼續編輯）')}
   ${TB('data-e="pub"', 'upload', '發佈', '發佈為範本', 'pri')}`).replace('<div class="sp"></div><div class="sp"></div>', '<div class="sp"></div>');
@@ -1142,7 +1170,7 @@ document.addEventListener('keydown', e => {
   e.preventDefault(); e.stopPropagation();
 }, true);
 function drawBoxes() {
-  const E = S.ed; const sids = selIds();
+  const E = S.ed; const sids = selIds(); const ord = E.showOrder ? new Map(edOrder().map((f, i) => [f.id, i + 1])) : null;
   E.pages.forEach((p, pi) => {
     p.ov.querySelectorAll('.fb').forEach(x => x.remove());
     E.fields.filter(f => f.page === pi).forEach(f => {
@@ -1160,7 +1188,8 @@ function drawBoxes() {
       else if (kk === 'drop') inner = `<span class="smp" style="font-size:${fs}px;justify-content:${jc};padding-right:${16}px">${esc(f.initial || (f.options && f.options[0]) || 'AaBb 範例')}</span><svg class="chv" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>`;
       else if (kk === 'check') inner = `<svg class="tick" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>`;
       else if (kk === 'sig') inner = `<span class="sg"><svg viewBox="0 0 24 24">${IC.pen}</svg>簽名</span>`;
-      d.innerHTML = `${pv}${inner}<span class="tag${f.ex ? ' ro' : ''}" title="拖動移動；雙擊改名">${f.ex ? '' : '<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg>'}<span class="nm">${esc(f.name)}${kk === 'radio' ? ' · ' + esc(f.onValue || '') : ''}</span></span>${f.ex ? '' : '<i class="rz"></i>'}`;
+      if (kk === 'multi' && sids.length === 1 && sids[0] === f.id && E.tab !== 'list' && !SECX.has('split') && document.getElementById('epanel')) inner += splitPrev(f);
+      d.innerHTML = `${pv}${inner}<span class="tag${f.ex ? ' ro' : ''}" title="拖動移動；雙擊改名">${f.ex ? '' : '<svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg>'}<span class="nm">${esc(f.name)}${kk === 'radio' ? ' · ' + esc(f.onValue || '') : ''}</span></span>${f.ex ? '' : '<i class="rz"></i>'}${ord && ord.has(f.id) ? `<i class="ord" title="Tab 次序">${ord.get(f.id)}</i>` : ''}`;
       p.ov.appendChild(d);
     });
   });  syncFtb();
@@ -1216,6 +1245,13 @@ function renderPanel() {
   const f = E.fields.find(x => x.id === E.sel); let props = '<p class="note" style="margin:0">在清單或頁面上選取欄位，即可修改名稱與格式。</p>';
   const colorRows = (p, cur) => `<div class="row"><label>顏色</label><button type="button" class="csw" data-cb="${p}-bg" title="背景顏色">${swHtml('bg', cur.bg)}${ic('caret')}</button><button type="button" class="csw" data-cb="${p}-bd" title="框線顏色">${swHtml('bd', cur.bw > 0 ? cur.border : '')}${ic('caret')}</button><div class="stp" title="框線粗幼（pt）"><input id="${p}-bw" type="number" min="0" max="6" step="0.5" value="${cur.bw ?? 0}"><div class="sb"><button type="button" data-bwu="${p}">${ic('up')}</button><button type="button" data-bwd="${p}">${ic('down')}</button></div></div></div>`;
   const stepRow = (id, label, val, min, max, step, ph, unit, tip) => `<div class="row"><label>${label}</label><div class="stp" title="${tip}"><input id="${id}" type="number" min="${min}" max="${max}" step="${step}" value="${val ?? ''}" placeholder="${ph}"><div class="sb"><button type="button" data-st="${id}" data-d="1">${ic('up')}</button><button type="button" data-st="${id}" data-d="-1">${ic('down')}</button></div></div><span class="note" style="margin:0">${unit}</span></div>`;
+  const splitBody = f => { const sp = splitSt(f), inf = splitInfo(f);
+    return `<p class="note" style="margin:0 0 6px">將多行欄位平均切成單行欄位，行距就唔再受閱讀器影響。拆完每行要逐行輸入。</p>
+    ${stepRow('pp-sn', '行數', sp.n, 2, 40, 1, '3', '行', '平均切成幾行（頁面上虛線係切線位置）')}
+    ${stepRow('pp-sg', '留空', sp.gap, 0, 6, 0.5, '0', 'pt', '行與行之間留空（pt）')}
+    <div class="row"><label>保留</label><label style="width:auto;display:flex;gap:6px;align-items:center;color:var(--ink)"><input id="pp-skeep" type="checkbox" ${sp.keep ? 'checked' : ''} style="flex:none;height:auto"> 保留原多行欄位</label></div>
+    <p class="note splsum" id="pp-ssum" style="${inf.bad ? 'color:var(--bad)' : ''}">${inf.txt}</p>
+    <div class="acts" style="margin:0"><button type="button" class="btn pri" id="pp-sbtn" data-pp="split" ${inf.bad ? 'disabled' : ''}>${ic('multi', 16)} 拆成 ${sp.n} 個單行欄位</button></div>`; };
   const fontRow = (id, cur0, mixed) => { const cur = normFont(cur0) || ''; return `<div class="row"><label>字體</label><select id="${id}">${mixed ? '<option value="__m" selected disabled>混合</option>' : ''}${Object.entries(BUILTIN).map(([kk, v]) => `<option value="${kk}" ${!mixed && cur === kk ? 'selected' : ''}>${v[0]}</option>`).join('')}${Object.keys(FONTS).length ? `<optgroup label="已載入嘅字體">${Object.keys(FONTS).map(n => `<option value="c:${esc(n)}" ${cur === 'c:' + n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</optgroup>` : ''}<option value="__local">更多字體（本機）…</option></select><button class="ib" data-fl="file" title="載入電腦字體檔（.ttf／.otf／.woff／.ttc）">${ic('upload')}</button></div>`; };
   const brushBtn = `<button class="ib ${E.paint ? 'on' : ''}" data-pp="paint" title="格式刷：開啟後，之後點選嘅欄位會自動套用此格式（字級、對齊、框線、背景）">${ic('brush')}</button>`;
   const alignBtns = (attr, cur) => [['left', 'alL', '靠左'], ['center', 'alC', '置中'], ['right', 'alR', '靠右']].map(([a, i, t]) => `<button class="ib ${cur === a ? 'on' : ''}" ${attr}="${a}" title="${t}">${ic(i)}</button>`).join('');
@@ -1261,7 +1297,7 @@ function renderPanel() {
     ${txt ? `<div class="row"><label>對齊</label><div class="seg">${alignBtns('data-pa', f.align || 'left')}</div></div>` : ''}
     ${txt ? stepRow('pp-ls', '字距', f.ls || 0, -2, 20, 0.5, '0', 'pt', '字與字之間距離（pt）') : ''}
     ${k === 'multi' ? stepRow('pp-lh', '行距', f.lh || '', 0.8, 4, 0.1, '預設', '倍', '行與行之間距離（字級倍數，留空＝預設）') : ''}`;
-    props = f.ex ? `<div class="row"><label>名稱</label><input value="${esc(f.name)}" disabled></div><p class="note">此欄位類型（${esc(f.kind)}）或含多個位置，保留原樣，只可刪除。</p><div class="acts" style="margin:0"><button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>` : `${sec('field', 'sliders', '欄位設定', secField)}${sec('text', 'text', '文字格式', secText)}${sec('look', 'drop', '外觀', colorRows('pp', f))}
+    props = f.ex ? `<div class="row"><label>名稱</label><input value="${esc(f.name)}" disabled></div><p class="note">此欄位類型（${esc(f.kind)}）或含多個位置，保留原樣，只可刪除。</p><div class="acts" style="margin:0"><button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>` : `${sec('field', 'sliders', '欄位設定', secField)}${sec('text', 'text', '文字格式', secText)}${sec('look', 'drop', '外觀', colorRows('pp', f))}${k === 'multi' ? sec('split', 'multi', '拆成單行欄位', splitBody(f)) : ''}
     <div class="acts" style="margin:6px 0 0;justify-content:space-between">${brushBtn}<button class="ib dng" data-pp="del" title="刪除欄位">${ic('trash')}</button></div>`;
   }
   const tab = E.tab || 'fmt';
@@ -1271,12 +1307,14 @@ function renderPanel() {
   box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { E.tab = b.dataset.tab; renderPanel(); });
   const renamePr = (r, f) => {
     const sp = r.querySelector('.pn'); if (!sp) return; const inp = document.createElement('input'); inp.className = 'rnm'; inp.value = f.name; inp.maxLength = 60; sp.replaceWith(inp); inp.focus(); inp.select();
-    let fin = false; const end = ok => { if (fin) return; fin = true; const v = inp.value.trim();
+    let fin = false; const end = (ok, nx) => { if (fin) return; fin = true; const v = inp.value.trim();
       if (ok && v && v !== f.name) { const mem = f.kind === 'radio' ? E.fields.filter(x => x.kind === 'radio' && x.name === f.name) : [f]; mem.forEach(x => { x.name = ''; }); const nn = uniqueName(v); mem.forEach(x => { x.name = nn; }); commit(); drawBoxes(); }
+      if (nx) { const l = edOrder(), i = l.findIndex(x => x.id === f.id); let n = null; for (let k = i + 1; k < l.length; k++) { if (f.kind === 'radio' && l[k].kind === 'radio' && l[k].name === f.name) continue; n = l[k]; break; } if (n) { setSel([n.id]); E.prAnchor = n.id; drawBoxes(); renderPanel(); if (PANEL_RN) PANEL_RN(n.id); const bx = document.querySelector(`.fb[data-id="${CSS.escape(n.id)}"]`); if (bx) bx.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; } }
       renderPanel(); };
-    inp.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); end(true); } else if (e.key === 'Escape') { e.preventDefault(); end(false); } };
+    inp.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter' || (e.key === 'Tab' && !e.shiftKey)) { e.preventDefault(); end(true, true); } else if (e.key === 'Escape') { e.preventDefault(); end(false); } };
     inp.onblur = () => end(true); inp.onpointerdown = e => e.stopPropagation();
   };
+  PANEL_RN = id => { const r = box.querySelector(`[data-pf="${CSS.escape(id)}"]`), ff = E.fields.find(x => x.id === id); if (r && ff && !ff.ex) { r.scrollIntoView({ block: 'nearest' }); renamePr(r, ff); } };
   box.querySelectorAll('[data-pf]').forEach(r => r.addEventListener('contextmenu', ev => { const f = E.fields.find(x => x.id === r.dataset.pf); if (!f || f.ex) return; ev.preventDefault(); if (!selIds().includes(f.id)) { setSel([f.id]); drawBoxes(); renderPanel(); } openCx(ev.clientX, ev.clientY); }));
   box.querySelectorAll('[data-pf]').forEach(r => r.addEventListener('pointerdown', ev => {
     if ((ev.button || 0) > 0 || ev.target.closest('input')) return;
@@ -1413,8 +1451,45 @@ function renderPanel() {
   wireNum('pp-cn', 1, 40, 1, 8, n => { f.maxLength = Math.max(1, Math.round(n) || 8); const cw = f.w / f.maxLength, el = q('#pp-cnote'); if (el) el.innerHTML = (f.fontSize || 11) > cw ? `<span style="color:var(--bad)">每格約闊 ${cw.toFixed(1)}pt，字級偏大，字會超出格</span>。每格一個字；要加減格數，可拉闊欄位或改格數。` : `每格約闊 ${cw.toFixed(1)}pt。每格一個字；要加減格數，可拉闊欄位或改格數。`; });
   wireNum('pp-ls', -2, 20, .5, 0, n => { f.ls = n; });
   wireNum('pp-lh', .8, 4, .1, 1.4, n => { f.lh = n; });
+  if (q('#pp-sn')) {
+    const upSum = () => { const i = splitInfo(f), s = q('#pp-ssum'), b = q('#pp-sbtn'); if (s) { s.textContent = i.txt; s.style.color = i.bad ? 'var(--bad)' : ''; } if (b) { b.disabled = i.bad; b.lastChild.textContent = ` 拆成 ${splitSt(f).n} 個單行欄位`; } };
+    wireNum('pp-sn', 2, 40, 1, 3, n => { splitSt(f).n = Math.max(2, Math.min(40, Math.round(n) || 3)); upSum(); });
+    wireNum('pp-sg', 0, 6, .5, 0, n => { splitSt(f).gap = Math.max(0, Math.min(6, Math.round(n * 2) / 2 || 0)); upSum(); });
+    q('#pp-skeep').onchange = e => { splitSt(f).keep = e.target.checked; };
+    q('#pp-sbtn').onclick = () => splitField(f);
+  }
   if (brush) brush.onclick = () => setPaint(!E.paint, f);
   q('[data-pp=del]').onclick = delSel;
+}
+/* ---------- Tab 揀下個物件（次序＝欄位清單次序，亦即 PDF 內 Tab 鍵次序） ---------- */
+let PANEL_RN = null;
+const edOrder = () => { const E = S.ed; return E.pages.flatMap((_, pi) => E.fields.filter(f => f.page === pi && !f.ex)); };
+function tabSel(dir) {
+  const E = S.ed, l = edOrder(); if (!l.length) return; const ids = selIds(); let i;
+  if (!ids.length) i = dir > 0 ? 0 : l.length - 1;
+  else { const ix = ids.map(id => l.findIndex(f => f.id === id)).filter(x => x >= 0); i = ix.length ? (((dir > 0 ? Math.max(...ix) : Math.min(...ix)) + dir) % l.length + l.length) % l.length : 0; }
+  E.showOrder = true; const ob = document.querySelector('[data-e="order"]'); if (ob) ob.classList.add('on');
+  setSel([l[i].id]); drawBoxes(); renderPanel();
+  const bx = document.querySelector(`.fb[data-id="${CSS.escape(l[i].id)}"]`); if (bx) bx.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+}
+/* ---------- 依橫線拆成單行欄位（等高；新欄位保持原字級） ---------- */
+const r2 = v => Math.round(v * 100) / 100;
+function splitSt(f) { const E = S.ed; if (!E.split) E.split = { n: 3, gap: 0, keep: false, fid: null }; const sp = E.split; if (f && sp.fid !== f.id) { sp.fid = f.id; sp.n = Math.max(2, Math.min(40, Math.round(f.h / ((f.fontSize || 10) * (f.lh || DEF_LH))) || 3)); } return sp; }
+function splitInfo(f) { const sp = splitSt(f), nh = r2(f.h / sp.n - sp.gap), bad = nh < 6; return { bad, nh, txt: bad ? `每行高度只得 ${nh} pt，太矮（最少 6 pt），請減少行數或留空` : `每行高約 ${nh} pt · 新欄位 ${sp.n} 個 · 字級保持 ${f.fontSize || 10} pt` }; }
+function splitPrev(f) { const n = splitSt(f).n; let h = ''; for (let i = 1; i < n; i++) h += `<i class="spl" style="top:${(i / n) * 100}%"></i>`; for (let i = 0; i < n; i++) h += `<b class="spt" style="top:${((i + .5) / n) * 100}%">${i + 1}</b>`; return h; }
+function splitField(f) {
+  const E = S.ed; if (!f || f.ex || kindKey(f) !== 'multi') return; const sp = splitSt(f), n = sp.n, gap = sp.gap, inf = splitInfo(f);
+  if (inf.bad) return toast('每行太矮，請減少行數或留空', true);
+  const rh = f.h / n, at = E.fields.indexOf(f), base = f.name, lines = String(f.initial || '').split(/\r?\n/); if (lines.length > n) lines.splice(n - 1, lines.length - n + 1, lines.slice(n - 1).join(' '));
+  if (!sp.keep) E.fields.splice(at, 1);
+  const made = [];
+  for (let i = 0; i < n; i++) {
+    const h = r2(rh - (i < n - 1 ? gap : 0)), g = JSON.parse(JSON.stringify(f));
+    Object.assign(g, { id: uid(), multiline: false, comb: false, lh: 0, maxLength: null, h, y: r2(f.y + f.h - i * rh - h), initial: lines[i] || '', required: i === 0 ? !!f.required : false, fontSize: f.fontSize || 10 });
+    g.name = ''; g.name = uniqueName(`${base}_${i + 1}`); E.fields.push(g); made.push(g);
+  }
+  E.fields.splice(E.fields.length - n, n); E.fields.splice(sp.keep ? at + 1 : at, 0, ...made); // 放返喺原本欄位嘅位置，清單次序唔變
+  setSel(made.map(g => g.id)); commit(); drawBoxes(); renderPanel(); toast(`已拆成 ${n} 個單行欄位：${made[0].name} … ${made[n - 1].name}（Ctrl+Z 可還原）`);
 }
 function delSel() { const E = S.ed; const ids = selIds(); if (!ids.length) return; E.fields = E.fields.filter(f => !ids.includes(f.id)); setSel([]); commit(); drawBoxes(); renderPanel(); }
 function setKind(f, k) {
@@ -1790,6 +1865,8 @@ function editProps(f) {
 document.addEventListener('keydown', e => {
   if (S.view !== 'edit' || !S.ed) return; const t = e.target; if (t.closest && t.closest('.cpop')) return; const typing = /TEXTAREA|SELECT/.test(t.tagName) || (t.tagName === 'INPUT' && !['checkbox', 'color', 'radio', 'button'].includes(t.type));
   if (typing) return; const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
+  if (e.key === 'Tab' && !mod && !e.altKey) { const a = document.activeElement; if ((a && a !== document.body && !(a.closest && a.closest('.pages'))) || document.querySelector('.mask,.bnp,.cxm,.cpop')) return; e.preventDefault(); tabSel(e.shiftKey ? -1 : 1); return; }
+  if (e.key === 'Enter' && !mod && !e.shiftKey && S.ed.tab === 'list' && selIds().length === 1 && PANEL_RN && !document.querySelector('.mask,.bnp,.cxm,.cpop')) { const a = document.activeElement; if (a && a !== document.body) return; e.preventDefault(); PANEL_RN(selIds()[0]); return; }
   if (mod && k === 'c' && selIds().length) { e.preventDefault(); copySel(); return; }
   if (mod && k === 'v' && CLIP) { e.preventDefault(); pasteClip(null); return; }
   if (mod && k === 'd' && selIds().length) { e.preventDefault(); dupSel(); return; }
@@ -1971,6 +2048,7 @@ app.addEventListener('click', async e => {
   if (a === 'tool') { E.tool = arg; E.lastAdded = null; document.querySelectorAll('[data-e^="tool:"]').forEach(x => x.classList.toggle('on', x.dataset.e === b.dataset.e)); E.pages.forEach(pp => pp.ov.classList.toggle('draw', arg !== 'sel')); return; }
   if (a === 'undo') return undo();
   if (a === 'redo') return redo();
+  if (a === 'order') { E.showOrder = !E.showOrder; b.classList.toggle('on', !!E.showOrder); drawBoxes(); return; }
   if (a === 'auto') return autoDetect();
   if (a === 'panel') { E.panel = !E.panel; return renderEditor(); }
   if (a === 'draft') {
@@ -2023,5 +2101,3 @@ async function boot() {
 boot();
 if ('serviceWorker' in navigator && location.protocol === 'https:') addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW', e)));
 </script>
-
-</body></html>

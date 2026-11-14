@@ -186,8 +186,24 @@
   "id": "ee97505c-f82e-48a7-b514-9c16333bd7a7",
   "tid": "92fe80ad-910b-4633-9357-efa44b58da49",
   "version": 2,
-  "active": true,
+  "active": false,
   "draft": false,
   "created_at": "2026-11-14T00:52:37.801Z"
+ },
+ {
+  "name": "強積金",
+  "by": "SAM",
+  "code": "SHKP-REEA-24V1",
+  "category": "人事部",
+  "note": "",
+  "field_count": 139,
+  "file_path": "data/files/710821d6-ab0a-4230-9900-618e524ac5e1.pdf",
+  "thumb_path": "data/files/710821d6-ab0a-4230-9900-618e524ac5e1.jpg",
+  "id": "d213a000-56e0-4691-b932-da9080d9a3f9",
+  "tid": "92fe80ad-910b-4633-9357-efa44b58da49",
+  "version": 3,
+  "active": true,
+  "draft": false,
+  "created_at": "2026-11-14T01:47:27.808Z"
  }
 ]

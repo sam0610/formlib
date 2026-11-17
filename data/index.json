@@ -271,20 +271,6 @@
   "created_at": "2026-11-17T07:57:47.579Z"
  },
  {
-  "name": "0125A-HQA僱員工傷報告",
-  "category": "",
-  "code": "",
-  "note": "",
-  "field_count": 0,
-  "file_path": "data/files/980cd24e-4b0f-4182-aeea-262d17c78956.pdf",
-  "thumb_path": "data/files/980cd24e-4b0f-4182-aeea-262d17c78956.jpg",
-  "id": "1ac58617-2561-44bb-bab2-cf70c81ee172",
-  "version": 0,
-  "active": false,
-  "draft": true,
-  "created_at": "2026-11-17T07:58:14.270Z"
- },
- {
   "name": "僱員工傷報告_可輸入表單",
   "by": "SAM",
   "code": "0125A-HQA",

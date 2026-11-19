@@ -303,10 +303,10 @@
   "created_at": "2026-11-19T08:47:28.754Z"
  },
  {
-  "name": "辭職通知書(004R-HQD) (1)",
+  "name": "辭職通知書",
   "by": "",
-  "code": "",
-  "category": "",
+  "code": "004R-HQD",
+  "category": "人事部",
   "note": "",
   "field_count": 25,
   "file_path": "data/files/5edb253a-f982-4907-a773-ccc7550e8e04.pdf",
